@@ -63,6 +63,8 @@ public class WebCrawlerTest {
      * and continue crawling.
      * @param urls - the current collection of URLs
      */
+    @Test
+    @Parameters(method = "")
     public void ifTheUrlSetIsEmptyButFoundMoreLinksTheProcessShouldContinueWithNewLinksAddedToTheURLSet(Set<URL> urls){
 
     }

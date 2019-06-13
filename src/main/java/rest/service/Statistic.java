@@ -13,6 +13,7 @@ public class Statistic {
     public Statistic(Item type, String keyword) {
         this.type = type;
         this.keyword = keyword;
+        this.startTime = System.currentTimeMillis();
     }
 
     public Integer getSearchDepth() {

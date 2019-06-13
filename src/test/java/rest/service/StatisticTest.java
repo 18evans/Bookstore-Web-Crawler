@@ -16,12 +16,18 @@ import static org.mockito.Mockito.mock;
 @RunWith(JUnitParamsRunner.class)
 public class StatisticTest {
     private Item dummyBook, dummyMovie, dummyMusic;
+    private Statistic dummySUTBook, dummySUTMovie, dummySUTMusic;
+    private String dummyKeyword;
 
     @Before
     public void setUp(){
         dummyBook = mock(Books.class);
         dummyMovie = mock(Movies.class);
         dummyMusic = mock(Music.class);
+        dummyKeyword = "dummy keyword";
+        dummySUTBook = new Statistic(dummyBook, dummyKeyword);
+        dummySUTMovie = new Statistic(dummyMovie, dummyKeyword);
+        dummySUTMusic = new Statistic(dummyMovie, dummyKeyword);
     }
 
     public Object[] testFields(){
@@ -63,12 +69,10 @@ public class StatisticTest {
     @Test
     public void afterInstantiationTheStartTimeShouldEqualNow(){
         // arrange
-        String dummyKeyword = "Some keyword";
 
         // act
-        Statistic statistic = new Statistic(dummyBook, dummyKeyword);
         Long expectedTime = System.currentTimeMillis();
-        Long actualTime = statistic.getStartTime();
+        Long actualTime = dummySUTBook.getStartTime();
 
         // assert
         assertEquals("The start time did not match!!", expectedTime, actualTime);
@@ -80,6 +84,9 @@ public class StatisticTest {
      */
     @Test
     public void afterInstantiationTheNrOfPagesExploredShouldBeZero(){
+        // arrange
+        Integer expectedNrOfPageExplored = 0;
+
 
     }
 

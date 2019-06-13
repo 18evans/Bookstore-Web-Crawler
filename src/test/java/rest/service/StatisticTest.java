@@ -3,6 +3,7 @@ package rest.service;
 import junitparams.Parameters;
 import org.junit.Before;
 import org.junit.Test;
+import rest.service.model.Item;
 
 import static org.junit.Assert.*;
 
@@ -13,6 +14,8 @@ public class StatisticTest {
 
     }
 
+
+
     /***
      * A constructor test which is used to check whether the parameters
      * are in correct state and are what are expected.
@@ -22,7 +25,16 @@ public class StatisticTest {
     @Test
     @Parameters(method = "")
     public void afterInstantiationFieldsShouldBeSet(){
+        // arrange
+        Statistic statistic = new Statistic(expectedItemType, expectedKeyword);
 
+        // act
+        Item actualItem = statistic.getType();
+        String actualKeyword = statistic.getKeyword();
+
+        // assert
+        assertEquals("The expected item type did not match!!", expectedItemType, actualItem);
+        assertEquals("The expected keyword did not match!!", expectedKeyword, actualKeyword);
     }
 
     /***

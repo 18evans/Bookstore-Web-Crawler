@@ -26,7 +26,7 @@ public class WebCrawlerResourceTest {
     }
 
     /**
-     * If query param value for "url" is passed as null, emtpy String or white space.
+     * If query param value for "url" is passed as null, empty String or white space.
      * Example:     getContent(null) returns Server Error.
      */
     @Test

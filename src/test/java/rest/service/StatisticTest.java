@@ -146,8 +146,18 @@ public class StatisticTest {
      * increase the depth level
      */
     @Test
-    public void afterInvokeMethodAndTheNewLevelIsDeeperTheSearchDepthShouldBeIncreasedByOne(){
+    @Parameters(method = "testFields")
+    public void afterInvokeMethodAndTheNewLevelIsDeeperTheSearchDepthShouldBeIncreasedByOne(Item type, String keyword){
+        // arrange
+        Integer expectedSearchDepth = 1;
+        Statistic sut = new Statistic(type, keyword);
 
+        // act
+        sut.increaseSearchDepth();
+        Integer actualSearchDepth = sut.getSearchDepth();
+
+        // assert
+        assertEquals("The search depth was not increased by one!!", expectedSearchDepth, actualSearchDepth);
     }
 
     /***

@@ -102,7 +102,15 @@ public class StatisticTest {
      */
     @Test
     public void afterInstantiationTheSearchDepthShouldBeZero(){
+        // arrange
+        Integer expectedSearchDepthLevel = 0;
+        Statistic sut = new Statistic(new Books(), "dummy");
 
+        // act
+        Integer actualSearchDepthLevel = sut.getSearchDepth();
+
+        // assert
+        assertEquals("The search depth level when the object was initialized was not zero!!", expectedSearchDepthLevel, actualSearchDepthLevel);
     }
 
 

@@ -101,10 +101,11 @@ public class StatisticTest {
      * should equal to Zero after instantiation
      */
     @Test
-    public void afterInstantiationTheSearchDepthShouldBeZero(){
+    @Parameters(method = "testFields")
+    public void afterInstantiationTheSearchDepthShouldBeZero(Item type, String keyword){
         // arrange
         Integer expectedSearchDepthLevel = 0;
-        Statistic sut = new Statistic(new Books(), "dummy");
+        Statistic sut = new Statistic(type, keyword);
 
         // act
         Integer actualSearchDepthLevel = sut.getSearchDepth();

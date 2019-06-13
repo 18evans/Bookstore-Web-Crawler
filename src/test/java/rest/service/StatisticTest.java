@@ -83,11 +83,17 @@ public class StatisticTest {
      * explored should equal to Zero after instantiation.
      */
     @Test
-    public void afterInstantiationTheNrOfPagesExploredShouldBeZero(){
+    @Parameters(method = "testFields")
+    public void afterInstantiationTheNrOfPagesExploredShouldBeZero(Item type, String dummyKeyword){
         // arrange
         Integer expectedNrOfPageExplored = 0;
+        Statistic sut = new Statistic(type, dummyKeyword);
 
+        // act
+        Integer actualNrOfPageExplored = sut.getPagesExplored();
 
+        // assert
+        assertEquals("The total number of pages explored when the object was initialized was not zero!", expectedNrOfPageExplored, actualNrOfPageExplored);
     }
 
     /***

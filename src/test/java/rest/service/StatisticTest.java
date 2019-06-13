@@ -11,13 +11,17 @@ import rest.service.model.Movies;
 import rest.service.model.Music;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 @RunWith(JUnitParamsRunner.class)
 public class StatisticTest {
+    private Item dummyBook, dummyMovie, dummyMusic;
 
     @Before
     public void setUp(){
-
+        dummyBook = mock(Books.class);
+        dummyMovie = mock(Movies.class);
+        dummyMusic = mock(Music.class);
     }
 
     public Object[] testFields(){
@@ -58,7 +62,16 @@ public class StatisticTest {
      */
     @Test
     public void afterInstantiationTheStartTimeShouldEqualNow(){
+        // arrange
+        String dummyKeyword = "Some keyword";
 
+        // act
+        Statistic statistic = new Statistic(dummyBook, dummyKeyword);
+        Long expectedTime = System.currentTimeMillis();
+        Long actualTime = statistic.getStartTime();
+
+        // assert
+        assertEquals("The start time did not match!!", expectedTime, actualTime);
     }
 
     /***

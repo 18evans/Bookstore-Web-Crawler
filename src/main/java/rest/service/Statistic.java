@@ -42,7 +42,7 @@ public class Statistic {
      * Increase the total number of pages explored by one.
      */
     public void increasePagesExplored(){
-
+        this.pagesExplored += 1;
     }
 
     /***

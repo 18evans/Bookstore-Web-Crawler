@@ -131,7 +131,7 @@ public class StatisticTest {
         // act
         sut.increasePagesExplored();
         Integer actualNrOfPagesExplored = sut.getPagesExplored();
-        
+
         // assert
         assertEquals("The number of total pages explored was not increased by one!!", expectedNrOfPagesExplored, actualNrOfPagesExplored);
     }

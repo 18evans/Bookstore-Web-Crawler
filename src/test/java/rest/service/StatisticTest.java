@@ -1,12 +1,18 @@
 package rest.service;
 
+import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import rest.service.model.Books;
 import rest.service.model.Item;
+import rest.service.model.Movies;
+import rest.service.model.Music;
 
 import static org.junit.Assert.*;
 
+@RunWith(JUnitParamsRunner.class)
 public class StatisticTest {
 
     @Before
@@ -14,6 +20,13 @@ public class StatisticTest {
 
     }
 
+    public Object[] testFields(){
+        return new Object[]{
+                new Object[] { new Music(), "Let It Go"},
+                new Object[] { new Books(), "Head First - Design Pattern"},
+                new Object[] { new Movies(), "Interstellar"}
+        };
+    }
 
 
     /***
@@ -23,7 +36,7 @@ public class StatisticTest {
      * for the Item classes and keyword
      */
     @Test
-    @Parameters(method = "")
+    @Parameters(method = "testFields")
     public void afterInstantiationFieldsShouldBeSet(Item expectedItemType, String expectedKeyword){
         // arrange
         Statistic statistic = new Statistic(expectedItemType, expectedKeyword);
@@ -99,7 +112,7 @@ public class StatisticTest {
      * of keyword to check if the new values are as expected ones.
      */
     @Test
-    @Parameters(method = "")
+    //@Parameters(method = "")
     public void afterChangeKeywordTheNewKeywordShouldMatch(){
 
     }
@@ -112,7 +125,7 @@ public class StatisticTest {
      * Item classes to check if the new values are as expected ones.
      */
     @Test
-    @Parameters(method = "")
+    //@Parameters(method = "")
     public void afterChangeTargetTypeTheNewTypeShouldMatch(){
 
     }

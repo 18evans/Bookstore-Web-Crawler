@@ -47,6 +47,7 @@ public class StatisticTest {
 
         // assert
         assertEquals("The expected item type did not match!!", expectedItemType, actualItem);
+        assertEquals("The expected item class type did not match!!!", expectedItemType.getClass(), actualItem.getClass());
         assertEquals("The expected keyword did not match!!", expectedKeyword, actualKeyword);
     }
 

@@ -14,6 +14,7 @@ public class Statistic {
         this.type = type;
         this.keyword = keyword;
         this.startTime = System.currentTimeMillis();
+        this.pagesExplored = 0;
     }
 
     public Integer getSearchDepth() {

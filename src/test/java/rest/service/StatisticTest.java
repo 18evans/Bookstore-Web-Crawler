@@ -122,8 +122,18 @@ public class StatisticTest {
      * is fully explored.
      */
     @Test
-    public void afterInvokeMethodTheTotalNumberOfPagesExploredShouldBeIncreasedByOne(){
+    @Parameters(method = "testFields")
+    public void afterInvokeMethodTheTotalNumberOfPagesExploredShouldBeIncreasedByOne(Item type, String keyword){
+        // arrange
+        Integer expectedNrOfPagesExplored = 1;
+        Statistic sut = new Statistic(type, keyword);
 
+        // act
+        sut.increasePagesExplored();
+        Integer actualNrOfPagesExplored = sut.getPagesExplored();
+        
+        // assert
+        assertEquals("The number of total pages explored was not increased by one!!", expectedNrOfPagesExplored, actualNrOfPagesExplored);
     }
 
     /***

@@ -24,7 +24,7 @@ public class StatisticTest {
      */
     @Test
     @Parameters(method = "")
-    public void afterInstantiationFieldsShouldBeSet(){
+    public void afterInstantiationFieldsShouldBeSet(Item expectedItemType, String expectedKeyword){
         // arrange
         Statistic statistic = new Statistic(expectedItemType, expectedKeyword);
 

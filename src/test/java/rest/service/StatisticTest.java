@@ -67,6 +67,7 @@ public class StatisticTest {
         assertEquals("The expected item type did not match!!", expectedItemType, actualItem);
         assertEquals("The expected item class type did not match!!!", expectedItemType.getClass(), actualItem.getClass());
         assertEquals("The expected keyword did not match!!", expectedKeyword, actualKeyword);
+        assertNotNull("The object was not instantiated correctly!!", statistic);
     }
 
     /***
@@ -84,6 +85,7 @@ public class StatisticTest {
 
         // assert
         assertEquals("The start time did not match!!", expectedTime, actualTime);
+        assertNotNull("The start time was null", actualTime);
     }
 
     /***
@@ -102,6 +104,7 @@ public class StatisticTest {
 
         // assert
         assertEquals("The total number of pages explored when the object was initialized was not zero!", expectedNrOfPageExplored, actualNrOfPageExplored);
+        assertNotNull("The total number of pages explored was instantiated with null value!!", actualNrOfPageExplored);
     }
 
     /***
@@ -120,6 +123,7 @@ public class StatisticTest {
 
         // assert
         assertEquals("The search depth level when the object was initialized was not zero!!", expectedSearchDepthLevel, actualSearchDepthLevel);
+        assertNotNull("The search depth level was null when the object was instantiated.!!", actualSearchDepthLevel);
     }
 
 
@@ -187,6 +191,7 @@ public class StatisticTest {
 
         // assert
         assertEquals("The keyword was not changed!!", expectedNewKeyword, actualKeyword);
+        assertNotNull("The keyword was null!!", actualKeyword);
     }
 
     /***

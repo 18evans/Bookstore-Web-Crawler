@@ -57,7 +57,7 @@ public class Statistic {
      * @param newKeyword - The new searching keyword
      */
     public void changeKeyword(String newKeyword){
-
+        this.keyword = newKeyword;
     }
 
     /***

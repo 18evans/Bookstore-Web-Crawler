@@ -49,7 +49,7 @@ public class Statistic {
      * Increase the search depth by one if and only if the page is not in the same depth level
      */
     public void increaseSearchDepth(){
-
+        this.searchDepth += 1;
     }
 
     /***

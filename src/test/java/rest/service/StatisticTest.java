@@ -38,6 +38,14 @@ public class StatisticTest {
         };
     }
 
+    public Object[] testChangeKeywords(){
+        return new Object[]{
+                new Object[] { new Music(), "Let It Go", "Human"},
+                new Object[] { new Books(), "Head First - Design Pattern", "Practical Unit Testing with JUnit"},
+                new Object[] { new Movies(), "Interstellar", "The Matrix"}
+        };
+    }
+
 
     /***
      * A constructor test which is used to check whether the parameters
@@ -168,9 +176,17 @@ public class StatisticTest {
      * of keyword to check if the new values are as expected ones.
      */
     @Test
-    //@Parameters(method = "")
-    public void afterChangeKeywordTheNewKeywordShouldMatch(){
+    @Parameters(method = "testChangeKeywords")
+    public void afterChangeKeywordTheNewKeywordShouldMatch(Item type, String oldKeyword, String expectedNewKeyword){
+        // arrange
+        Statistic sut = new Statistic(type, oldKeyword);
 
+        // act
+        sut.changeKeyword(expectedNewKeyword);
+        String actualKeyword = sut.getKeyword();
+
+        // assert
+        assertEquals("The keyword was not changed!!", expectedNewKeyword, actualKeyword);
     }
 
     /***

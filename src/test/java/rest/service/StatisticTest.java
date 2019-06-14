@@ -46,6 +46,14 @@ public class StatisticTest {
         };
     }
 
+    public Object[] testChangeTypes(){
+        return new Object[]{
+                new Object[] { new Music(), "Let It Go", new Books()},
+                new Object[] { new Books(), "Head First - Design Pattern", new Movies()},
+                new Object[] { new Movies(), "Interstellar", "The Matrix", new Music()}
+        };
+    }
+
 
     /***
      * A constructor test which is used to check whether the parameters

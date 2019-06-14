@@ -50,7 +50,7 @@ public class StatisticTest {
         return new Object[]{
                 new Object[] { new Music(), "Let It Go", new Books()},
                 new Object[] { new Books(), "Head First - Design Pattern", new Movies()},
-                new Object[] { new Movies(), "Interstellar", "The Matrix", new Music()}
+                new Object[] { new Movies(), "Interstellar", new Music()}
         };
     }
 

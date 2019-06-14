@@ -202,9 +202,18 @@ public class StatisticTest {
      * Item classes to check if the new values are as expected ones.
      */
     @Test
-    //@Parameters(method = "")
-    public void afterChangeTargetTypeTheNewTypeShouldMatch(){
+    @Parameters(method = "testChangeTypes")
+    public void afterChangeTargetTypeTheNewTypeShouldMatch(Item oldType, String keyword, Item expectedNewType){
+        // arrange
+        Statistic sut = new Statistic(oldType, keyword);
 
+        // act
+        sut.changeTargetType(expectedNewType);
+        Item actualNewType = sut.getType();
+
+        // assert
+        assertEquals("The new search type was not changed correctly!!", expectedNewType, actualNewType);
+        assertNotNull("The new search type was changed to null!!", actualNewType);
     }
 
     /***

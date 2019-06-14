@@ -65,7 +65,7 @@ public class Statistic {
      * @param newType - The new type which derives from Item class
      */
     public void changeTargetType(Item newType){
-
+        this.type = newType;
     }
 
     /***

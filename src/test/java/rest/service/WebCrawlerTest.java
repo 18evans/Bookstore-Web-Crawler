@@ -120,25 +120,6 @@ public class WebCrawlerTest {
         assertNotNull("The statistic object was null!!", actualStatistic);
     }
 
-    @Test
-    public void afterInstantiationKeywordAndItemTypeMustBeReturnedByTheStatisticObject(){
-        // arrange
-        WebCrawler webCrawler;
-        Statistic statisticMock = mock(Statistic.class);
-        when(statisticMock.getKeyword()).thenReturn(validKeyword);
-        when(statisticMock.getType()).thenReturn(validGeneralItemType);
-
-        // act
-        webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
-        webCrawler.setStatistic(statisticMock);
-        webCrawler.getItem();
-        webCrawler.getKeyword();
-
-        // assert
-        verify(statisticMock).getType();
-        verify(statisticMock).getKeyword();
-    }
-
 //    /***
 //     * If the current collection of urls already empty, but found more hyperlinks
 //     * the process should add new hyperlinks to to the current collection of urls

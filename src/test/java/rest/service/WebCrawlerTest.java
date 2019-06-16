@@ -52,6 +52,22 @@ public class WebCrawlerTest {
         // assert
     }
 
+    @Test
+    public void validUrlShouldNotThrowException() {
+        //  arrange
+        WebCrawler webCrawler;
+        String expectedUrl = validUrl.toString();
+
+        // act
+        webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+        String actualUrl = webCrawler.getInitUrl();
+
+        // assert
+        assertNotNull("The webcrawler is null", webCrawler);
+        assertEquals("The url did not match", expectedUrl, actualUrl);
+
+    }
+
     /***
      * The test that verify the method should throw an IllegalArgumentException when
      * the given keyword is Empty or Null.
@@ -100,6 +116,9 @@ public class WebCrawlerTest {
         assertNotNull("The WebCrawler object was null!!", webCrawler);
     }
 
+    /***
+     * A constructor test which check all the fields of the WebCrawler class
+     */
     @Test
     public void afterInstantiationAllFieldsShouldBeSet(){
         // arrange
@@ -113,7 +132,7 @@ public class WebCrawlerTest {
         Object actualItem = webCrawler.getItem();
 
         // assert
-        assertEquals("The url did not match!!", actualUrl, validUrl.getHost());
+        assertEquals("The url did not match!!", actualUrl, validUrl.toString());
         assertEquals("The keyword did not match!!", actualKeyword, validKeyword);
         assertNotNull("The Item was null!!", actualItem);
         assertTrue("The Item did not implement Item class", actualItem instanceof Item);

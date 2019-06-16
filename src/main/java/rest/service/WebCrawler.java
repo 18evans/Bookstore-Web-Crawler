@@ -43,7 +43,7 @@ public class WebCrawler {
     }
 
     public String getInitUrl() {
-        return this.url.getHost();
+        return this.url.toString();
     }
 
     public String getKeyword() {

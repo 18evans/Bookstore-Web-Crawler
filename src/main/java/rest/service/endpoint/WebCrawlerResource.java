@@ -26,7 +26,7 @@ public class WebCrawlerResource {
     public Response getContent(@QueryParam("url") String urlAsString,
                                @QueryParam("type") @DefaultValue("") String type,
                                @QueryParam("keyword") @DefaultValue("") String keyword) {
-        return null;
+        return Response.ok().build();
     }
 
 }

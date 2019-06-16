@@ -10,51 +10,41 @@ import static org.junit.Assert.*;
 
 public class WebCrawlerTest {
 
-//    /***
-//     * The test that verify the method should throw an IllegalArgumentException when
-//     * the given URL is Empty or Null.
-//     */
-//    @Test(expected = IllegalArgumentException.class)
-//    public void nullOrEmptyURLShouldThrowIllegalArgumentException(){
-//
-//    }
-//
-//    /***
-//     * The test that verify the method should not throw an IllegalArgumentException when
-//     * the given URL is in a valid format.
-//     */
-//    @Test
-//    public void validURLShouldNotThrowException(){
-//
-//    }
-//
-//    /***
-//     * The test that verify the method should throw an IllegalArgumentException when
-//     * the given keyword is Empty or Null.
-//     */
-//    @Test(expected = IllegalArgumentException.class)
-//    public void nullOrEmptyKeywordShouldThrowIllegalArgumentException(){
-//
-//    }
-//
-//    /***
-//     * The test the test that verify the method should not throw an IllegalArgumentException when
-//     * the given keyword is in a valid format
-//     */
-//    @Test
-//    public void validKeywordShouldNotThrowIllegalArgumentException(){
-//
-//    }
+    /***
+     * The test that verify the method should throw an IllegalArgumentException when
+     * the given URL is Empty or Null.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void nullOrEmptyURLShouldThrowIllegalArgumentException() {
+
+    }
+
+    /***
+     * The test that verify the method should throw an IllegalArgumentException when
+     * the given keyword is Empty or Null.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void nullOrEmptyKeywordShouldThrowIllegalArgumentException() {
+
+    }
+
+    /***
+     * The test the test that verify the method should not throw an IllegalArgumentException when
+     * the given keyword is in a valid format
+     */
+    @Test
+    public void validKeywordShouldNotThrowIllegalArgumentException() {
+
+    }
 
     /***
      * If the given type is not a class that derived from Item class
      * , an IllegalArgumentException should be throw
      */
     @Test(expected = IllegalArgumentException.class)
-    public void ifTheTypeIsNotItemShouldThrowException(){
+    public void ifTheTypeIsNotItemShouldThrowException() {
 
     }
-
 
 
     /***
@@ -65,7 +55,7 @@ public class WebCrawlerTest {
      */
     @Test
     @Parameters(method = "")
-    public void ifTheUrlSetIsEmptyButFoundMoreLinksTheProcessShouldContinueWithNewLinksAddedToTheURLSet(Set<URL> urls){
+    public void ifTheUrlSetIsEmptyButFoundMoreLinksTheProcessShouldContinueWithNewLinksAddedToTheURLSet(Set<URL> urls) {
 
     }
 
@@ -76,7 +66,7 @@ public class WebCrawlerTest {
      */
     @Test
     @Parameters(method = "")
-    public void ifTheUrlSetIsEmptyButNotFoundAnythingShouldReturnNull(Set<URL> urls){
+    public void ifTheUrlSetIsEmptyButNotFoundAnythingShouldEmptyCollection(Set<URL> urls) {
 
     }
 
@@ -87,7 +77,7 @@ public class WebCrawlerTest {
      */
     @Test
     @Parameters(method = "")
-    public void ifTheUrlSetIsEmptyButFoundSomeItemsShouldReturnCollectionOfThatItems(Set<URL> urls){
+    public void ifTheUrlSetIsEmptyButFoundSomeItemsShouldReturnCollectionOfThatItems(Set<URL> urls) {
 
     }
 
@@ -99,7 +89,7 @@ public class WebCrawlerTest {
      */
     @Test
     @Parameters(method = "")
-    public void ifTheUrlSetIsNotEmptyButNotFoundAnythingShouldContinueWithTheNextUrl(Set<URL> urls){
+    public void ifTheUrlSetIsNotEmptyButNotFoundAnythingShouldContinueWithTheNextUrl(Set<URL> urls) {
 
     }
 
@@ -110,7 +100,7 @@ public class WebCrawlerTest {
      */
     @Test
     @Parameters(method = "")
-    public void ifTheUrlSetIsNotEmptyButFoundTheItemThatMatchExactlyShouldReturnACollectionWithOnlyThatItem(Set<URL> urls){
+    public void ifTheUrlSetIsNotEmptyButFoundTheItemThatMatchExactlyShouldReturnACollectionWithOnlyThatItem(Set<URL> urls) {
 
     }
 
@@ -122,7 +112,7 @@ public class WebCrawlerTest {
      */
     @Test
     @Parameters(method = "")
-    public void ifTheUrlSetIsEmptyButFoundSomeCloseMatchItemsShouldReturnACollectionOfCloseMatchedItems(Set<URL> url){
+    public void ifTheUrlSetIsEmptyButFoundSomeCloseMatchItemsShouldReturnACollectionOfCloseMatchedItems(Set<URL> url) {
 
     }
 }

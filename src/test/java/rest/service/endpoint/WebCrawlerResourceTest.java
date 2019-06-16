@@ -1,18 +1,37 @@
 package rest.service.endpoint;
 
 import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import rest.service.model.Books;
+
+import javax.ws.rs.core.Response;
+
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 @RunWith(JUnitParamsRunner.class)
 public class WebCrawlerResourceTest {
 
     //1 returns json
-    WebCrawlerResource resource = new WebCrawlerResource(); //SUT
+    private final WebCrawlerResource resource = new WebCrawlerResource(); //SUT
 
     @Test
     public void sutReturnsResponseReturnType() {
+        //arrange
+        final String url = "https://en.wikipedia.org/wiki/Books";
+        final String type = Books.class.getSimpleName();
+        final String keyword = "The Bible";
+
+        //act
+        Response response = resource.getContent(url, type, keyword);
+
+        //assert
+        assertNotNull("Response was NULL", response);
+        assertThat("Response was NOT an instance of Response class.",
+                response, instanceOf(Response.class));
     }
 
     //tests with only 1 parameter
@@ -22,6 +41,7 @@ public class WebCrawlerResourceTest {
      * method returns a Server Error response.
      */
     @Test
+    @Ignore
     public void responseReturnsErrorIfURLIsNotSpecified() {
     }
 
@@ -30,6 +50,7 @@ public class WebCrawlerResourceTest {
      * Example:     getContent(null) returns Server Error.
      */
     @Test
+    @Ignore
     public void responseReturnsErrorIfURLIsNullEmptyOrWhitespace() {
     }
 
@@ -39,6 +60,7 @@ public class WebCrawlerResourceTest {
      * when type is present.
      */
     @Test
+    @Ignore
     public void responseReturnsErrorIfURLIsNotSpecifiedButTypeIs() {
     }
 
@@ -47,6 +69,7 @@ public class WebCrawlerResourceTest {
      * when keyword is present.
      */
     @Test
+    @Ignore
     public void responseReturnsErrorIfUrlIsNotSpecifiedButKeywordIs() {
     }
 
@@ -55,6 +78,7 @@ public class WebCrawlerResourceTest {
      * Example:     getContent("wikipedia.org") returns OK response.
      */
     @Test
+    @Ignore
     public void responseReturnsOKIfURLIsSpecified() {
     }
 
@@ -67,6 +91,7 @@ public class WebCrawlerResourceTest {
      * }.
      */
     @Test
+    @Ignore
     public void ifResponseReturnsOKItContainsValueForTimeElapsed() {
     }
 
@@ -76,6 +101,7 @@ public class WebCrawlerResourceTest {
      * Example:     getContent("wikipedia.org") returns OK response.
      */
     @Test
+    @Ignore
     public void responseWithOnlyAURLSpecifiedReturnsWholeSiteCrawl() {
     }
 
@@ -86,6 +112,7 @@ public class WebCrawlerResourceTest {
      * Example:     getContent("wikipedia.org") has 3 arrays, one for each model type.
      */
     @Test
+    @Ignore
     public void responseReturnsMultipleArraysOfEachModelTypeIfURLIsSpecified() {
     }
 
@@ -99,6 +126,7 @@ public class WebCrawlerResourceTest {
      * reponse with error response code.
      */
     @Test
+    @Ignore
     public void responseReturnsErrorIfTypeDoesNotExistInModels() {
     }
 
@@ -109,6 +137,7 @@ public class WebCrawlerResourceTest {
      * getContent("wikipedia.org")
      */
     @Test
+    @Ignore
     public void responseWithNullEmptyOrWhitespaceTypeReturnsSameFormatAsResponseWithOnlyURLSpecified() {
     }
 
@@ -127,7 +156,8 @@ public class WebCrawlerResourceTest {
      * @param type        type query param - Compared to the response's array's object type.
      */
     @Test
-    @Parameters(method = "")
+    @Ignore
+//    @Parameters(method = "")
     public void responseReturnsOnlyOneArrayOfObjectTypeSameAsTheOneSpecifiedInTheQueryParam(String urlAsString,
                                                                                             String type) {
     }
@@ -141,6 +171,7 @@ public class WebCrawlerResourceTest {
      * getContent("wikipedia.org")
      */
     @Test
+    @Ignore
     public void responseWithNullEmptyOrWhitespaceKeywordReturnsSameFormatAsResponseWithOnlyURLSpecified() {
     }
 
@@ -155,6 +186,7 @@ public class WebCrawlerResourceTest {
      * }
      */
     @Test
+    @Ignore
     public void responseReturnsArrayResultIfAKeyWordIsSpecified() {
     }
 
@@ -170,6 +202,7 @@ public class WebCrawlerResourceTest {
      * }
      */
     @Test
+    @Ignore
     public void responseWithValidTypeAndValidKeywordContainsKeyForResult() {
     }
 

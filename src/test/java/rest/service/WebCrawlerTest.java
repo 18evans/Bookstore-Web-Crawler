@@ -5,19 +5,22 @@ import org.junit.Before;
 import org.junit.Test;
 import rest.service.model.Books;
 import rest.service.model.Item;
+import rest.service.model.Movies;
+import rest.service.model.Music;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class WebCrawlerTest {
     private String emptyString;
     private String nullString;
     private String validKeyword;
-    private Object invalidType;
-    private Item validType;
+    private Item validBookType, validMovieType, validMusicType;
+    private Item validGeneralItemType;
     private URL validUrl;
 
     @Before
@@ -25,7 +28,10 @@ public class WebCrawlerTest {
         emptyString = "";
         nullString = null;
         validKeyword = "sample keyword";
-        invalidType = new Object();
+        validBookType = mock(Books.class);
+        validMovieType = mock(Movies.class);
+        validMusicType = mock(Music.class);
+        validGeneralItemType = mock(Item.class);
         validUrl = new URL("https://fontys.nl");
     }
 
@@ -38,11 +44,10 @@ public class WebCrawlerTest {
         // arrange
         URL emptyUrl = new URL(emptyString);
         URL nullURL = new URL(nullString);
-        validType = new Books();
 
         // act
-        WebCrawler webCrawler = new WebCrawler(emptyUrl, validKeyword, validType);
-        WebCrawler webCrawler2 = new WebCrawler(nullURL, validKeyword, validType);
+        WebCrawler webCrawler = new WebCrawler(emptyUrl, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler2 = new WebCrawler(nullURL, validKeyword, validGeneralItemType);
 
         // assert
     }
@@ -56,10 +61,11 @@ public class WebCrawlerTest {
         // arrange
         String emptyKeyword = emptyString;
         WebCrawler webCrawler;
-        validType = new Books();
 
         // act
-        webCrawler = new WebCrawler(validUrl, emptyKeyword, validType);
+        webCrawler = new WebCrawler(validUrl, emptyKeyword, validMusicType);
+        webCrawler = new WebCrawler(validUrl, emptyKeyword, validBookType);
+        webCrawler = new WebCrawler(validUrl, emptyKeyword, validMovieType);
     }
 
     /***
@@ -71,10 +77,11 @@ public class WebCrawlerTest {
         // arrange
         String nullKeyword = nullString;
         WebCrawler webCrawler;
-        validType = new Books();
 
         // act
-        webCrawler = new WebCrawler(validUrl, nullKeyword, validType);
+        webCrawler = new WebCrawler(validUrl, nullKeyword, validBookType);
+        webCrawler = new WebCrawler(validUrl, nullKeyword, validMovieType);
+        webCrawler = new WebCrawler(validUrl, nullKeyword, validMusicType);
     }
 
     /***
@@ -85,17 +92,13 @@ public class WebCrawlerTest {
     public void validKeywordShouldNotThrowIllegalArgumentException() {
         // arrange
         WebCrawler webCrawler;
-        validType = new Books();
 
         // act
-        webCrawler = new WebCrawler(validUrl, validKeyword, validType);
+        webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
 
         // assert
         assertNotNull("The WebCrawler object was null!!", webCrawler);
     }
-
-    
-
 
 //    /***
 //     * If the current collection of urls already empty, but found more hyperlinks

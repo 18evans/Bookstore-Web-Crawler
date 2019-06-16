@@ -75,6 +75,14 @@ public class WebCrawlerResourceTest {
         };
     }
 
+
+    /**
+     * Method asserts that a Valid URL passed as argument will cause endpoint
+     * to NOT return a Server error.
+     * Method uses Parameterized Tests to get valid URL argument.
+     *
+     * @param url - the valid URL.
+     */
     @Test
     @Parameters(method = "getValidUrls")
     public void responseDoesNotReturnServerErrorOnValidatedURL(String url) {
@@ -100,6 +108,12 @@ public class WebCrawlerResourceTest {
         };
     }
 
+    /**
+     * Method asserts that an Invalid URL passed as argument will cause endpoint
+     * to return Server error.
+     * Method uses Parameterized Tests to get an invalid URL argument.
+     * @param url - the invalid URL.
+     */
     @Test
     @Parameters(method = "getInvalidUrls")
     public void responseReturnsServerErrorOnInvalidURL(String url) {

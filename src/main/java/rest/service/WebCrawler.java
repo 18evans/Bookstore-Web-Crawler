@@ -36,8 +36,14 @@ public class WebCrawler {
      * @return A Set Collection of the Item
      */
     public Set<Item> startCrawler() throws IOException {
-        URL discoveredUrl = new URL("https://fontys.nl");
-        this.urlList.add(discoveredUrl);
+        Document document = Jsoup.connect(this.getInitUrl()).get();
+        Elements linksOnPage = document.select("a[href]");
+
+        for (Element element : linksOnPage){
+            String urlText = element.attr("abs:href");
+            URL discoveredURL = new URL(urlText);
+            urlList.add(discoveredURL);
+        }
 
         return null;
     }

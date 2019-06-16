@@ -13,6 +13,7 @@ import rest.service.model.Music;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -212,18 +213,26 @@ public class WebCrawlerTest {
     }
 
 
+    /***
+     * If the current collection of urls already empty, but found more hyperlinks
+     * the process should add new hyperlinks to to the current collection of urls
+     * and continue crawling.
+     * @param url - the init url
+     */
+    @Test
+    @Parameters(method = "crawlOneSiteToManySites")
+    public void ifTheUrlSetIsEmptyButFoundMoreLinksTheProcessShouldContinueWithNewLinksAddedToTheURLSet(URL url) throws IOException {
+        // arrange
+        WebCrawler webCrawler = mock(WebCrawler.class);
+        when(webCrawler.getInitUrl()).thenReturn(url.toString());
+        when(webCrawler.getUrlList()).thenReturn(new HashSet<>());
 
-//    /***
-//     * If the current collection of urls already empty, but found more hyperlinks
-//     * the process should add new hyperlinks to to the current collection of urls
-//     * and continue crawling.
-//     * @param urls - the current collection of URLs
-//     */
-//    @Test
-//    @Parameters(method = "")
-//    public void ifTheUrlSetIsEmptyButFoundMoreLinksTheProcessShouldContinueWithNewLinksAddedToTheURLSet(Set<URL> urls) {
-//
-//    }
+        // act
+        webCrawler.startCrawler();
+
+        // assert
+        verify(webCrawler, atLeast(2)).startCrawler();
+    }
 //
 //    /***
 //     * When the crawling process could not find anything and the new url set to be explored

@@ -11,11 +11,12 @@ public class WebCrawler {
     private Scrape scrape;
     private URL url;
 
-    public WebCrawler(URL url, String keyword, Object type) {
+    public WebCrawler(URL url, String keyword, Item type) {
         this.url = url;
         if (keyword == null || keyword.equals("")){
             throw new IllegalArgumentException();
         }
+
     }
 
     /**

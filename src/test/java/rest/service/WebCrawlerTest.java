@@ -101,11 +101,10 @@ public class WebCrawlerTest {
     @Test(expected = IllegalArgumentException.class)
     public void ifTheTypeIsNotItemShouldThrowException() {
         // arrange
-        Object invalidType = new Object();
         WebCrawler webCrawler;
 
         // act
-        webCrawler = new WebCrawler(validUrl, validKeyword, invalidType);
+        webCrawler = new WebCrawler(validUrl, validKeyword, (Item) invalidType);
     }
 
 

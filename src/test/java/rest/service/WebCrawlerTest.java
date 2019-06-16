@@ -109,6 +109,7 @@ public class WebCrawlerTest {
         webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
         String actualUrl = webCrawler.getInitUrl();
         String actualKeyword = webCrawler.getKeyword();
+        Statistic actualStatistic = webCrawler.getStatistic();
         Object actualItem = webCrawler.getItem();
 
         // assert
@@ -116,6 +117,7 @@ public class WebCrawlerTest {
         assertEquals("The keyword did not match!!", actualKeyword, validKeyword);
         assertNotNull("The Item was null!!", actualItem);
         assertTrue("The Item did not implement Item class", actualItem instanceof Item);
+        assertNotNull("The statistic object was null!!", actualStatistic);
     }
 
 //    /***

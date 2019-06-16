@@ -16,6 +16,7 @@ public class WebCrawler {
         if (keyword == null || keyword.equals("")){
             throw new IllegalArgumentException();
         }
+        statistic = new Statistic(type, keyword);
     }
 
     /**
@@ -42,11 +43,14 @@ public class WebCrawler {
     }
 
     public String getInitUrl() {
+        return null;
     }
 
     public String getKeyword() {
+        return null;
     }
 
     public Object getItem() {
+        return null;
     }
 }

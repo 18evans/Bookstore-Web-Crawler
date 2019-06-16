@@ -100,6 +100,24 @@ public class WebCrawlerTest {
         assertNotNull("The WebCrawler object was null!!", webCrawler);
     }
 
+    @Test
+    public void afterInstantiationAllFieldsShouldBeSet(){
+        // arrange
+        WebCrawler webCrawler;
+
+        // act
+        webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+        String actualUrl = webCrawler.getInitUrl();
+        String actualKeyword = webCrawler.getKeyword();
+        Object actualItem = webCrawler.getItem();
+
+        // assert
+        assertEquals("The url did not match!!", actualUrl, validUrl.getHost());
+        assertEquals("The keyword did not match!!", actualKeyword, validKeyword);
+        assertNotNull("The Item was null!!", actualItem);
+        assertTrue("The Item did not implement Item class", actualItem instanceof Item);
+    }
+
 //    /***
 //     * If the current collection of urls already empty, but found more hyperlinks
 //     * the process should add new hyperlinks to to the current collection of urls

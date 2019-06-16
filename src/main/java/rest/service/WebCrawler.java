@@ -13,6 +13,9 @@ public class WebCrawler {
 
     public WebCrawler(URL url, String keyword) {
         this.url = url;
+        if (keyword.equals("")){
+            throw new IllegalArgumentException();
+        }
     }
 
     /**

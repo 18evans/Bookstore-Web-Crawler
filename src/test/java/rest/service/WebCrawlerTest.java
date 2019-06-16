@@ -156,15 +156,15 @@ public class WebCrawlerTest {
      * A test which check the initial set of url. The initial set should have only one url.
      */
     @Test
-    public void afterInstantiationShouldHaveOnlyOneInitUrl(){
+    public void afterInstantiationTheToBeExploredUrlShouldHaveOnlyOneInitUrl(){
         // arrange
         WebCrawler webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
         Integer expectedNrOfUrl = 1;
         String expectedUrlString = validUrl.toString();
 
         // act
-        Integer actualNrOfUrl = webCrawler.getUrlList().size();
-        String actualUrlString = webCrawler.getUrlList().toArray()[0].toString();
+        Integer actualNrOfUrl = webCrawler.getToBeExploredUrls().size();
+        String actualUrlString = webCrawler.getToBeExploredUrls().toArray()[0].toString();
 
         // assert
         assertEquals("The number of initial url was not 1", actualNrOfUrl, expectedNrOfUrl);
@@ -185,7 +185,7 @@ public class WebCrawlerTest {
         webCrawler.startCrawler();
 
         // assert
-        assertTrue("The URL list had zero url!!!", webCrawler.getUrlList().size() > 0);
+        assertTrue("The explored URL list had zero url!!!", webCrawler.getToBeExploredUrls().size() > 0);
         assertNotNull("The web crawler was null", webCrawler);
     }
 
@@ -225,7 +225,7 @@ public class WebCrawlerTest {
         // arrange
         WebCrawler webCrawler = mock(WebCrawler.class);
         when(webCrawler.getInitUrl()).thenReturn(url.toString());
-        when(webCrawler.getUrlList()).thenReturn(new HashSet<>());
+        when(webCrawler.getToBeExploredUrls()).thenReturn(new HashSet<>());
 
         // act
         webCrawler.startCrawler();

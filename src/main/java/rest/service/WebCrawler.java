@@ -18,7 +18,8 @@ public class WebCrawler {
     private Statistic statistic;
     private Scrape scrape;
     private URL url;
-    private Set<URL> urlList;
+    private Set<URL> exploredUrls;
+    private Set<URL> toBeExploredUrls;
 
     public WebCrawler(URL url, String keyword, Item type) {
         this.url = url;
@@ -26,8 +27,9 @@ public class WebCrawler {
             throw new IllegalArgumentException();
         }
         statistic = new Statistic(type, keyword);
-        urlList = new HashSet<>();
-        urlList.add(url);
+        exploredUrls = new HashSet<>();
+        toBeExploredUrls = new HashSet<>();
+        toBeExploredUrls.add(url);
     }
 
     public void setStatistic(Statistic statistic) {
@@ -41,22 +43,26 @@ public class WebCrawler {
      * @return A Set Collection of the Item
      */
     public Set<Item> startCrawler() throws IOException {
-        Document document = Jsoup.connect(this.getInitUrl()).get();
-        Elements linksOnPage = document.select("a[href]");
+        if (!toBeExploredUrls.isEmpty()){
+            for (URL url : toBeExploredUrls){
+                Document document = Jsoup.connect(url.toString()).get();
+                Elements linksOnPage = document.select("a[href]");
 
-        for (Element element : linksOnPage){
-            String urlText = element.attr("abs:href");
-            URL discoveredUrl = null;
-            try {
-                discoveredUrl = new URL(urlText);
-            } catch (MalformedURLException ex){
-            }
+                for (Element element : linksOnPage){
+                    String urlText = element.attr("abs:href");
+                    URL discoveredUrl = null;
+                    try {
+                        discoveredUrl = new URL(urlText);
+                    } catch (MalformedURLException ex){
+                    }
 
-            if (discoveredUrl != null) {
-                urlList.add(discoveredUrl);
+                    if (discoveredUrl != null) {
+                        toBeExploredUrls.add(discoveredUrl);
+                    }
+                }
+                statistic.increasePagesExplored();
             }
         }
-        statistic.increasePagesExplored();
         return null;
     }
 
@@ -92,7 +98,19 @@ public class WebCrawler {
         return statistic;
     }
 
-    public Set<URL> getUrlList() {
-        return urlList;
+    public Set<URL> getExploredUrls() {
+        return exploredUrls;
+    }
+
+    public void setExploredUrls(Set<URL> exploredUrls) {
+        this.exploredUrls = exploredUrls;
+    }
+
+    public Set<URL> getToBeExploredUrls() {
+        return toBeExploredUrls;
+    }
+
+    public void setToBeExploredUrls(Set<URL> toBeExploredUrls) {
+        this.toBeExploredUrls = toBeExploredUrls;
     }
 }

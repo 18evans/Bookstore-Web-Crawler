@@ -1,6 +1,7 @@
 package rest.service.endpoint;
 
 import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +11,7 @@ import javax.ws.rs.core.Response;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
@@ -63,6 +65,30 @@ public class WebCrawlerResourceTest {
         assertEquals("Response on NULL url was NOT server error as was expected.",
                 Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
                 responseNull.getStatus());
+    }
+
+    private static String[] getValidUrls() {
+        return new String[]{
+                "https://en.wikipedia.org/wiki/Books",
+                "https://en.wikipedia.org/wiki/Film",
+                "https://en.wikipedia.org/wiki/Music"
+        };
+    }
+
+    @Test
+    @Parameters(method = "getValidUrls")
+    public void responseDoesNotReturnServerErrorOnValidatedURL(String url) {
+        //arrange
+        final String type = Books.class.getSimpleName();
+        final String keyword = "word";
+
+        //act
+        Response response = resource.getContent(url, type, keyword);
+
+        //assert
+        assertNotEquals("Response did in fact return a SERVER ERROR when it was not expected.",
+                Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                response.getStatus());
     }
 
     /**

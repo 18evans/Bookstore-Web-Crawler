@@ -42,11 +42,14 @@ public class WebCrawler {
 
         for (Element element : linksOnPage){
             String urlText = element.attr("abs:href");
+            URL discoveredUrl = null;
             try {
-                URL discoveredURL = new URL(urlText);
-                urlList.add(discoveredURL);
+                discoveredUrl = new URL(urlText);
             } catch (MalformedURLException ex){
-
+            }
+            
+            if (discoveredUrl != null) {
+                urlList.add(discoveredUrl);
             }
         }
 

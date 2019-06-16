@@ -37,15 +37,6 @@ public class WebCrawlerResourceTest {
     //tests with only 1 parameter
 
     /**
-     * If query parameter for "url" is not specified,
-     * method returns a Server Error response.
-     */
-    @Test
-    @Ignore
-    public void responseReturnsErrorIfURLIsNotSpecified() {
-    }
-
-    /**
      * If query param value for "url" is passed as null, empty String or white space.
      * Example:     getContent(null) returns Server Error.
      */

@@ -13,7 +13,7 @@ import java.net.URL;
 import java.util.Set;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 public class WebCrawlerTest {
     private String emptyString;
@@ -118,6 +118,24 @@ public class WebCrawlerTest {
         assertNotNull("The Item was null!!", actualItem);
         assertTrue("The Item did not implement Item class", actualItem instanceof Item);
         assertNotNull("The statistic object was null!!", actualStatistic);
+    }
+
+    @Test
+    public void afterInstantiationKeywordAndItemTypeMustBeReturnedByTheStatisticObject(){
+        // arrange
+        WebCrawler webCrawler;
+        Statistic statisticMock = mock(Statistic.class);
+        when(statisticMock.getKeyword()).thenReturn(validKeyword);
+        when(statisticMock.getType()).thenReturn(validGeneralItemType);
+
+        // act
+        webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+        webCrawler.getItem();
+        webCrawler.getKeyword();
+
+        // assert
+        verify(statisticMock).getType();
+        verify(statisticMock).getKeyword();
     }
 
 //    /***

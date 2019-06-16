@@ -61,6 +61,7 @@ public class WebCrawler {
                     }
                 }
                 statistic.increasePagesExplored();
+                exploredUrls.add(url);
             }
         }
         return null;

@@ -42,11 +42,12 @@ public class WebCrawlerTest {
 
     private Object[] crawlOneSiteToManySites() throws MalformedURLException {
         return new Object[]{
-          new Object[]{new URL("https://fontys.nl")},
-          new Object[]{new URL("https://www.youtube.com")},
-          new Object[]{new URL("https://www.reddit.com")}
+                new Object[]{new URL("https://fontys.nl")},
+                new Object[]{new URL("https://www.youtube.com")},
+                new Object[]{new URL("https://www.reddit.com")}
         };
     }
+
 
     /***
      * The test that verify the method should throw an MalformedURLException when
@@ -133,7 +134,7 @@ public class WebCrawlerTest {
      * A constructor test which check all the fields of the WebCrawler class
      */
     @Test
-    public void afterInstantiationAllFieldsShouldBeSet(){
+    public void afterInstantiationAllFieldsShouldBeSet() {
         // arrange
         WebCrawler webCrawler;
 
@@ -156,7 +157,7 @@ public class WebCrawlerTest {
      * A test which check the initial set of url. The initial set should have only one url.
      */
     @Test
-    public void afterInstantiationTheToBeExploredUrlShouldHaveOnlyOneInitUrl(){
+    public void afterInstantiationTheToBeExploredUrlShouldHaveOnlyOneInitUrl() {
         // arrange
         WebCrawler webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
         Integer expectedNrOfUrl = 1;
@@ -191,6 +192,7 @@ public class WebCrawlerTest {
 
     /**
      * After finish searching for all the links of the given url, the total number of page explored should be increase by one.
+     *
      * @param url - the given URL
      * @throws IOException - expected exception from Jsoup
      */
@@ -217,21 +219,18 @@ public class WebCrawlerTest {
      * If the current collection of urls already empty, but found more hyperlinks
      * the process should add new hyperlinks to to the current collection of urls
      * and continue crawling.
-     * @param url - the init url
      */
     @Test
     @Parameters(method = "crawlOneSiteToManySites")
     public void ifTheUrlSetIsEmptyButFoundMoreLinksTheProcessShouldContinueWithNewLinksAddedToTheURLSet(URL url) throws IOException {
         // arrange
-        WebCrawler webCrawler = mock(WebCrawler.class);
-        when(webCrawler.getInitUrl()).thenReturn(url.toString());
-        when(webCrawler.getToBeExploredUrls()).thenReturn(new HashSet<>());
+        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
 
         // act
         webCrawler.startCrawler();
 
         // assert
-        verify(webCrawler, atLeast(2)).startCrawler();
+        assertTrue("The total number of explored page was 0", webCrawler.getStatistic().getPagesExplored() > 0);
     }
 //
 //    /***

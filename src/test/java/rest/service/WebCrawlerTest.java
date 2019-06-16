@@ -130,6 +130,7 @@ public class WebCrawlerTest {
 
         // act
         webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+        webCrawler.setStatistic(statisticMock);
         webCrawler.getItem();
         webCrawler.getKeyword();
 

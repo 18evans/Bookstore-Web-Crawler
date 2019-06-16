@@ -173,6 +173,7 @@ public class WebCrawlerTest {
 
         // assert
         assertTrue("The URL list did not have more than one url!!!", webCrawler.getUrlList().size() > 1);
+        assertNotNull("The webclawer was null", webCrawler);
     }
 
 //    /***

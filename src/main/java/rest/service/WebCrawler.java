@@ -11,7 +11,7 @@ public class WebCrawler {
     private Scrape scrape;
     private URL url;
 
-    public WebCrawler(URL url, String keyword) {
+    public WebCrawler(URL url, String keyword, Object type) {
         this.url = url;
         if (keyword == null || keyword.equals("")){
             throw new IllegalArgumentException();

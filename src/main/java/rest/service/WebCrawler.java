@@ -7,6 +7,14 @@ import java.util.Set;
 
 public class WebCrawler {
 
+    private Statistic statistic;
+    private Scrape scrape;
+    private URL url;
+
+    public WebCrawler(URL url, String keyword) {
+        this.url = url;
+    }
+
     /**
      * Method calls private crawl which will recursively go through the URL,
      * looking for the specified objects either by using BFS or DFS searching algorithm.

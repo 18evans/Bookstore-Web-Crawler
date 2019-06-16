@@ -41,38 +41,36 @@ public class WebCrawlerResourceTest {
                 response, instanceOf(Response.class));
     }
 
+
     //tests of only 1 parameter
 
+    private static String[] getNullEmptyOrWhiteSpaceStrings() {
+        return new String[]{
+                null,
+                "",
+                "     "
+        };
+    }
+
     /**
-     * If query param value for "url" is passed as null, empty String or white space.
-     * Example:     getContent(null) returns Server Error.
+     * If query param value for "url" is a passed NULL pointer, Empty String or String of only White Space,
+     * expected return object is a Response carrying ServerError entity with
+     * a Server error entity message for NULL pointer, Empty String or String of only White Space URLs.
+     * Example:      getContent(null),
+     * getContent("")
+     * and getContent("     ")
+     * return Server Error.
+     * @param urlAsNullEmptyOrWhiteSpace - url equal to either NULL, "" or "    ".
      */
     @Test
-    public void responseReturnsServerErrorIfURLIsNullEmptyOrWhitespace() {
-        //arrange
-        final String urlEmpty = "";
-        final String urlWhiteSpace = "    ";
+    @Parameters(method = "getNullEmptyOrWhiteSpaceStrings")
+    public void responseReturnsServerErrorIfUrlIsNullEmptyOrWhiteSpace(String urlAsNullEmptyOrWhiteSpace) {
+        //arrange - url from Parameterized method, type & keyword from Global constants
 
         //act
-        Response responseEmpty = resource.getContent(urlEmpty, type, keyword);
-        Response responseWhiteSpace = resource.getContent(urlWhiteSpace, type, keyword);
-        Response responseNull = resource.getContent(null, type, keyword);
+        Response responseNull = resource.getContent(urlAsNullEmptyOrWhiteSpace, type, keyword);
 
         //assert
-        assertEquals("Response on EMPTY url was NOT server error as was expected.",
-                Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
-                responseEmpty.getStatus());
-        assertEquals("Server Error did not in fact carry the expected entity error String message.",
-                MSG_ERROR_URL_NULL_EMPTY_WHITESPACE,
-                responseEmpty.getEntity());
-
-        assertEquals("Response on WHITE SPACE url was NOT server error as was expected.",
-                Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
-                responseWhiteSpace.getStatus());
-        assertEquals("Server Error did not in fact carry the expected entity error String message.",
-                MSG_ERROR_URL_NULL_EMPTY_WHITESPACE,
-                responseWhiteSpace.getEntity());
-
         assertEquals("Response on NULL url was NOT server error as was expected.",
                 Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
                 responseNull.getStatus());
@@ -88,7 +86,6 @@ public class WebCrawlerResourceTest {
                 "https://en.wikipedia.org/wiki/Music"
         };
     }
-
 
     /**
      * Method asserts that a Valid URL passed as argument will cause endpoint
@@ -124,6 +121,7 @@ public class WebCrawlerResourceTest {
      * Method asserts that an Invalid URL passed as argument will cause endpoint
      * to return Server error.
      * Method uses Parameterized Tests to get an invalid URL argument.
+     *
      * @param url - the invalid URL.
      */
     @Test

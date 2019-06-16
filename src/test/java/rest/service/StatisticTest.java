@@ -233,6 +233,4 @@ public class StatisticTest {
     public void generateJsonShouldReturnJsonObjectWithCorrectValues(){
 
     }
-
-
 }

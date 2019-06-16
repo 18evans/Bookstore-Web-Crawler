@@ -13,12 +13,14 @@ import static org.junit.Assert.*;
 public class WebCrawlerTest {
     private String emptyString;
     private String nullString;
+    private String validKeyword;
     private URL validUrl;
 
     @Before
     public void setUp() throws MalformedURLException {
         emptyString = "";
         nullString = null;
+        validKeyword = "sample keyword";
         validUrl = new URL("https://fontys.nl");
     }
 
@@ -33,8 +35,8 @@ public class WebCrawlerTest {
         URL nullURL = new URL(nullString);
 
         // act
-        WebCrawler webCrawler = new WebCrawler(emptyUrl);
-        WebCrawler webCrawler2 = new WebCrawler(nullURL);
+        WebCrawler webCrawler = new WebCrawler(emptyUrl, validKeyword);
+        WebCrawler webCrawler2 = new WebCrawler(nullURL, validKeyword);
 
         // assert
     }

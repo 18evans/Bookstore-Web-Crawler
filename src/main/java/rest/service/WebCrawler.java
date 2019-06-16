@@ -30,6 +30,10 @@ public class WebCrawler {
         urlList.add(url);
     }
 
+    public void setStatistic(Statistic statistic) {
+        this.statistic = statistic;
+    }
+
     /**
      * Method calls private crawl which will recursively go through the URL,
      * looking for the specified objects either by using BFS or DFS searching algorithm.
@@ -47,12 +51,12 @@ public class WebCrawler {
                 discoveredUrl = new URL(urlText);
             } catch (MalformedURLException ex){
             }
-            
+
             if (discoveredUrl != null) {
                 urlList.add(discoveredUrl);
             }
         }
-
+        statistic.increasePagesExplored();
         return null;
     }
 

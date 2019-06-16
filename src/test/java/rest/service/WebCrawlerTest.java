@@ -188,20 +188,30 @@ public class WebCrawlerTest {
         assertNotNull("The web crawler was null", webCrawler);
     }
 
+    /**
+     * After finish searching for all the links of the given url, the total number of page explored should be increase by one.
+     * @param url - the given URL
+     * @throws IOException - expected exception from Jsoup
+     */
     @Test
     @Parameters(method = "crawlOneSiteToManySites")
     public void afterFinishFindingAllLinksOfAnUrlTheStatisticShouldIncreaseTheTotalPageExploredByOne(URL url) throws IOException {
         // arrange
         WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
-        Integer expectedNrOfPageExplored = 1;
+        Statistic statisticMock = mock(Statistic.class);
+        webCrawler.setStatistic(statisticMock);
+        //Integer expectedNrOfPageExplored = 1;
 
         // act
         webCrawler.startCrawler();
-        Integer actuanNrOfPageExplored = webCrawler.getStatistic().getPagesExplored();
+        //Integer actualNrOfPageExplored = webCrawler.getStatistic().getPagesExplored();
 
         // assert
-        assertEquals("The total number of page explored was not 1", expectedNrOfPageExplored, actuanNrOfPageExplored);
+        //assertEquals("The total number of page explored was not 1", expectedNrOfPageExplored, actualNrOfPageExplored);
+        verify(statisticMock).increasePagesExplored();
     }
+
+
 
 //    /***
 //     * If the current collection of urls already empty, but found more hyperlinks

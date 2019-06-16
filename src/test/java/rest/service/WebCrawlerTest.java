@@ -3,6 +3,8 @@ package rest.service;
 import junitparams.Parameters;
 import org.junit.Before;
 import org.junit.Test;
+import rest.service.model.Books;
+import rest.service.model.Item;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,6 +16,8 @@ public class WebCrawlerTest {
     private String emptyString;
     private String nullString;
     private String validKeyword;
+    private Object invalidType;
+    private Item validType;
     private URL validUrl;
 
     @Before
@@ -21,6 +25,7 @@ public class WebCrawlerTest {
         emptyString = "";
         nullString = null;
         validKeyword = "sample keyword";
+        invalidType = new Object();
         validUrl = new URL("https://fontys.nl");
     }
 
@@ -33,10 +38,11 @@ public class WebCrawlerTest {
         // arrange
         URL emptyUrl = new URL(emptyString);
         URL nullURL = new URL(nullString);
+        validType = new Books();
 
         // act
-        WebCrawler webCrawler = new WebCrawler(emptyUrl, validKeyword);
-        WebCrawler webCrawler2 = new WebCrawler(nullURL, validKeyword);
+        WebCrawler webCrawler = new WebCrawler(emptyUrl, validKeyword, validType);
+        WebCrawler webCrawler2 = new WebCrawler(nullURL, validKeyword, validType);
 
         // assert
     }
@@ -50,9 +56,10 @@ public class WebCrawlerTest {
         // arrange
         String emptyKeyword = emptyString;
         WebCrawler webCrawler;
+        validType = new Books();
 
         // act
-        webCrawler = new WebCrawler(validUrl, emptyKeyword);
+        webCrawler = new WebCrawler(validUrl, emptyKeyword, validType);
     }
 
     /***
@@ -64,9 +71,10 @@ public class WebCrawlerTest {
         // arrange
         String nullKeyword = nullString;
         WebCrawler webCrawler;
+        validType = new Books();
 
         // act
-        webCrawler = new WebCrawler(validUrl, nullKeyword);
+        webCrawler = new WebCrawler(validUrl, nullKeyword, validType);
     }
 
     /***
@@ -77,9 +85,10 @@ public class WebCrawlerTest {
     public void validKeywordShouldNotThrowIllegalArgumentException() {
         // arrange
         WebCrawler webCrawler;
+        validType = new Books();
 
         // act
-        webCrawler = new WebCrawler(validUrl, validKeyword);
+        webCrawler = new WebCrawler(validUrl, validKeyword, validType);
 
         // assert
         assertNotNull("The WebCrawler object was null!!", webCrawler);

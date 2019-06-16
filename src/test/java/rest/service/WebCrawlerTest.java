@@ -176,7 +176,7 @@ public class WebCrawlerTest {
      */
     @Test
     @Parameters(method = "crawlOneSiteToManySites")
-    public void afterStartTheUrlListShouldHaveMoreThanOneUrl(URL url) throws IOException {
+    public void afterStartTheUrlListShouldHaveMoreThanZeroUrl(URL url) throws IOException {
         // arrange
         WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
 
@@ -184,8 +184,23 @@ public class WebCrawlerTest {
         webCrawler.startCrawler();
 
         // assert
-        assertTrue("The URL list did not have more than one url!!!", webCrawler.getUrlList().size() > 1);
-        assertNotNull("The web clawer was null", webCrawler);
+        assertTrue("The URL list had zero url!!!", webCrawler.getUrlList().size() > 0);
+        assertNotNull("The web crawler was null", webCrawler);
+    }
+
+    @Test
+    @Parameters(method = "crawlOneSiteToManySites")
+    public void afterFinishFindingAllLinksOfAnUrlTheStatisticShouldIncreaseTheTotalPageExploredByOne(URL url) throws IOException {
+        // arrange
+        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
+        Integer expectedNrOfPageExplored = 1;
+
+        // act
+        webCrawler.startCrawler();
+        Integer actuanNrOfPageExplored = webCrawler.getStatistic().getPagesExplored();
+
+        // assert
+        assertEquals("The total number of page explored was not 1", expectedNrOfPageExplored, actuanNrOfPageExplored);
     }
 
 //    /***

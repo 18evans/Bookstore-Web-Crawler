@@ -36,7 +36,7 @@ public class WebCrawler {
      * @return A Set Collection of the Item
      */
     public Set<Item> startCrawler() throws IOException {
-        URL discoveredUrl = new URL("fontys.nl");
+        URL discoveredUrl = new URL("https://fontys.nl");
         this.urlList.add(discoveredUrl);
 
         return null;

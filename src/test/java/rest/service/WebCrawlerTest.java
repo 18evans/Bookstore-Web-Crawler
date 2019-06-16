@@ -45,7 +45,12 @@ public class WebCrawlerTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void nullOrEmptyKeywordShouldThrowIllegalArgumentException() {
+        // arrange
+        String emtpyKeyword = emptyString;
+        WebCrawler webCrawler;
 
+        // act
+        webCrawler = new WebCrawler(validUrl, emtpyKeyword);
     }
 
     /***

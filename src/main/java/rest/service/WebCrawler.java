@@ -21,6 +21,7 @@ public class WebCrawler {
         }
         statistic = new Statistic(type, keyword);
         urlList = new HashSet<>();
+        urlList.add(url);
     }
 
     /**

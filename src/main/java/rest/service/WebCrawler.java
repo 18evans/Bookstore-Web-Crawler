@@ -47,6 +47,10 @@ public class WebCrawler {
         return null;
     }
 
+    /***
+     * Return the initial url
+     * @return
+     */
     public String getInitUrl() {
         return this.url.toString();
     }

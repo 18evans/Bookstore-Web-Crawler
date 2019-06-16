@@ -155,6 +155,24 @@ public class WebCrawlerTest {
 
         // assert
         assertEquals("The number of initial url was not 1", actualNrOfUrl, expectedNrOfUrl);
+        assertEquals("The url did not match", actualUrlString, expectedUrlString);
+    }
+
+    /***
+     * This is a parameterized test which uses urls (that contain more url within it).
+     * When the crawl process start, the url list should be increased to more than one.
+     */
+    @Test
+    @Parameters(method = "crawlOneSiteToManySites")
+    public void afterStartTheUrlListShouldHaveMoreThanOneUrl(URL url){
+        // arrange
+        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
+
+        // act
+        webCrawler.startCrawler();
+
+        // assert
+        assertTrue("The URL list did not have more than one url!!!", webCrawler.getUrlList().size() > 1);
     }
 
 //    /***

@@ -8,6 +8,7 @@ import rest.service.model.Item;
 import rest.service.model.Movies;
 import rest.service.model.Music;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
@@ -164,7 +165,7 @@ public class WebCrawlerTest {
      */
     @Test
     @Parameters(method = "crawlOneSiteToManySites")
-    public void afterStartTheUrlListShouldHaveMoreThanOneUrl(URL url){
+    public void afterStartTheUrlListShouldHaveMoreThanOneUrl(URL url) throws IOException {
         // arrange
         WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
 
@@ -173,7 +174,7 @@ public class WebCrawlerTest {
 
         // assert
         assertTrue("The URL list did not have more than one url!!!", webCrawler.getUrlList().size() > 1);
-        assertNotNull("The webclawer was null", webCrawler);
+        assertNotNull("The web clawer was null", webCrawler);
     }
 
 //    /***

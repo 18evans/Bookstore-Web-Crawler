@@ -1,7 +1,12 @@
 package rest.service;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import rest.service.model.Item;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +35,9 @@ public class WebCrawler {
      *
      * @return A Set Collection of the Item
      */
-    public Set<Item> startCrawler() {
+    public Set<Item> startCrawler() throws IOException {
+        this.urlList.add(discoveredUrl);
+
         return null;
     }
 

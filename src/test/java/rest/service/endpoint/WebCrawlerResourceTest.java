@@ -91,6 +91,31 @@ public class WebCrawlerResourceTest {
                 response.getStatus());
     }
 
+    private static String[] getInvalidUrls() {
+        return new String[]{
+                "asdf",
+                "fdgdfhg.gfddsfgdg",
+                "gfdhfnb.dsfgdg",
+                "www.dfgdfgdfgdfgdfgdfgdfg.hngfdjhgjgfhjgdhj"
+        };
+    }
+
+    @Test
+    @Parameters(method = "getInvalidUrls")
+    public void responseReturnsServerErrorOnInvalidURL(String url) {
+        //arrange
+        final String type = Books.class.getSimpleName();
+        final String keyword = "word";
+
+        //act
+        Response response = resource.getContent(url, type, keyword);
+
+        //assert
+        assertEquals("Response did in fact NOT return a SERVER ERROR when it was expected.",
+                Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                response.getStatus());
+    }
+
     /**
      * /**
      * Test case checks that response returns Error if URL is omitted,

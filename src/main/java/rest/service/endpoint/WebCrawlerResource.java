@@ -17,6 +17,9 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class WebCrawlerResource {
 
+    public static final String MSG_ERROR_URL_INVALID = "URL is malformed or invalid.";
+    public static final String MSG_ERROR_URL_NULL_EMPTY_WHITESPACE = "URL cannot be NULL, EMPTY or WHITE SPACE.";
+
     /**
      * @param urlAsString - url of website you wish to crawl through
      * @param type        - the class name of the type of object you wish to look for.
@@ -30,10 +33,10 @@ public class WebCrawlerResource {
                                @QueryParam("type") @DefaultValue("") String type,
                                @QueryParam("keyword") @DefaultValue("") String keyword) {
         if (StringUtils.isBlank(urlAsString)) {
-            return Response.serverError().build();
+            return Response.serverError().entity(MSG_ERROR_URL_NULL_EMPTY_WHITESPACE).build();
         }
         if (!UrlValidator.getInstance().isValid(urlAsString)) {
-            return Response.serverError().build();
+            return Response.serverError().entity(MSG_ERROR_URL_INVALID).build();
         }
         return Response.ok().build();
     }

@@ -14,6 +14,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_URL_INVALID;
+import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_URL_NULL_EMPTY_WHITESPACE;
 
 @RunWith(JUnitParamsRunner.class)
 public class WebCrawlerResourceTest {
@@ -60,12 +62,23 @@ public class WebCrawlerResourceTest {
         assertEquals("Response on EMPTY url was NOT server error as was expected.",
                 Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
                 responseEmpty.getStatus());
+        assertEquals("Server Error did not in fact carry the expected entity error String message.",
+                MSG_ERROR_URL_NULL_EMPTY_WHITESPACE,
+                responseEmpty.getEntity());
+
         assertEquals("Response on WHITE SPACE url was NOT server error as was expected.",
                 Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
                 responseWhiteSpace.getStatus());
+        assertEquals("Server Error did not in fact carry the expected entity error String message.",
+                MSG_ERROR_URL_NULL_EMPTY_WHITESPACE,
+                responseWhiteSpace.getEntity());
+
         assertEquals("Response on NULL url was NOT server error as was expected.",
                 Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
                 responseNull.getStatus());
+        assertEquals("Server Error did not in fact carry the expected entity error String message.",
+                MSG_ERROR_URL_NULL_EMPTY_WHITESPACE,
+                responseNull.getEntity());
     }
 
     private static String[] getValidUrls() {
@@ -125,6 +138,9 @@ public class WebCrawlerResourceTest {
         assertEquals("Response did in fact NOT return a SERVER ERROR when it was expected.",
                 Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
                 response.getStatus());
+        assertEquals("Server Error did not in fact carry the expected entity error String message.",
+                MSG_ERROR_URL_INVALID,
+                response.getEntity());
     }
 
     /**

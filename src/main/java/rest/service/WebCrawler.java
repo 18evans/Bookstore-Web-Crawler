@@ -3,6 +3,8 @@ package rest.service;
 import rest.service.model.Item;
 
 import java.net.URL;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class WebCrawler {
@@ -10,6 +12,7 @@ public class WebCrawler {
     private Statistic statistic;
     private Scrape scrape;
     private URL url;
+    private Set<URL> urlList;
 
     public WebCrawler(URL url, String keyword, Item type) {
         this.url = url;
@@ -17,6 +20,7 @@ public class WebCrawler {
             throw new IllegalArgumentException();
         }
         statistic = new Statistic(type, keyword);
+        urlList = new HashSet<>();
     }
 
     /**
@@ -56,5 +60,9 @@ public class WebCrawler {
 
     public Statistic getStatistic() {
         return statistic;
+    }
+
+    public Set<URL> getUrlList() {
+        return urlList;
     }
 }

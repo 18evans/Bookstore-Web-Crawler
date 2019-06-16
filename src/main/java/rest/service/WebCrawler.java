@@ -53,4 +53,8 @@ public class WebCrawler {
     public Object getItem() {
         return null;
     }
+
+    public Statistic getStatistic() {
+        return null;
+    }
 }

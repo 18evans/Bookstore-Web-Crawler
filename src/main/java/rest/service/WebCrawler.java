@@ -43,18 +43,18 @@ public class WebCrawler {
     }
 
     public String getInitUrl() {
-        return null;
+        return this.url.getHost();
     }
 
     public String getKeyword() {
-        return null;
+        return statistic.getKeyword();
     }
 
     public Object getItem() {
-        return null;
+        return statistic.getType();
     }
 
     public Statistic getStatistic() {
-        return null;
+        return statistic;
     }
 }

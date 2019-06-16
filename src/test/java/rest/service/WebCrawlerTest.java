@@ -151,7 +151,7 @@ public class WebCrawlerTest {
 
         // act
         Integer actualNrOfUrl = webCrawler.getUrlList().size();
-        String actualUrlString = webCrawler.getUrlList().get(0).toString();
+        String actualUrlString = webCrawler.getUrlList().toArray()[0].toString();
 
         // assert
         assertEquals("The number of initial url was not 1", actualNrOfUrl, expectedNrOfUrl);

@@ -3,6 +3,7 @@ package rest.service;
 import junitparams.Parameters;
 import org.junit.Test;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
 
@@ -15,8 +16,15 @@ public class WebCrawlerTest {
      * the given URL is Empty or Null.
      */
     @Test(expected = IllegalArgumentException.class)
-    public void nullOrEmptyURLShouldThrowIllegalArgumentException() {
+    public void nullOrEmptyURLShouldThrowIllegalArgumentException() throws MalformedURLException {
+        // arrange
+        String emptyUrlString = "";
+        URL emptyUrl = new URL(emptyUrlString);
 
+        // act
+        WebCrawler webCrawler = new WebCrawler(emptyUrl);
+
+        // assert
     }
 
     /***

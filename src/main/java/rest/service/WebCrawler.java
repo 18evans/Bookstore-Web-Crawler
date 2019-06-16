@@ -40,4 +40,13 @@ public class WebCrawler {
     private Set<Item> crawl(Set<URL> urls) {
         return null;
     }
+
+    public String getInitUrl() {
+    }
+
+    public String getKeyword() {
+    }
+
+    public Object getItem() {
+    }
 }

@@ -1,6 +1,7 @@
 package rest.service.endpoint;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.UrlValidator;
 
 import javax.inject.Singleton;
 import javax.ws.rs.DefaultValue;
@@ -29,6 +30,9 @@ public class WebCrawlerResource {
                                @QueryParam("type") @DefaultValue("") String type,
                                @QueryParam("keyword") @DefaultValue("") String keyword) {
         if (StringUtils.isBlank(urlAsString)) {
+            return Response.serverError().build();
+        }
+        if (!UrlValidator.getInstance().isValid(urlAsString)) {
             return Response.serverError().build();
         }
         return Response.ok().build();

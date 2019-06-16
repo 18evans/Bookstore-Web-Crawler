@@ -16,6 +16,10 @@ public class WebCrawler {
         if (keyword.equals("")){
             throw new IllegalArgumentException();
         }
+
+        if (keyword == null){
+            throw new IllegalArgumentException();
+        }
     }
 
     /**

@@ -139,6 +139,24 @@ public class WebCrawlerTest {
         assertNotNull("The statistic object was null!!", actualStatistic);
     }
 
+    /***
+     * A test which check the initial set of url. The initial set should have only one url.
+     */
+    @Test
+    public void afterInstantiationShouldHaveOnlyOneInitUrl(){
+        // arrange
+        WebCrawler webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+        Integer expectedNrOfUrl = 1;
+        String expectedUrlString = validUrl.toString();
+
+        // act
+        Integer actualNrOfUrl = webCrawler.getUrlList().size();
+        String actualUrlString = webCrawler.getUrlList().get(0).toString();
+
+        // assert
+        assertEquals("The number of initial url was not 1", actualNrOfUrl, expectedNrOfUrl);
+    }
+
 //    /***
 //     * If the current collection of urls already empty, but found more hyperlinks
 //     * the process should add new hyperlinks to to the current collection of urls

@@ -57,4 +57,8 @@ public class WebCrawler {
     public Statistic getStatistic() {
         return statistic;
     }
+
+    public void setStatistic(Statistic statistic) {
+        this.statistic = statistic;
+    }
 }

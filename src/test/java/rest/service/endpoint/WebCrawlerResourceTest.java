@@ -9,13 +9,14 @@ import rest.service.model.Books;
 import javax.ws.rs.core.Response;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 @RunWith(JUnitParamsRunner.class)
 public class WebCrawlerResourceTest {
 
-    //1 returns json
+    //returns json
     private final WebCrawlerResource resource = new WebCrawlerResource(); //SUT
 
     @Test
@@ -34,15 +35,34 @@ public class WebCrawlerResourceTest {
                 response, instanceOf(Response.class));
     }
 
-    //tests with only 1 parameter
+    //tests of only 1 parameter
 
     /**
      * If query param value for "url" is passed as null, empty String or white space.
      * Example:     getContent(null) returns Server Error.
      */
     @Test
-    @Ignore
-    public void responseReturnsErrorIfURLIsNullEmptyOrWhitespace() {
+    public void responseReturnsServerErrorIfURLIsNullEmptyOrWhitespace() {
+        final String urlEmpty = "";
+        final String urlWhiteSpace = "    ";
+        final String type = Books.class.getSimpleName();
+        final String keyword = "The Bible";
+
+        //act
+        Response responseEmpty = resource.getContent(urlEmpty, type, keyword);
+        Response responseWhiteSpace = resource.getContent(urlWhiteSpace, type, keyword);
+        Response responseNull = resource.getContent(null, type, keyword);
+
+        //assert
+        assertEquals("Response on EMPTY url was NOT server error as was expected.",
+                Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                responseEmpty.getStatus());
+        assertEquals("Response on WHITE SPACE url was NOT server error as was expected.",
+                Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                responseWhiteSpace.getStatus());
+        assertEquals("Response on NULL url was NOT server error as was expected.",
+                Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                responseNull.getStatus());
     }
 
     /**

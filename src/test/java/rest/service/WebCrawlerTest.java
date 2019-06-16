@@ -94,18 +94,7 @@ public class WebCrawlerTest {
         assertNotNull("The WebCrawler object was null!!", webCrawler);
     }
 
-    /***
-     * If the given type is not a class that derived from Item class
-     * , an IllegalArgumentException should be throw
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void ifTheTypeIsNotItemShouldThrowException() {
-        // arrange
-        WebCrawler webCrawler;
-
-        // act
-        webCrawler = new WebCrawler(validUrl, validKeyword, (Item) invalidType);
-    }
+    
 
 
 //    /***

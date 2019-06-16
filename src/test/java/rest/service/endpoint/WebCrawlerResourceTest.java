@@ -21,12 +21,14 @@ public class WebCrawlerResourceTest {
     //returns json
     private final WebCrawlerResource resource = new WebCrawlerResource(); //SUT
 
+    //example valid argument variables
+    private final String url = "https://en.wikipedia.org/wiki/Books";
+    private final String type = Books.class.getSimpleName();
+    private final String keyword = "The Bible";
+
     @Test
     public void sutReturnsResponseReturnType() {
-        //arrange
-        final String url = "https://en.wikipedia.org/wiki/Books";
-        final String type = Books.class.getSimpleName();
-        final String keyword = "The Bible";
+        //arrange - uses the valid global constants
 
         //act
         Response response = resource.getContent(url, type, keyword);
@@ -45,10 +47,9 @@ public class WebCrawlerResourceTest {
      */
     @Test
     public void responseReturnsServerErrorIfURLIsNullEmptyOrWhitespace() {
+        //arrange
         final String urlEmpty = "";
         final String urlWhiteSpace = "    ";
-        final String type = Books.class.getSimpleName();
-        final String keyword = "The Bible";
 
         //act
         Response responseEmpty = resource.getContent(urlEmpty, type, keyword);
@@ -86,9 +87,7 @@ public class WebCrawlerResourceTest {
     @Test
     @Parameters(method = "getValidUrls")
     public void responseDoesNotReturnServerErrorOnValidatedURL(String url) {
-        //arrange
-        final String type = Books.class.getSimpleName();
-        final String keyword = "word";
+        //arrange - uses the valid global constants
 
         //act
         Response response = resource.getContent(url, type, keyword);
@@ -117,9 +116,7 @@ public class WebCrawlerResourceTest {
     @Test
     @Parameters(method = "getInvalidUrls")
     public void responseReturnsServerErrorOnInvalidURL(String url) {
-        //arrange
-        final String type = Books.class.getSimpleName();
-        final String keyword = "word";
+        //arrange - uses the valid global constants
 
         //act
         Response response = resource.getContent(url, type, keyword);

@@ -1,8 +1,10 @@
 package rest.service;
 
+import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import rest.service.model.Books;
 import rest.service.model.Item;
 import rest.service.model.Movies;
@@ -16,6 +18,7 @@ import java.util.Set;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+@RunWith(JUnitParamsRunner.class)
 public class WebCrawlerTest {
     private String emptyString;
     private String nullString;
@@ -34,6 +37,14 @@ public class WebCrawlerTest {
         validMusicType = mock(Music.class);
         validGeneralItemType = mock(Item.class);
         validUrl = new URL("https://fontys.nl");
+    }
+
+    private Object[] crawlOneSiteToManySites() throws MalformedURLException {
+        return new Object[]{
+          new Object[]{new URL("https://fontys.nl")},
+          new Object[]{new URL("https://www.youtube.com")},
+          new Object[]{new URL("https://www.reddit.com")}
+        };
     }
 
     /***

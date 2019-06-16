@@ -46,13 +46,27 @@ public class WebCrawlerTest {
      * the given keyword is Empty or Null.
      */
     @Test(expected = IllegalArgumentException.class)
-    public void nullOrEmptyKeywordShouldThrowIllegalArgumentException() {
+    public void emptyKeywordShouldThrowIllegalArgumentException() {
         // arrange
-        String emtpyKeyword = emptyString;
+        String emptyKeyword = emptyString;
         WebCrawler webCrawler;
 
         // act
-        webCrawler = new WebCrawler(validUrl, emtpyKeyword);
+        webCrawler = new WebCrawler(validUrl, emptyKeyword);
+    }
+
+    /***
+     * The test that verify the method should throw an IllegalArgumentException when
+     * the given keyword is Empty or Null.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void nullKeywordShouldThrowIllegalArgumentException() {
+        // arrange
+        String nullKeyword = nullString;
+        WebCrawler webCrawler;
+
+        // act
+        webCrawler = new WebCrawler(validUrl, nullKeyword);
     }
 
     /***

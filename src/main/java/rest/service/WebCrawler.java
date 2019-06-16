@@ -7,6 +7,7 @@ import org.jsoup.select.Elements;
 import rest.service.model.Item;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
@@ -41,8 +42,12 @@ public class WebCrawler {
 
         for (Element element : linksOnPage){
             String urlText = element.attr("abs:href");
-            URL discoveredURL = new URL(urlText);
-            urlList.add(discoveredURL);
+            try {
+                URL discoveredURL = new URL(urlText);
+                urlList.add(discoveredURL);
+            } catch (MalformedURLException ex){
+
+            }
         }
 
         return null;

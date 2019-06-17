@@ -9,6 +9,7 @@ import rest.service.model.Item;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,8 +19,8 @@ public class WebCrawler {
     private Statistic statistic;
     private Scrape scrape;
     private URL url;
-    private Set<URL> exploredUrls;
-    private Set<URL> toBeExploredUrls;
+    private final Set<URL> exploredUrls;
+    private final Set<URL> toBeExploredUrls;
 
     public WebCrawler(URL url, String keyword, Item type) {
         this.url = url;
@@ -28,8 +29,7 @@ public class WebCrawler {
         }
         statistic = new Statistic(type, keyword);
         exploredUrls = new HashSet<>();
-        toBeExploredUrls = new HashSet<>();
-        toBeExploredUrls.add(url);
+        toBeExploredUrls = Collections.singleton(url);
     }
 
     public void setStatistic(Statistic statistic) {
@@ -43,28 +43,7 @@ public class WebCrawler {
      * @return A Set Collection of the Item
      */
     public Set<Item> startCrawler() throws IOException {
-        if (!toBeExploredUrls.isEmpty()){
-            for (URL url : toBeExploredUrls){
-                Document document = Jsoup.connect(url.toString()).get();
-                Elements linksOnPage = document.select("a[href]");
 
-                for (Element element : linksOnPage){
-                    String urlText = element.attr("abs:href");
-                    URL discoveredUrl = null;
-                    try {
-                        discoveredUrl = new URL(urlText);
-                    } catch (MalformedURLException ex){
-                    }
-
-                    if (discoveredUrl != null) {
-                        toBeExploredUrls.add(discoveredUrl);
-                    }
-                }
-                statistic.increasePagesExplored();
-                exploredUrls.add(url);
-            }
-        }
-        return null;
     }
 
     /**
@@ -76,7 +55,28 @@ public class WebCrawler {
      * @return the found Items
      */
     private Set<Item> crawl(Set<URL> urls) {
-        return null;
+        if (urls.isEmpty()) {
+            return null;
+        }
+        urls.removeAll(this.exploredUrls);
+        if (!urls.isEmpty()) {
+            this.exploredUrls.addAll(urls);
+            final Set<URL> newUrls = new HashSet<>();
+            try {
+                for (final URL url : toBeExploredUrls) {
+                    final Document document = Jsoup.connect(url.toString()).get();
+                    final Elements urlsOnPage = document.select("a[href]");
+                    for (final Element element : urlsOnPage) {
+                        final String urlText = element.attr("abs:href");
+                        final URL discoveredUrl = new URL(urlText);
+                        newUrls.add(discoveredUrl);
+                    }
+                }
+            } catch (Exception ex) {
+
+            }
+            return crawl(newUrls);
+        }
     }
 
     /***
@@ -87,6 +87,10 @@ public class WebCrawler {
         return this.url.toString();
     }
 
+    /***
+     * return the keyword
+     * @return
+     */
     public String getKeyword() {
         return statistic.getKeyword();
     }
@@ -103,15 +107,8 @@ public class WebCrawler {
         return exploredUrls;
     }
 
-    public void setExploredUrls(Set<URL> exploredUrls) {
-        this.exploredUrls = exploredUrls;
-    }
 
     public Set<URL> getToBeExploredUrls() {
         return toBeExploredUrls;
-    }
-
-    public void setToBeExploredUrls(Set<URL> toBeExploredUrls) {
-        this.toBeExploredUrls = toBeExploredUrls;
     }
 }

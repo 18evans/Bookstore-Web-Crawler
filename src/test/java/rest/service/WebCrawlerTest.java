@@ -211,7 +211,7 @@ public class WebCrawlerTest {
 
         // assert
         //assertEquals("The total number of page explored was not 1", expectedNrOfPageExplored, actualNrOfPageExplored);
-        verify(statisticMock).increasePagesExplored();
+        verify(statisticMock, atLeast(1)).increasePagesExplored();
     }
 
 

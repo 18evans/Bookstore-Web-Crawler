@@ -38,7 +38,7 @@ public class WebCrawlerResource {
         if (!UrlValidator.getInstance().isValid(urlAsString)) {
             return Response.serverError().entity(MSG_ERROR_URL_INVALID).build();
         }
-        return Response.ok().build();
+        return Response.ok("time_elapsed").build();
     }
 
 }

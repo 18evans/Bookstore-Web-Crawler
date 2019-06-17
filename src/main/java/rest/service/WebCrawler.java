@@ -68,7 +68,7 @@ public class WebCrawler {
                         final URL discoveredUrl = new URL(urlText);
                         newUrls.add(discoveredUrl);
                     }
-                    statistic.increasePagesExplored();
+                    this.statistic.increasePagesExplored();
                 }
             } catch (Exception ex) {
 

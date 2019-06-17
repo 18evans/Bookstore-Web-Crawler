@@ -44,7 +44,7 @@ public class WebCrawlerTest {
         return new Object[]{
                 new Object[]{new URL("https://fontys.nl")},
                 new Object[]{new URL("https://www.youtube.com")},
-                new Object[]{new URL("https://www.reddit.com")}
+                new Object[]{new URL("https://www.google.com")}
         };
     }
 
@@ -198,41 +198,22 @@ public class WebCrawlerTest {
      */
     @Test
     @Parameters(method = "crawlOneSiteToManySites")
-    public void afterFinishFindingAllLinksOfAnUrlTheStatisticShouldIncreaseTheTotalPageExploredByOne(URL url) throws IOException {
+    public void afterFinishFindingAllLinksOfAnUrlTheStatisticShouldIncreaseTheNumberOfPageExplored(URL url) throws IOException {
         // arrange
         WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
-        Statistic statisticMock = mock(Statistic.class);
-        webCrawler.setStatistic(statisticMock);
-        //Integer expectedNrOfPageExplored = 1;
+        Statistic statistic = mock(Statistic.class);
+        webCrawler.setStatistic(statistic);
 
         // act
         webCrawler.startCrawler();
-        //Integer actualNrOfPageExplored = webCrawler.getStatistic().getPagesExplored();
+        Integer actualNrOfPageExplored = webCrawler.getExploredUrls().size();
 
         // assert
-        //assertEquals("The total number of page explored was not 1", expectedNrOfPageExplored, actualNrOfPageExplored);
-        verify(statisticMock, atLeast(1)).increasePagesExplored();
+        verify(statistic).increasePagesExplored();
+        assertTrue("The total number of page explored was not increased", actualNrOfPageExplored > 0);
     }
+    
 
-
-    /***
-     * If the current collection of urls already empty, but found more hyperlinks
-     * the process should add new hyperlinks to to the current collection of urls
-     * and continue crawling.
-     */
-    @Test
-    @Parameters(method = "crawlOneSiteToManySites")
-    public void ifTheUrlSetIsEmptyButFoundMoreLinksTheProcessShouldContinueWithNewLinksAddedToTheURLSet(URL url) throws IOException {
-        // arrange
-        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
-
-        // act
-        webCrawler.startCrawler();
-
-        // assert
-        assertTrue("The total number of explored page was 0", webCrawler.getStatistic().getPagesExplored() > 0);
-    }
-//
 //    /***
 //     * When the crawling process could not find anything and the new url set to be explored
 //     * are empty. The method should return an empty collection.

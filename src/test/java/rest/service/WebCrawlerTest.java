@@ -212,18 +212,25 @@ public class WebCrawlerTest {
         verify(statistic).increasePagesExplored();
         assertTrue("The total number of page explored was not increased", actualNrOfPageExplored > 0);
     }
-    
 
-//    /***
-//     * When the crawling process could not find anything and the new url set to be explored
-//     * are empty. The method should return an empty collection.
-//     * @param urls - the current collection of URLs
-//     */
-//    @Test
-//    @Parameters(method = "")
-//    public void ifTheUrlSetIsEmptyButNotFoundAnythingShouldEmptyCollection(Set<URL> urls) {
-//
-//    }
+
+    /***
+     * When the crawling process could not find anything and the new url set to be explored
+     * are empty. The method should return an empty collection.
+     * @param urls - the current collection of URLs
+     */
+    @Test
+    @Parameters(method = "")
+    public void ifTheUrlSetIsEmptyButNotFoundAnythingShouldEmptyCollection(Set<URL> urls) throws IOException {
+        // arrange
+        WebCrawler webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+
+        // act
+        Set<Item> actualResult = webCrawler.startCrawler();
+
+        // arrange
+        assertTrue("The item collection was not empty!!", actualResult.size() == 0);
+    }
 //
 //    /***
 //     * When the crawling process found several items and the current collection of URLs is empty,

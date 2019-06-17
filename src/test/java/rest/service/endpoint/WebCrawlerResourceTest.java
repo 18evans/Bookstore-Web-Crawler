@@ -141,32 +141,24 @@ public class WebCrawlerResourceTest {
                 response.getEntity());
     }
 
-    /**
-     * /**
-     * Test case checks that response returns Error if URL is omitted,
-     * when type is present.
-     */
-    @Test
-    @Ignore
-    public void responseReturnsErrorIfURLIsNotSpecifiedButTypeIs() {
-    }
-
-    /**
-     * Test case checks that response returns Error if URL is omitted,
-     * when keyword is present.
-     */
-    @Test
-    @Ignore
-    public void responseReturnsErrorIfUrlIsNotSpecifiedButKeywordIs() {
-    }
-
+    //todo test case empty type
+    //todo test case empty keyword
+    
     /**
      * Test case checks that if a URL is specified, response succeeds
      * Example:     getContent("wikipedia.org") returns OK response.
      */
     @Test
-    @Ignore
-    public void responseReturnsOKIfURLIsSpecified() {
+    public void responseReturnsOKIfOnlyURLIsSpecified() {
+        //arrange - use example valid url + null passed vars
+
+        //act
+        Response response = resource.getContent(url, "", "");
+
+        //assert
+        assertEquals("Response did NOT return OK when it was expected.",
+                Response.Status.OK.getStatusCode(),
+                response.getStatus());
     }
 
     /**

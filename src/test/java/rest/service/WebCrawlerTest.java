@@ -27,6 +27,7 @@ public class WebCrawlerTest {
     private Item validBookType, validMovieType, validMusicType;
     private Item validGeneralItemType;
     private URL validUrl;
+    private Scraper scraperDummy;
 
     @Before
     public void setUp() throws MalformedURLException {
@@ -37,6 +38,7 @@ public class WebCrawlerTest {
         validMovieType = mock(Movies.class);
         validMusicType = mock(Music.class);
         validGeneralItemType = mock(Item.class);
+        scraperDummy = mock(Scraper.class);
         validUrl = new URL("https://fontys.nl");
     }
 
@@ -60,8 +62,8 @@ public class WebCrawlerTest {
         URL nullURL = new URL(nullString);
 
         // act
-        WebCrawler webCrawler = new WebCrawler(emptyUrl, validKeyword, validGeneralItemType);
-        WebCrawler webCrawler2 = new WebCrawler(nullURL, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(emptyUrl, validKeyword, validGeneralItemType, scraperDummy);
+        WebCrawler webCrawler2 = new WebCrawler(nullURL, validKeyword, validGeneralItemType, scraperDummy);
 
         // assert
     }
@@ -73,7 +75,7 @@ public class WebCrawlerTest {
         String expectedUrl = validUrl.toString();
 
         // act
-        webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+        webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType, scraperDummy);
         String actualUrl = webCrawler.getInitUrl();
 
         // assert
@@ -93,9 +95,9 @@ public class WebCrawlerTest {
         WebCrawler webCrawler;
 
         // act
-        webCrawler = new WebCrawler(validUrl, emptyKeyword, validMusicType);
-        webCrawler = new WebCrawler(validUrl, emptyKeyword, validBookType);
-        webCrawler = new WebCrawler(validUrl, emptyKeyword, validMovieType);
+        webCrawler = new WebCrawler(validUrl, emptyKeyword, validMusicType, scraperDummy);
+        webCrawler = new WebCrawler(validUrl, emptyKeyword, validBookType, scraperDummy);
+        webCrawler = new WebCrawler(validUrl, emptyKeyword, validMovieType, scraperDummy);
     }
 
     /***
@@ -109,9 +111,9 @@ public class WebCrawlerTest {
         WebCrawler webCrawler;
 
         // act
-        webCrawler = new WebCrawler(validUrl, nullKeyword, validBookType);
-        webCrawler = new WebCrawler(validUrl, nullKeyword, validMovieType);
-        webCrawler = new WebCrawler(validUrl, nullKeyword, validMusicType);
+        webCrawler = new WebCrawler(validUrl, nullKeyword, validBookType, scraperDummy);
+        webCrawler = new WebCrawler(validUrl, nullKeyword, validMovieType, scraperDummy);
+        webCrawler = new WebCrawler(validUrl, nullKeyword, validMusicType, scraperDummy);
     }
 
     /***
@@ -124,7 +126,7 @@ public class WebCrawlerTest {
         WebCrawler webCrawler;
 
         // act
-        webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+        webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType, scraperDummy);
 
         // assert
         assertNotNull("The WebCrawler object was null!!", webCrawler);
@@ -139,7 +141,7 @@ public class WebCrawlerTest {
         WebCrawler webCrawler;
 
         // act
-        webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+        webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType, scraperDummy);
         String actualUrl = webCrawler.getInitUrl();
         String actualKeyword = webCrawler.getKeyword();
         Statistic actualStatistic = webCrawler.getStatistic();
@@ -159,7 +161,7 @@ public class WebCrawlerTest {
     @Test
     public void afterInstantiationTheToBeExploredUrlShouldHaveOnlyOneInitUrl() {
         // arrange
-        WebCrawler webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType, scraperDummy);
         Integer expectedNrOfUrl = 1;
         String expectedUrlString = validUrl.toString();
 
@@ -180,7 +182,7 @@ public class WebCrawlerTest {
     @Parameters(method = "crawlOneSiteToManySites")
     public void afterStartTheUrlListShouldHaveMoreThanZeroUrl(URL url) throws IOException {
         // arrange
-        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType, scraperDummy);
 
         // act
         webCrawler.startCrawler();
@@ -200,7 +202,7 @@ public class WebCrawlerTest {
     @Parameters(method = "crawlOneSiteToManySites")
     public void afterFinishFindingAllLinksOfAnUrlTheStatisticShouldIncreaseTheNumberOfPageExplored(URL url) throws IOException {
         // arrange
-        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType, scraperDummy);
         Statistic statistic = mock(Statistic.class);
         webCrawler.setStatistic(statistic);
 
@@ -217,13 +219,15 @@ public class WebCrawlerTest {
     /***
      * When the crawling process could not find anything and the new url set to be explored
      * are empty. The method should return an empty collection.
-     * @param urls - the current collection of URLs
+     * @param url - the init url
      */
     @Test
-    @Parameters(method = "")
+    @Parameters(method = "crawlOneSiteToManySites")
     public void ifTheUrlSetIsEmptyButNotFoundAnythingShouldEmptyCollection(URL url) throws IOException {
         // arrange
-        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
+        Scraper scraper = mock(Scraper.class);
+        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType, scraper);
+        when(scraper.findItem(url)).thenReturn(new HashSet<>());
 
         // act
         Set<Item> actualResult = webCrawler.startCrawler();

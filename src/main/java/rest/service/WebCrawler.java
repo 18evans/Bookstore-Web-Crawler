@@ -18,10 +18,11 @@ public class WebCrawler {
 
     private Statistic statistic;
     private URL url;
+    private Scraper scraper;
     private final Set<URL> exploredUrls;
     private final Set<URL> toBeExploredUrls;
 
-    public WebCrawler(URL url, String keyword, Item type) {
+    public WebCrawler(URL url, String keyword, Item type, Scraper scraper) {
         this.url = url;
         if (keyword == null || keyword.equals("")) {
             throw new IllegalArgumentException();
@@ -29,6 +30,7 @@ public class WebCrawler {
         statistic = new Statistic(type, keyword);
         exploredUrls = new HashSet<>();
         toBeExploredUrls = Collections.singleton(url);
+        this.scraper = scraper;
     }
 
     public void setStatistic(Statistic statistic) {
@@ -60,14 +62,18 @@ public class WebCrawler {
             final Set<URL> newUrls = new HashSet<>();
             try {
                 for (final URL url : toBeExploredUrls) {
-                    final Document document = Jsoup.connect(url.toString()).get();
-                    final Elements urlsOnPage = document.select("a[href]");
-                    for (final Element element : urlsOnPage) {
-                        final String urlText = element.attr("abs:href");
-                        final URL discoveredUrl = new URL(urlText);
-                        newUrls.add(discoveredUrl);
-                    }
                     this.statistic.increasePagesExplored();
+                    if (scraper.findItem(url).isEmpty()){
+                        return new HashSet<>();
+                    } else {
+                        final Document document = Jsoup.connect(url.toString()).get();
+                        final Elements urlsOnPage = document.select("a[href]");
+                        for (final Element element : urlsOnPage) {
+                            final String urlText = element.attr("abs:href");
+                            final URL discoveredUrl = new URL(urlText);
+                            newUrls.add(discoveredUrl);
+                        }
+                    }
                 }
             } catch (Exception ex) {
 

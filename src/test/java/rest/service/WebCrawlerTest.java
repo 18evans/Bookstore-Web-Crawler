@@ -186,7 +186,7 @@ public class WebCrawlerTest {
         webCrawler.startCrawler();
 
         // assert
-        assertTrue("The explored URL list had zero url!!!", webCrawler.getToBeExploredUrls().size() > 0);
+        assertTrue("The explored URL list had zero url!!!", webCrawler.getExploredUrls().size() > 0);
         assertNotNull("The web crawler was null", webCrawler);
     }
 

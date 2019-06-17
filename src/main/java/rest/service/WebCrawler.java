@@ -43,7 +43,7 @@ public class WebCrawler {
      * @return A Set Collection of the Item
      */
     public Set<Item> startCrawler() throws IOException {
-
+        return crawl(toBeExploredUrls);
     }
 
     /**
@@ -55,9 +55,6 @@ public class WebCrawler {
      * @return the found Items
      */
     private Set<Item> crawl(Set<URL> urls) {
-        if (urls.isEmpty()) {
-            return null;
-        }
         urls.removeAll(this.exploredUrls);
         if (!urls.isEmpty()) {
             this.exploredUrls.addAll(urls);
@@ -71,11 +68,14 @@ public class WebCrawler {
                         final URL discoveredUrl = new URL(urlText);
                         newUrls.add(discoveredUrl);
                     }
+                    statistic.increasePagesExplored();
                 }
             } catch (Exception ex) {
 
             }
             return crawl(newUrls);
+        } else {
+            return null;
         }
     }
 

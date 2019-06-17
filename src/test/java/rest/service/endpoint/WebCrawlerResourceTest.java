@@ -1,5 +1,6 @@
 package rest.service.endpoint;
 
+import com.google.gson.Gson;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Ignore;
@@ -14,6 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_URL_INVALID;
 import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_URL_NULL_EMPTY_WHITESPACE;
 
@@ -22,6 +24,7 @@ public class WebCrawlerResourceTest {
 
     //returns json
     private final WebCrawlerResource resource = new WebCrawlerResource(); //SUT
+    private final Gson gson = new Gson();
 
     //example valid argument variables
     private final String url = "https://en.wikipedia.org/wiki/Books";
@@ -60,6 +63,7 @@ public class WebCrawlerResourceTest {
      * getContent("")
      * and getContent("     ")
      * return Server Error.
+     *
      * @param urlAsNullEmptyOrWhiteSpace - url equal to either NULL, "" or "    ".
      */
     @Test
@@ -143,7 +147,7 @@ public class WebCrawlerResourceTest {
 
     //todo test case empty type
     //todo test case empty keyword
-    
+
     /**
      * Test case checks that if a URL is specified, response succeeds
      * Example:     getContent("wikipedia.org") returns OK response.
@@ -170,8 +174,19 @@ public class WebCrawlerResourceTest {
      * }.
      */
     @Test
-    @Ignore
-    public void ifResponseReturnsOKItContainsValueForTimeElapsed() {
+    public void ifRequestContainsURLResponseReturnsObjectWithPropertyValueForTimeElapsed() {
+        //arrange - use example valid url + null passed vars
+
+        //act
+        Response response = resource.getContent(url, "", "");
+
+//        Object object = response.getMediaType();//(JsonObject.class);
+        Object object = response.getEntity();
+        String objectAsJsonString = gson.toJson(object);
+
+        //assert
+        assertTrue("Response object did NOT have a key & value combination for \"time_elapsed\".",
+                objectAsJsonString.contains("time_elapsed"));
     }
 
     /**

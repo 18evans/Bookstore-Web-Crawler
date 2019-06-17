@@ -17,7 +17,6 @@ import java.util.Set;
 public class WebCrawler {
 
     private Statistic statistic;
-    private Scrape scrape;
     private URL url;
     private final Set<URL> exploredUrls;
     private final Set<URL> toBeExploredUrls;

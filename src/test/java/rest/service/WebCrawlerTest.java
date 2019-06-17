@@ -221,9 +221,9 @@ public class WebCrawlerTest {
      */
     @Test
     @Parameters(method = "")
-    public void ifTheUrlSetIsEmptyButNotFoundAnythingShouldEmptyCollection(Set<URL> urls) throws IOException {
+    public void ifTheUrlSetIsEmptyButNotFoundAnythingShouldEmptyCollection(URL url) throws IOException {
         // arrange
-        WebCrawler webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
 
         // act
         Set<Item> actualResult = webCrawler.startCrawler();

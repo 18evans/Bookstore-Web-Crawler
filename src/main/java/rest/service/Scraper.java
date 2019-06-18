@@ -1,10 +1,11 @@
 package rest.service;
 
+import org.jsoup.nodes.Document;
 import rest.service.model.Item;
 
-import java.net.URL;
-import java.util.Set;
+public class Scraper {
 
-public interface Scraper {
-    Set<Item> findItem(URL url);
+    public Item scrapeAndGetItem(Document document) {
+        return null;
+    }
 }

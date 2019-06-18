@@ -44,9 +44,9 @@ public class WebCrawlerTest {
 
     private Object[] crawlOneSiteToManySites() throws MalformedURLException {
         return new Object[]{
-                new Object[]{new URL("https://fontys.nl")},
-                new Object[]{new URL("https://www.youtube.com")},
-                new Object[]{new URL("https://www.google.com")}
+                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=101")},
+                new Object[]{new URL("hhttp://i367506.hera.fhict.nl/webcrawl_example/details.php?id=201")},
+                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=301")}
         };
     }
 
@@ -227,7 +227,6 @@ public class WebCrawlerTest {
         // arrange
         Scraper scraperStub = mock(Scraper.class);
         WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType, scraperStub);
-        when(scraperStub.findItem(url)).thenReturn(new HashSet<>());
 
         // act
         Set<Item> actualResult = webCrawler.startCrawler();

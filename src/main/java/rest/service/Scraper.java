@@ -62,6 +62,30 @@ public class Scraper {
                 break;
             case "movies":
                 item = new Movies();
+
+                String director = "", writers = "", stars = "";
+
+                for (Element row : rows) {
+                    if (row.select("th").text().toLowerCase().contains("director")) {
+                        director = row.select("td").text();
+                    } else if (row.select("th").text().toLowerCase().contains("writers")) {
+                        writers = row.select("td").text();
+                    } else if (row.select("th").text().toLowerCase().contains("stars")) {
+                        stars = row.select("td").text();
+                    }
+                }
+
+                ((Movies) item).setDirector(director);
+
+                String[] splitWriters = writers.split(", ");
+                for (String writer : splitWriters) {
+                    ((Movies) item).addWriter(writer);
+                }
+
+                String[] splitStars = stars.split(", ");
+                for (String star : splitStars) {
+                    ((Movies) item).addStar(star);
+                }
                 break;
             case "music":
                 item = new Music();

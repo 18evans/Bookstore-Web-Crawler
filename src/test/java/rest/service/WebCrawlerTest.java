@@ -326,7 +326,7 @@ public class WebCrawlerTest {
      * A test which checks when the keyword is changed, the web crawler must reset all previous data.
      */
     @Test
-    public void whenTheKeywordIsChangeTheStatisticShouldResetAllData(){
+    public void whenTheKeywordIsChangedTheStatisticShouldResetAllData(){
         // arrange
         String oldKeyword = "old";
         String newKeyword = "new";
@@ -340,6 +340,26 @@ public class WebCrawlerTest {
         // assert
         verify(statisticDummy).resetData();
         verify(statisticDummy).changeKeyword(newKeyword);
+    }
+
+    /**
+     * A test which checks when the target type is changed, the web crawler must reset all previous data.
+     */
+    @Test
+    public void whenTheTargetTypeIsChangedTheStatisticShouldResetAllData(){
+        // arrange
+        Books oldType = (Books) validBookType;
+        Movies newType = (Movies) validMovieType;
+        WebCrawler webCrawler = new WebCrawler(validUrl, validKeyword, oldType);
+        webCrawler.setStatistic(statisticDummy);
+        webCrawler.setScraper(scraperDummy);
+
+        // act
+        webCrawler.changeType(newType);
+
+        // assert
+        verify(statisticDummy).changeTargetType(newType);
+        verify(statisticDummy).resetData();
     }
 //
 //    /***

@@ -17,12 +17,21 @@ public class Scraper {
             return null; //not an item page
         }
 
+        final String title = elements.select("h1").text();
         final Elements rows = elements.select("table tbody tr");
 
-        Item item;
-        String category = "";
+        Item item = null;
+        String category = "", genre = "", format = "";
+        int year = -1;
+
         for (Element row : rows) {
-            if (row.select("th").text().toLowerCase().contains("category")) {
+            if (row.select("th").text().toLowerCase().contains("genre")) {
+                genre = row.select("td").text();
+            } else if (row.select("th").text().toLowerCase().contains("format")) {
+                format = row.select("td").text();
+            } else if (row.select("th").text().toLowerCase().contains("year")) {
+                year = Integer.parseInt(row.select("td").text());
+            } else if (row.select("th").text().toLowerCase().contains("category")) {
                 category = row.select("td").text();
             }
         }
@@ -37,9 +46,12 @@ public class Scraper {
             case "music":
                 item = new Music();
                 break;
-            default:
-                throw new IllegalStateException("Encountered an Item from a Category which is not supported yet!");
         }
+
+        item.setTitle(title);
+        item.setFormat(format);
+        item.setGenre(genre);
+        item.setYear(year);
 
         return item;
     }

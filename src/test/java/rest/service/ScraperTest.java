@@ -120,9 +120,14 @@ public class ScraperTest {
         Item result = scraper.scrapeAndGetItem(document);
 
         //assert
-        assertFalse(StringUtils.isBlank(result.getTitle()));
-        assertFalse(StringUtils.isBlank(result.getFormat()));
-        assertFalse(StringUtils.isBlank(result.getGenre()));
-        assertNotEquals(-1, (int) result.getYear());
+        assertFalse("Title was expected to be set, but is in fact either null, empty or white space.",
+                StringUtils.isBlank(result.getTitle()));
+        assertFalse("Format was expected to be set, but is in fact either null, empty or white space.",
+                StringUtils.isBlank(result.getFormat()));
+        assertFalse("Genre was expected to be set, but is in fact either null, empty or white space.",
+                StringUtils.isBlank(result.getGenre()));
+        assertNotEquals("Year was expected to be set, but is in fact default value (-1).",
+                -1, (int) result.getYear());
     }
+
 }

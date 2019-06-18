@@ -1,18 +1,16 @@
 package rest.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import rest.service.model.Books;
 import rest.service.model.Item;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class WebCrawler {
@@ -69,7 +67,7 @@ public class WebCrawler {
                     final Document document = Jsoup.connect(url.toString()).get();
                     final Elements urlsOnPage = document.select("a[href]");
                     Item foundItem = (Item) scraper.scrapeAndGetItem(document);
-                    if (foundItem != null){
+                    if (foundItem != null) {
                         foundItems.add(foundItem);
                     }
                     for (final Element element : urlsOnPage) {
@@ -92,11 +90,12 @@ public class WebCrawler {
         Set<Item> result = new HashSet<>();
         String targetKeyword = this.statistic.getKeyword();
 
-        for (Item i : foundItems){
-            if (i.getTitle().contains(targetKeyword) ||
-                i.getGenre().contains(targetKeyword) ||
-                i.getYear().toString().contains(targetKeyword) ||
-                i.getFormat().contains(targetKeyword)){
+        for (Item i : foundItems) {
+            if (StringUtils.isBlank(targetKeyword) ||
+                    i.getTitle().contains(targetKeyword) ||
+                    i.getGenre().contains(targetKeyword) ||
+                    i.getYear().toString().contains(targetKeyword) ||
+                    i.getFormat().contains(targetKeyword)) {
                 result.add(i);
             }
         }

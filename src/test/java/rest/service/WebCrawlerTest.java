@@ -340,7 +340,6 @@ public class WebCrawlerTest {
         // assert
         verify(statisticDummy).resetData();
         verify(statisticDummy).changeKeyword(newKeyword);
-
     }
 //
 //    /***

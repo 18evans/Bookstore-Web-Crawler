@@ -13,6 +13,7 @@ import rest.service.model.Music;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.contains;
@@ -54,6 +55,14 @@ public class WebCrawlerTest {
                 new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=101"),
                 new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=201"),
                 new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=301")
+        };
+    }
+
+    private Object[] testSameKeywordMultipleItemsShouldBeReturned() throws MalformedURLException {
+        return new Object[]{
+          new Object[]{ new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=books")},
+          new Object[]{ new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=movies")},
+          new Object[]{ new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=music")}
         };
     }
 
@@ -279,17 +288,39 @@ public class WebCrawlerTest {
     }
 
 
-//    /***
-//     * When the crawling process found several items and the current collection of URLs is empty,
-//     * the method should return the collection of found items.
-//     * @param urls - the current collection of URLs
-//     */
-//    @Test
-//    @Parameters(method = "")
-//    public void ifTheUrlSetIsEmptyButFoundSomeItemsShouldReturnCollectionOfThatItems(Set<URL> urls) {
-//
-//    }
-//
+    /***
+     * When the crawling process found several items and the current collection of URLs is empty,
+     * the method should return the collection of found items.
+     * @param url - the init url
+     */
+    @Test
+    @Parameters(method = "testSameKeywordMultipleItemsShouldBeReturned")
+    public void ifTheUrlSetIsEmptyButAlreadyFoundSomeItemsShouldReturnCollectionOfThatItems(URL url) throws IOException {
+        // arrange
+        String keyword = "some keyword";
+        WebCrawler webCrawler = new WebCrawler(url, keyword, validGeneralItemType);
+        when(validGeneralItemType.getTitle()).thenReturn("asds"); //so that the keyword did not match
+        when(validGeneralItemType.getFormat()).thenReturn("ooak232");
+        when(validGeneralItemType.getYear()).thenReturn(2309);
+        when(validGeneralItemType.getGenre()).thenReturn("Pop");
+
+        Set<Item> expectedAlreadyFoundItem = new HashSet<>();
+        expectedAlreadyFoundItem.add(validBookType);
+        expectedAlreadyFoundItem.add(validMovieType);
+        expectedAlreadyFoundItem.add(validMusicType);
+
+        Integer expectedNrOfFoundItem = 3;
+
+        // act
+        webCrawler.setFoundItems(expectedAlreadyFoundItem);
+        webCrawler.startCrawler();
+        Integer actualNrOfFoundItem = webCrawler.getFoundItems().size();
+
+        //arrange
+        assertEquals("The number of items in the result did not match!!", expectedNrOfFoundItem, actualNrOfFoundItem);
+    }
+
+
 //    /***
 //     * During the crawling process, if the current collection of URLs are not empty
 //     * and no result found yet, the crawling should continue to the next URL in the

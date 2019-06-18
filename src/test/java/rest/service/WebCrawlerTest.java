@@ -368,12 +368,14 @@ public class WebCrawlerTest {
         // arrange
         WebCrawler webCrawler = new WebCrawler(initURl, validKeyword, validGeneralItemType);
         webCrawler.setStatistic(statisticDummy);
+
         webCrawler.setScraper(scraperDummy);
+        when(scraperDummy.scrapeAndGetItem(any())).thenReturn(null);
 
         // act
         webCrawler.startCrawler();
 
         // assert
-        verify(statisticDummy, atLeast(1)).increaseSearchDepth();
+        verify(statisticDummy).increaseSearchDepth();
     }
 }

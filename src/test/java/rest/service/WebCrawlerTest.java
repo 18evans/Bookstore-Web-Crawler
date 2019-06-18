@@ -321,6 +321,27 @@ public class WebCrawlerTest {
         verify(statisticDummy, atLeast(2)).increasePagesExplored();
         verify(scraperDummy, atLeast(2)).scrapeAndGetItem(any());
     }
+
+    /***
+     * A test which checks when the keyword is changed, the web crawler must reset all previous data.
+     */
+    @Test
+    public void whenTheKeywordIsChangeTheStatisticShouldResetAllData(){
+        // arrange
+        String oldKeyword = "old";
+        String newKeyword = "new";
+        WebCrawler webCrawler = new WebCrawler(validUrl, oldKeyword, validGeneralItemType);
+        webCrawler.setStatistic(statisticDummy);
+        webCrawler.setScraper(scraperDummy);
+
+        // act
+        webCrawler.changeKeyword(newKeyword);
+
+        // assert
+        verify(statisticDummy).resetData();
+        verify(statisticDummy).changeKeyword(newKeyword);
+
+    }
 //
 //    /***
 //     * During the crawling process, if found an item that match the searching criteria

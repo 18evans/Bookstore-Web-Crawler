@@ -361,18 +361,7 @@ public class WebCrawlerTest {
         verify(statisticDummy).changeTargetType(newType);
         verify(statisticDummy).resetData();
     }
-//
-//    /***
-//     * During the crawling process, if found an item that match the searching criteria
-//     * , the process should stop immediately and return that item.
-//     * @param urls - the current collection of URLs
-//     */
-//    @Test
-//    @Parameters(method = "")
-//    public void ifTheUrlSetIsNotEmptyButFoundTheItemThatMatchExactlyShouldReturnACollectionWithOnlyThatItem(Set<URL> urls) {
-//
-//    }
-//
+
 //    /***
 //     * During the crawling process, if the current collection of URLs is empty but
 //     * already found several close matched items, the method should return a collection

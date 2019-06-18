@@ -39,6 +39,26 @@ public class Scraper {
         switch (category.toLowerCase()) {
             case "books":
                 item = new Books();
+
+                String authors = "", publisher = "", isbn = "";
+
+                for (Element row : rows) {
+                    if (row.select("th").text().toLowerCase().contains("authors")) {
+                        authors = row.select("td").text();
+                    } else if (row.select("th").text().toLowerCase().contains("publisher")) {
+                        publisher = row.select("td").text();
+                    } else if (row.select("th").text().toLowerCase().contains("isbn")) {
+                        isbn = row.select("td").text();
+                    }
+                }
+
+                String[] splitAuthors = authors.split(", ");
+                for (String author : splitAuthors) {
+                    ((Books) item).addAuthor(authors);
+                }
+
+                ((Books) item).setPublisher(publisher);
+                ((Books) item).setISBN(isbn);
                 break;
             case "movies":
                 item = new Movies();

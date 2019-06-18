@@ -86,9 +86,10 @@ public class StatisticTest {
     @Test
     public void afterInstantiationTheStartTimeShouldEqualNow(){
         // arrange
+        Long expectedTime = System.currentTimeMillis();
+        dummySUTBook = new Statistic(dummyBook, dummyKeyword, expectedTime);
 
         // act
-        Long expectedTime = System.currentTimeMillis();
         Long actualTime = dummySUTBook.getStartTime();
 
         // assert

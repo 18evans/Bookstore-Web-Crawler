@@ -33,5 +33,14 @@ public class Music extends Item {
     public String toString() {
         return super.toString();
     }
+
+    @Override
+    public boolean compareTo(Item obj) {
+        if (super.compareTo(obj)
+                && artist.equals(((Music) obj).artist)) {
+            return true;
+        }
+        return false;
+    }
 }
 

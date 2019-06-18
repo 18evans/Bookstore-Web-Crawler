@@ -66,9 +66,10 @@ public class WebCrawler {
                     this.statistic.increasePagesExplored();
                     final Document document = Jsoup.connect(url.toString()).get();
                     final Elements urlsOnPage = document.select("a[href]");
-                    Item foundItem = (Item) scraper.scrapeAndGetItem(document);
-                    if (foundItem != null) {
-                        foundItems.add(foundItem);
+                    Item newFoundItem = (Item) scraper.scrapeAndGetItem(document);
+                    if (newFoundItem != null && foundItems.stream().noneMatch(o -> o.compareTo(newFoundItem))) {
+                        //do not add if no new found element or an element with same properties exists
+                        foundItems.add(newFoundItem);
                     }
                     for (final Element element : urlsOnPage) {
                         final String urlText = element.attr("abs:href");
@@ -135,4 +136,5 @@ public class WebCrawler {
     public Set<URL> getToBeExploredUrls() {
         return toBeExploredUrls;
     }
+
 }

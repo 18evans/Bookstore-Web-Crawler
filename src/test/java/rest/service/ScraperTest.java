@@ -85,8 +85,8 @@ public class ScraperTest {
     }
 
     /**
-     * If Jsoup {@link Document} object points to a page of a supported item category,
-     * returned will be  be null instance of Item.
+     * The class of the returned scraped Item object instance must be in name equal to the type of
+     * the Item category on the webpage.
      */
     @Test
     @Parameters(method = "getValidTypeWithValidUrl")
@@ -103,4 +103,5 @@ public class ScraperTest {
         assertEquals("The Scraped object was not an instance of the class it was expected to be.",
                 classnameItem, result.getClass());
     }
+
 }

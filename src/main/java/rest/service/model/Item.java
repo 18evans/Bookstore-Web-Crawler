@@ -1,16 +1,23 @@
 package rest.service.model;
 
 public abstract class Item {
+    private String title;
     private String genre;
     private String format;
     private Integer year;
 
-    public Item() { }
+    public Item() {
+    }
 
-    public Item(String genre, String format, Integer year) {
+    public Item(String title, String genre, String format, Integer year) {
+        this.title = title;
         this.genre = genre;
         this.format = format;
         this.year = year;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getGenre() {
@@ -23,6 +30,10 @@ public abstract class Item {
 
     public Integer getYear() {
         return year;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setGenre(String genre) {

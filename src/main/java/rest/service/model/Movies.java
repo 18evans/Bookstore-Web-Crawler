@@ -1,16 +1,18 @@
 package rest.service.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Movies extends Item {
     private String director;
-    private ArrayList<String> writers;
-    private ArrayList<String> stars;
+    private List<String> writers = new ArrayList<>();
+    private List<String> stars = new ArrayList<>();
 
-    public Movies() { }
+    public Movies() {
+    }
 
-    public Movies(String genre, String format, Integer year, String director) {
-        super(genre, format, year);
+    public Movies(String title, String genre, String format, Integer year, String director) {
+        super(title, genre, format, year);
         this.director = director;
     }
 
@@ -23,7 +25,7 @@ public class Movies extends Item {
         this.director = director;
     }
 
-    public ArrayList<String> getWriters() {
+    public List<String> getWriters() {
         return writers;
     }
 
@@ -31,7 +33,7 @@ public class Movies extends Item {
         this.writers = writers;
     }
 
-    public ArrayList<String> getStars() {
+    public List<String> getStars() {
         return stars;
     }
 
@@ -39,11 +41,11 @@ public class Movies extends Item {
         this.stars = stars;
     }
 
-    public void addWriters(String writer){
+    public void addWriter(String writer) {
         this.writers.add(writer);
     }
 
-    public void addStars(String star){
+    public void addStar(String star) {
         this.stars.add(star);
     }
 

@@ -2,6 +2,7 @@ package rest.service;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.BeforeClass;
@@ -19,6 +20,8 @@ import java.util.AbstractMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
@@ -104,4 +107,22 @@ public class ScraperTest {
                 classnameItem, result.getClass());
     }
 
+    /**
+     * On successful Scrape of an Item the properties of the {@link Item} superclass
+     * must be set (not default value)
+     */
+    @Test
+    public void onScrapeValidItemHasTitleFormatGenreAndYear() throws IOException {
+        //arrange
+        Document document = Jsoup.connect(exampleValidMovieUrl.toString()).timeout(6000).get(); //document point to valid webpage of an item
+
+        //act
+        Item result = scraper.scrapeAndGetItem(document);
+
+        //assert
+        assertFalse(StringUtils.isBlank(result.getTitle()));
+        assertFalse(StringUtils.isBlank(result.getFormat()));
+        assertFalse(StringUtils.isBlank(result.getGenre()));
+        assertNotEquals(-1, (int) result.getYear());
+    }
 }

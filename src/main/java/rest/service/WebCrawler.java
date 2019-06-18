@@ -88,6 +88,11 @@ public class WebCrawler {
         }
     }
 
+    /***
+     * Filter out all un-matched item and return the collection of close-matched items
+     * @param foundItems - the raw result collection
+     * @return
+     */
     private Set<Item> process(Set<Item> foundItems) {
         Set<Item> result = new HashSet<>();
         String targetKeyword = this.statistic.getKeyword();

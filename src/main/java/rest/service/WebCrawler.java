@@ -140,4 +140,7 @@ public class WebCrawler {
     public void setScraper(Scraper scraper) {
         this.scraper = scraper;
     }
+
+    public void changeKeyword(String newKeyword) {
+    }
 }

@@ -84,4 +84,7 @@ public class Statistic {
     public JsonObject generateJSONData(){
         return null;
     }
+
+    public void resetData() {
+    }
 }

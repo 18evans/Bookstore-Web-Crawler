@@ -137,4 +137,7 @@ public class WebCrawler {
         return toBeExploredUrls;
     }
 
+    public void setScraper(Scraper scraper) {
+        this.scraper = scraper;
+    }
 }

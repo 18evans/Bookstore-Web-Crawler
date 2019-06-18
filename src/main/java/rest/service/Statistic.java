@@ -18,9 +18,6 @@ public class Statistic {
         this.searchDepth = 0;
     }
 
-    /**
-     * Used to test the startTime property.
-     */
     public Statistic(Item type, String keyword, Long startTime) {
         this.type = type;
         this.keyword = keyword;

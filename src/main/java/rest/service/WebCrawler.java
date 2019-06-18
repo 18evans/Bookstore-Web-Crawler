@@ -147,7 +147,7 @@ public class WebCrawler {
         this.statistic.resetData();
     }
 
-    public void changeType(Movies newType) {
-
+    public void changeType(Item newType) {
+        this.statistic.changeTargetType(newType);
     }
 }

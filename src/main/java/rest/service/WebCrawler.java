@@ -149,5 +149,6 @@ public class WebCrawler {
 
     public void changeType(Item newType) {
         this.statistic.changeTargetType(newType);
+        this.statistic.resetData();
     }
 }

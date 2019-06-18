@@ -89,6 +89,13 @@ public class Scraper {
                 break;
             case "music":
                 item = new Music();
+
+                for (Element row : rows) {
+                    if (row.select("th").text().toLowerCase().contains("artist")) {
+                        String artist = row.select("td").text();
+                        ((Music) item).setArtist(artist);
+                    }
+                }
                 break;
         }
 

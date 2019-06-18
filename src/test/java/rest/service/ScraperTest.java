@@ -155,4 +155,25 @@ public class ScraperTest {
         assertFalse("ISBN was expected to be set, but is in fact either null, empty or white space.",
                 StringUtils.isBlank(result.getISBN()));
     }
+
+    /**
+     * On successful Scrape of a Movie object the properties of {@link Movies}
+     * must be set (not default value).
+     */
+    @Test
+    public void onScrapeOfMovieHasMoviePropertiesSet() throws IOException {
+        //arrange
+        Document document = Jsoup.connect(exampleValidMovieUrl.toString()).timeout(6000).get(); //document point to valid webpage of an item
+
+        //act
+        Movies result = (Movies) scraper.scrapeAndGetItem(document);
+
+        //assert
+        assertFalse("Director was expected to be set, but is in fact either null, empty or white space.",
+                StringUtils.isBlank(result.getDirector()));
+        assertThat("Movie expected to have at least 1 writer but instead has 0.",
+                result.getWriters().size(), greaterThan(0));
+        assertThat("Book expected to have at least 1 star but instead has 0.",
+                result.getStars().size(), greaterThan(0));
+    }
 }

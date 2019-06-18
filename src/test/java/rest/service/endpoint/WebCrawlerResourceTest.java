@@ -3,12 +3,15 @@ package rest.service.endpoint;
 import com.google.gson.Gson;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import rest.service.model.Books;
 
 import javax.ws.rs.core.Response;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
@@ -27,7 +30,13 @@ public class WebCrawlerResourceTest {
     private final Gson gson = new Gson();
 
     //example valid argument variables
-    private final String url = "https://en.wikipedia.org/wiki/Books";
+    private static URL exampleValidDashboardUrl;
+
+    @BeforeClass
+    public static void setUp() throws MalformedURLException {
+        exampleValidDashboardUrl = new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php");
+    }
+
     private final String type = Books.class.getSimpleName();
     private final String keyword = "The Bible";
 
@@ -36,7 +45,7 @@ public class WebCrawlerResourceTest {
         //arrange - uses the valid global constants
 
         //act
-        Response response = resource.getContent(url, type, keyword);
+        Response response = resource.getContent("", "", "");
 
         //assert
         assertNotNull("Response was NULL", response);
@@ -63,6 +72,9 @@ public class WebCrawlerResourceTest {
      * getContent("")
      * and getContent("     ")
      * return Server Error.
+     * <p>
+     * Note: Cannot Mock final classes ({@link URL} and {@link String}) thus using parameterized test
+     * for each of the three scenarios
      *
      * @param urlAsNullEmptyOrWhiteSpace - url equal to either NULL, "" or "    ".
      */
@@ -83,11 +95,11 @@ public class WebCrawlerResourceTest {
                 responseNull.getEntity());
     }
 
-    private static String[] getValidUrls() {
-        return new String[]{
-                "https://en.wikipedia.org/wiki/Books",
-                "https://en.wikipedia.org/wiki/Film",
-                "https://en.wikipedia.org/wiki/Music"
+    private static URL[] getValidUrls() throws MalformedURLException {
+        return new URL[]{
+                new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=101"),
+                new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=201"),
+                new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=301")
         };
     }
 
@@ -100,11 +112,11 @@ public class WebCrawlerResourceTest {
      */
     @Test
     @Parameters(method = "getValidUrls")
-    public void responseDoesNotReturnServerErrorOnValidatedURL(String url) {
+    public void responseDoesNotReturnServerErrorOnValidatedURL(URL url) {
         //arrange - uses the valid global constants
 
         //act
-        Response response = resource.getContent(url, type, keyword);
+        Response response = resource.getContent(url.toString(), type, keyword);
 
         //assert
         assertNotEquals("Response did in fact return a SERVER ERROR when it was not expected.",
@@ -157,7 +169,7 @@ public class WebCrawlerResourceTest {
         //arrange - use example valid url + null passed vars
 
         //act
-        Response response = resource.getContent(url, "", "");
+        Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", "");
 
         //assert
         assertEquals("Response did NOT return OK when it was expected.",
@@ -178,7 +190,7 @@ public class WebCrawlerResourceTest {
         //arrange - use example valid url + null passed vars
 
         //act
-        Response response = resource.getContent(url, "", "");
+        Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", "");
 
 //        Object object = response.getMediaType();//(JsonObject.class);
         Object object = response.getEntity();

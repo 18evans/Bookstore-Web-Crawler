@@ -86,5 +86,7 @@ public class Statistic {
     }
 
     public void resetData() {
+        this.searchDepth = 0;
+        this.pagesExplored = 0;
     }
 }

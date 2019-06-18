@@ -142,5 +142,6 @@ public class WebCrawler {
     }
 
     public void changeKeyword(String newKeyword) {
+        this.statistic.changeKeyword(newKeyword);
     }
 }

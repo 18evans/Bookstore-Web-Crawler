@@ -81,6 +81,7 @@ public class WebCrawler {
             } catch (Exception ex) {
 
             }
+            this.statistic.increaseSearchDepth();
             return crawl(newUrls);
         } else {
             // filter all the item founds to match the searching criteria

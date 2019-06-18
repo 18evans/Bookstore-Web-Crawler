@@ -376,6 +376,6 @@ public class WebCrawlerTest {
         webCrawler.startCrawler();
 
         // assert
-        verify(statisticDummy).increaseSearchDepth();
+        verify(statisticDummy, atLeast(1)).increaseSearchDepth();
     }
 }

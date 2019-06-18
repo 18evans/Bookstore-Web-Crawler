@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import rest.service.model.Item;
+import rest.service.model.Movies;
 
 import java.io.IOException;
 import java.net.URL;
@@ -144,5 +145,9 @@ public class WebCrawler {
     public void changeKeyword(String newKeyword) {
         this.statistic.changeKeyword(newKeyword);
         this.statistic.resetData();
+    }
+
+    public void changeType(Movies newType) {
+
     }
 }

@@ -226,16 +226,20 @@ public class WebCrawlerTest {
     public void ifTheUrlSetIsEmptyButNotFoundAnythingShouldEmptyCollection(URL url) throws IOException {
         // arrange
         WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
+        Statistic statisticMock = mock(Statistic.class);
+        webCrawler.setStatistic(statisticMock);
         when(validGeneralItemType.getFormat()).thenReturn("sddad");
         when(validGeneralItemType.getGenre()).thenReturn("9588231asda");
         when(validGeneralItemType.getTitle()).thenReturn("a123132nasdsad");
         when(validGeneralItemType.getYear()).thenReturn(404040);
+        when(statisticMock.getKeyword()).thenReturn(validKeyword);
 
         // act
         Set<Item> actualResult = webCrawler.startCrawler();
 
         // arrange
         assertTrue("The item collection was not empty!!", actualResult.size() == 0);
+        verify(statisticMock).getKeyword();
     }
 //
 //    /***

@@ -1,18 +1,16 @@
 package rest.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import rest.service.model.Books;
 import rest.service.model.Item;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class WebCrawler {
@@ -68,9 +66,10 @@ public class WebCrawler {
                     this.statistic.increasePagesExplored();
                     final Document document = Jsoup.connect(url.toString()).get();
                     final Elements urlsOnPage = document.select("a[href]");
-                    Item foundItem = (Item) scraper.scrapeAndGetItem(document);
-                    if (foundItem != null){
-                        foundItems.add(foundItem);
+                    Item newFoundItem = (Item) scraper.scrapeAndGetItem(document);
+                    if (newFoundItem != null && foundItems.stream().noneMatch(o -> o.compareTo(newFoundItem))) {
+                        //do not add if no new found element or an element with same properties exists
+                        foundItems.add(newFoundItem);
                     }
                     for (final Element element : urlsOnPage) {
                         final String urlText = element.attr("abs:href");
@@ -92,11 +91,12 @@ public class WebCrawler {
         Set<Item> result = new HashSet<>();
         String targetKeyword = this.statistic.getKeyword();
 
-        for (Item i : foundItems){
-            if (i.getTitle().contains(targetKeyword) ||
-                i.getGenre().contains(targetKeyword) ||
-                i.getYear().toString().contains(targetKeyword) ||
-                i.getFormat().contains(targetKeyword)){
+        for (Item i : foundItems) {
+            if (StringUtils.isBlank(targetKeyword) ||
+                    i.getTitle().contains(targetKeyword) ||
+                    i.getGenre().contains(targetKeyword) ||
+                    i.getYear().toString().contains(targetKeyword) ||
+                    i.getFormat().contains(targetKeyword)) {
                 result.add(i);
             }
         }
@@ -135,5 +135,9 @@ public class WebCrawler {
 
     public Set<URL> getToBeExploredUrls() {
         return toBeExploredUrls;
+    }
+
+    public void setScraper(Scraper scraper) {
+        this.scraper = scraper;
     }
 }

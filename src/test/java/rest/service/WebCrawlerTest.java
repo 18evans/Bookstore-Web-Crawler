@@ -13,11 +13,18 @@ import rest.service.model.Music;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.contains;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(JUnitParamsRunner.class)
 public class WebCrawlerTest {
@@ -42,11 +49,11 @@ public class WebCrawlerTest {
         validUrl = new URL("https://fontys.nl");
     }
 
-    private Object[] crawlOneSiteToManySites() throws MalformedURLException {
-        return new Object[]{
-                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=101")},
-                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=201")},
-                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=301")}
+    private URL[] crawlOneSiteToManySites() throws MalformedURLException {
+        return new URL[]{
+                new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=101"),
+                new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=201"),
+                new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=301")
         };
     }
 
@@ -241,7 +248,37 @@ public class WebCrawlerTest {
         assertTrue("The item collection was not empty!!", actualResult.size() == 0);
         verify(statisticMock).getKeyword();
     }
-//
+
+    /**
+     * Finding an Item from the Scraper should result in that Item being returned in
+     * the {@link WebCrawler#startCrawler()} Set return type collection.
+     * Tested on a cleared results Set.
+     */
+    @Test
+    @Parameters(method = "crawlOneSiteToManySites")
+    public void itemFoundInScraperShouldBePutInCrawlResultSet(URL url) throws IOException {
+        // arrange
+        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
+        Statistic statisticMock = mock(Statistic.class);
+        webCrawler.setStatistic(statisticMock);
+        webCrawler.setScraper(scraperDummy);
+        when(statisticMock.getKeyword()).thenReturn(validKeyword);
+
+        when(validGeneralItemType.getFormat()).thenReturn("sddad");
+        when(validGeneralItemType.getGenre()).thenReturn("9588231asda");
+        when(validGeneralItemType.getTitle()).thenReturn("asdsa" + validKeyword); //title will match keyword
+        when(validGeneralItemType.getYear()).thenReturn(404040);
+
+        when(scraperDummy.scrapeAndGetItem(any())).thenReturn(validGeneralItemType);
+
+        // act
+        Set<Item> actualResult = webCrawler.startCrawler();
+
+        // arrange
+        assertThat(actualResult, contains(validGeneralItemType));
+    }
+
+
 //    /***
 //     * When the crawling process found several items and the current collection of URLs is empty,
 //     * the method should return the collection of found items.

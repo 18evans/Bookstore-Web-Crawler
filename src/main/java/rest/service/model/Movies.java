@@ -1,6 +1,7 @@
 package rest.service.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Movies extends Item {
@@ -62,6 +63,17 @@ public class Movies extends Item {
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    @Override
+    public boolean compareTo(Item obj) {
+        if (super.compareTo(obj)
+                && director.equals(((Movies) obj).director)
+                && Arrays.equals(writers.toArray(), ((Movies) obj).writers.toArray())
+                && Arrays.equals(stars.toArray(), ((Movies) obj).stars.toArray())) {
+            return true;
+        }
+        return false;
     }
 }
 

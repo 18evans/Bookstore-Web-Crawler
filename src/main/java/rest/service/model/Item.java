@@ -62,4 +62,11 @@ public abstract class Item {
     public String toString() {
         return super.toString();
     }
+
+    public boolean compareTo(Item obj) {
+        if (title.equals(obj.title) && genre.equals(obj.genre) && format.equals(obj.format) && year.equals(obj.year)) {
+            return true;
+        }
+        return false;
+    }
 }

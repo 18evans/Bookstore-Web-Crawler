@@ -18,6 +18,14 @@ public class Statistic {
         this.searchDepth = 0;
     }
 
+    public Statistic(Item type, String keyword, Long startTime) {
+        this.type = type;
+        this.keyword = keyword;
+        this.startTime = startTime;
+        this.pagesExplored = 0;
+        this.searchDepth = 0;
+    }
+
     public Integer getSearchDepth() {
         return searchDepth;
     }

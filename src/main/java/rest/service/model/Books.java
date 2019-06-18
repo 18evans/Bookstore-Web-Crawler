@@ -1,6 +1,7 @@
 package rest.service.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Books extends Item {
@@ -59,6 +60,17 @@ public class Books extends Item {
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    @Override
+    public boolean compareTo(Item obj) {
+        if (super.compareTo(obj)
+                && publisher.equals(((Books) obj).publisher)
+                && ISBN.equals(((Books) obj).ISBN)
+                && Arrays.equals(authors.toArray(), ((Books) obj).authors.toArray())) {
+            return true;
+        }
+        return false;
     }
 }
 

@@ -226,6 +226,10 @@ public class WebCrawlerTest {
     public void ifTheUrlSetIsEmptyButNotFoundAnythingShouldEmptyCollection(URL url) throws IOException {
         // arrange
         WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
+        when(validGeneralItemType.getFormat()).thenReturn("sddad");
+        when(validGeneralItemType.getGenre()).thenReturn("9588231asda");
+        when(validGeneralItemType.getTitle()).thenReturn("a123132nasdsad");
+        when(validGeneralItemType.getYear()).thenReturn(404040);
 
         // act
         Set<Item> actualResult = webCrawler.startCrawler();

@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import rest.service.model.Books;
 import rest.service.model.Item;
 
 import java.io.IOException;
@@ -82,8 +83,25 @@ public class WebCrawler {
             }
             return crawl(newUrls);
         } else {
-            return foundItems;
+            // filter all the item founds to match the searching criteria
+            return process(foundItems);
         }
+    }
+
+    private Set<Item> process(Set<Item> foundItems) {
+        Set<Item> result = new HashSet<>();
+        String targetKeyword = this.statistic.getKeyword();
+
+        for (Item i : foundItems){
+            if (i.getTitle().contains(targetKeyword) ||
+                i.getGenre().contains(targetKeyword) ||
+                i.getYear().toString().contains(targetKeyword) ||
+                i.getFormat().contains(targetKeyword)){
+                result.add(i);
+            }
+        }
+
+        return result;
     }
 
     /***

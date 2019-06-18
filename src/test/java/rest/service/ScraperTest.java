@@ -40,11 +40,14 @@ public class ScraperTest {
      */
     private static URL exampleValidBooksUrl;
     private static URL exampleValidMovieUrl;
+    private static URL exampleValidMusicUrl;
+
 
     @BeforeClass
     public static void setUp() throws MalformedURLException {
         exampleValidBooksUrl = new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=101");
         exampleValidMovieUrl = new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=201");
+        exampleValidMusicUrl = new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=301");
     }
 
     /**
@@ -175,5 +178,22 @@ public class ScraperTest {
                 result.getWriters().size(), greaterThan(0));
         assertThat("Book expected to have at least 1 star but instead has 0.",
                 result.getStars().size(), greaterThan(0));
+    }
+
+    /**
+     * On successful Scrape of a Music object the properties of {@link Music}
+     * must be set (not default value).
+     */
+    @Test
+    public void onScrapeOfMusicHasMusicPropertiesSet() throws IOException {
+        //arrange
+        Document document = Jsoup.connect(exampleValidMusicUrl.toString()).timeout(6000).get(); //document point to valid webpage of an item
+
+        //act
+        Music result = (Music) scraper.scrapeAndGetItem(document);
+
+        //assert
+        assertFalse("Artist was expected to be set, but is in fact either null, empty or white space.",
+                StringUtils.isBlank(result.getArtist()));
     }
 }

@@ -58,14 +58,29 @@ public class WebCrawlerTest {
 
     /**
      * The method that feed test data that can still be crawled to the web crawler.
+     *
      * @return
      * @throws MalformedURLException
      */
     private Object[] testSampleWebForCrawling() throws MalformedURLException {
         return new Object[]{
-          new Object[]{ new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=books")},
-          new Object[]{ new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=movies")},
-          new Object[]{ new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=music")},
+                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=books")},
+                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=movies")},
+                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=music")},
+        };
+    }
+
+    /**
+     * The method that feed test search depth data.
+     *
+     * @return
+     * @throws MalformedURLException
+     */
+    private Object[] testSampleWebForCrawlingSearchDepth() throws MalformedURLException {
+        return new Object[]{
+                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=books"), 2},
+                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=movies"), 2},
+                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=music"), 2},
         };
     }
 
@@ -326,7 +341,7 @@ public class WebCrawlerTest {
      * A test which checks when the keyword is changed, the web crawler must reset all previous data.
      */
     @Test
-    public void whenTheKeywordIsChangedTheStatisticShouldResetAllData(){
+    public void whenTheKeywordIsChangedTheStatisticShouldResetAllData() {
         // arrange
         String oldKeyword = "old";
         String newKeyword = "new";
@@ -346,7 +361,7 @@ public class WebCrawlerTest {
      * A test which checks when the target type is changed, the web crawler must reset all previous data.
      */
     @Test
-    public void whenTheTargetTypeIsChangedTheStatisticShouldResetAllData(){
+    public void whenTheTargetTypeIsChangedTheStatisticShouldResetAllData() {
         // arrange
         Books oldType = (Books) validBookType;
         Movies newType = (Movies) validMovieType;
@@ -362,9 +377,15 @@ public class WebCrawlerTest {
         verify(statisticDummy).resetData();
     }
 
+    /**
+     * A test which check if the web crawler increase the search depth everytime it starts a new crawling procedure
+     *
+     * @param initURl - the initial url
+     * @throws IOException
+     */
     @Test
-    @Parameters(method = "testSampleWebForCrawling")
-    public void theSearchDepthLevelShouldBeIncreasedWhenANewRecursiveCrawlStart(URL initURl) throws IOException {
+    @Parameters(method = "testSampleWebForCrawlingSearchDepth")
+    public void theSearchDepthLevelShouldBeIncreasedWhenANewRecursiveCrawlStart(URL initURl, Integer expectedMaxSearchDepth) throws IOException {
         // arrange
         WebCrawler webCrawler = new WebCrawler(initURl, validKeyword, validGeneralItemType);
         webCrawler.setStatistic(statisticDummy);
@@ -377,5 +398,6 @@ public class WebCrawlerTest {
 
         // assert
         verify(statisticDummy, atLeast(1)).increaseSearchDepth();
+        verify(statisticDummy, atMost(expectedMaxSearchDepth)).increaseSearchDepth(); // since the given urls' depth level are predictable.
     }
 }

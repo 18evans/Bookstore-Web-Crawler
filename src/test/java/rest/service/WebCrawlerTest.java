@@ -65,7 +65,7 @@ public class WebCrawlerTest {
         return new Object[]{
           new Object[]{ new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=books")},
           new Object[]{ new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=movies")},
-          new Object[]{ new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=music")}
+          new Object[]{ new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=music")},
         };
     }
 
@@ -362,15 +362,18 @@ public class WebCrawlerTest {
         verify(statisticDummy).resetData();
     }
 
-//    /***
-//     * During the crawling process, if the current collection of URLs is empty but
-//     * already found several close matched items, the method should return a collection
-//     * of close matched items
-//     * @param url
-//     */
-//    @Test
-//    @Parameters(method = "")
-//    public void ifTheUrlSetIsEmptyButFoundSomeCloseMatchItemsShouldReturnACollectionOfCloseMatchedItems(Set<URL> url) {
-//
-//    }
+    @Test
+    @Parameters(method = "testSampleWebForCrawling")
+    public void theSearchDepthLevelShouldBeIncreasedWhenANewRecursiveCrawlStart(URL initURl) throws IOException {
+        // arrange
+        WebCrawler webCrawler = new WebCrawler(initURl, validKeyword, validGeneralItemType);
+        webCrawler.setStatistic(statisticDummy);
+        webCrawler.setScraper(scraperDummy);
+
+        // act
+        webCrawler.startCrawler();
+
+        // assert
+        verify(statisticDummy, atLeast(1)).increaseSearchDepth();
+    }
 }

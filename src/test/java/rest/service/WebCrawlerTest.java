@@ -284,7 +284,8 @@ public class WebCrawlerTest {
         Set<Item> actualResult = webCrawler.startCrawler();
 
         // arrange
-        assertThat(actualResult, contains(validGeneralItemType));
+        assertThat("The result collection did not contain the item!!", actualResult, contains(validGeneralItemType));
+        verify(statisticMock, atLeast(1)).increasePagesExplored();
     }
 
 

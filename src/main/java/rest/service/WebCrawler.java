@@ -140,12 +140,4 @@ public class WebCrawler {
     public void setScraper(Scraper scraper) {
         this.scraper = scraper;
     }
-
-    public Set<Item> getFoundItems() {
-        return foundItems;
-    }
-
-    public void setFoundItems(Set<Item> foundItems) {
-        this.foundItems = foundItems;
-    }
 }

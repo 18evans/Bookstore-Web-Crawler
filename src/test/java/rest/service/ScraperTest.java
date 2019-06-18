@@ -19,11 +19,14 @@ import java.net.URL;
 import java.util.AbstractMap;
 import java.util.Map;
 
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -35,10 +38,12 @@ public class ScraperTest {
     /**
      * Since URL is pointing to FHICT self service Web host required is Cisco VPN to connect.
      */
+    private static URL exampleValidBooksUrl;
     private static URL exampleValidMovieUrl;
 
     @BeforeClass
     public static void setUp() throws MalformedURLException {
+        exampleValidBooksUrl = new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=101");
         exampleValidMovieUrl = new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=201");
     }
 
@@ -130,4 +135,24 @@ public class ScraperTest {
                 -1, (int) result.getYear());
     }
 
+    /**
+     * On successful Scrape of a Book object the properties of {@link Books}
+     * must be set (not default value).
+     */
+    @Test
+    public void onScrapeOfBookHasBookPropertiesSet() throws IOException {
+        //arrange
+        Document document = Jsoup.connect(exampleValidBooksUrl.toString()).timeout(6000).get(); //document point to valid webpage of an item
+
+        //act
+        Books result = (Books) scraper.scrapeAndGetItem(document);
+
+        //assert
+        assertThat("Book expected to have at least 1 author but instead has 0.",
+                result.getAuthors(), hasSize(greaterThan(0)));
+        assertFalse("Publisher was expected to be set, but is in fact either null, empty or white space.",
+                StringUtils.isBlank(result.getPublisher()));
+        assertFalse("ISBN was expected to be set, but is in fact either null, empty or white space.",
+                StringUtils.isBlank(result.getISBN()));
+    }
 }

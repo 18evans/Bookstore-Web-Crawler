@@ -63,16 +63,13 @@ public class WebCrawler {
             try {
                 for (final URL url : toBeExploredUrls) {
                     this.statistic.increasePagesExplored();
-                    if (scraper.findItem(url).isEmpty()){
-                        return new HashSet<>();
-                    } else {
-                        final Document document = Jsoup.connect(url.toString()).get();
-                        final Elements urlsOnPage = document.select("a[href]");
-                        for (final Element element : urlsOnPage) {
-                            final String urlText = element.attr("abs:href");
-                            final URL discoveredUrl = new URL(urlText);
-                            newUrls.add(discoveredUrl);
-                        }
+                    final Document document = Jsoup.connect(url.toString()).get();
+                    final Elements urlsOnPage = document.select("a[href]");
+                    for (final Element element : urlsOnPage) {
+
+                        final String urlText = element.attr("abs:href");
+                        final URL discoveredUrl = new URL(urlText);
+                        newUrls.add(discoveredUrl);
                     }
                 }
             } catch (Exception ex) {

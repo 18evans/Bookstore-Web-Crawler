@@ -45,7 +45,7 @@ public class WebCrawlerTest {
     private Object[] crawlOneSiteToManySites() throws MalformedURLException {
         return new Object[]{
                 new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=101")},
-                new Object[]{new URL("hhttp://i367506.hera.fhict.nl/webcrawl_example/details.php?id=201")},
+                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=201")},
                 new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=301")}
         };
     }
@@ -211,7 +211,7 @@ public class WebCrawlerTest {
         Integer actualNrOfPageExplored = webCrawler.getExploredUrls().size();
 
         // assert
-        verify(statistic).increasePagesExplored();
+        verify(statistic, atLeast(2)).increasePagesExplored();
         assertTrue("The total number of page explored was not increased", actualNrOfPageExplored > 0);
     }
 

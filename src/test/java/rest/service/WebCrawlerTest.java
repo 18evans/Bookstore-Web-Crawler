@@ -56,6 +56,11 @@ public class WebCrawlerTest {
         };
     }
 
+    /**
+     * The method that feed test data that can still be crawled to the web crawler.
+     * @return
+     * @throws MalformedURLException
+     */
     private Object[] testSampleWebForCrawling() throws MalformedURLException {
         return new Object[]{
           new Object[]{ new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=books")},
@@ -82,6 +87,10 @@ public class WebCrawlerTest {
         // assert
     }
 
+    /***
+     * The test which checks that the webcrawler class should not throw any exception if the given
+     * url is in a correct format.
+     */
     @Test
     public void validUrlShouldNotThrowException() {
         //  arrange

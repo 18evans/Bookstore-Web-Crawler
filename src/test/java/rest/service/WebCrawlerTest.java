@@ -13,7 +13,6 @@ import rest.service.model.Music;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
@@ -22,11 +21,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(JUnitParamsRunner.class)
 public class WebCrawlerTest {
@@ -37,6 +32,7 @@ public class WebCrawlerTest {
     private Item validGeneralItemType;
     private URL validUrl;
     private Scraper scraperDummy;
+    private Statistic statisticDummy;
 
     @Before
     public void setUp() throws MalformedURLException {
@@ -48,6 +44,7 @@ public class WebCrawlerTest {
         validMusicType = mock(Music.class);
         validGeneralItemType = mock(Item.class);
         scraperDummy = mock(Scraper.class);
+        statisticDummy = mock(Statistic.class);
         validUrl = new URL("https://fontys.nl");
     }
 
@@ -243,20 +240,19 @@ public class WebCrawlerTest {
     public void ifTheUrlSetIsEmptyButNotFoundAnythingShouldEmptyCollection(URL url) throws IOException {
         // arrange
         WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
-        Statistic statisticMock = mock(Statistic.class);
-        webCrawler.setStatistic(statisticMock);
+        webCrawler.setStatistic(statisticDummy);
         when(validGeneralItemType.getFormat()).thenReturn("sddad");
         when(validGeneralItemType.getGenre()).thenReturn("9588231asda");
         when(validGeneralItemType.getTitle()).thenReturn("a123132nasdsad");
         when(validGeneralItemType.getYear()).thenReturn(404040);
-        when(statisticMock.getKeyword()).thenReturn(validKeyword);
+        when(statisticDummy.getKeyword()).thenReturn(validKeyword);
 
         // act
         Set<Item> actualResult = webCrawler.startCrawler();
 
         // arrange
         assertTrue("The item collection was not empty!!", actualResult.size() == 0);
-        verify(statisticMock).getKeyword();
+        verify(statisticDummy).getKeyword();
     }
 
     /**
@@ -269,24 +265,25 @@ public class WebCrawlerTest {
     public void itemFoundInScraperShouldBePutInCrawlResultSet(URL url) throws IOException {
         // arrange
         WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
-        Statistic statisticMock = mock(Statistic.class);
-        webCrawler.setStatistic(statisticMock);
+
+        webCrawler.setStatistic(statisticDummy);
+        when(statisticDummy.getKeyword()).thenReturn(validKeyword);
+
         webCrawler.setScraper(scraperDummy);
-        when(statisticMock.getKeyword()).thenReturn(validKeyword);
+        when(scraperDummy.scrapeAndGetItem(any())).thenReturn(validGeneralItemType);
 
         when(validGeneralItemType.getFormat()).thenReturn("sddad");
         when(validGeneralItemType.getGenre()).thenReturn("9588231asda");
         when(validGeneralItemType.getTitle()).thenReturn("asdsa" + validKeyword); //title will match keyword
         when(validGeneralItemType.getYear()).thenReturn(404040);
 
-        when(scraperDummy.scrapeAndGetItem(any())).thenReturn(validGeneralItemType);
 
         // act
         Set<Item> actualResult = webCrawler.startCrawler();
 
         // arrange
         assertThat("The result collection did not contain the item!!", actualResult, contains(validGeneralItemType));
-        verify(statisticMock, atLeast(1)).increasePagesExplored();
+        verify(statisticDummy, atLeast(1)).increasePagesExplored();
     }
 
 
@@ -294,16 +291,15 @@ public class WebCrawlerTest {
      * During the crawling process, if the current collection of URLs are not empty
      * and no result found yet, the crawling should continue to the next URL in the
      * collection of URLs
-     * @param urls - the current collection of URLs
+     * @param initUrl - the current collection of URLs
      */
     @Test
     @Parameters(method = "testSampleWebForCrawling")
     public void ifTheUrlSetIsNotEmptyButNotFoundAnythingShouldContinueWithTheNextUrl(URL initUrl) throws IOException {
         // arrange
         WebCrawler webCrawler = new WebCrawler(initUrl, validKeyword, validGeneralItemType);
-        Statistic statisticMock = mock(Statistic.class);
 
-        webCrawler.setStatistic(statisticMock);
+        webCrawler.setStatistic(statisticDummy);
 
         webCrawler.setScraper(scraperDummy);
         when(scraperDummy.scrapeAndGetItem(any())).thenReturn(null);
@@ -313,7 +309,7 @@ public class WebCrawlerTest {
 
         // assert
         assertThat("The result collection contained unwanted item!!", actualResult, not(hasItem(validGeneralItemType)));
-        verify(statisticMock, atLeast(2)).increasePagesExplored();
+        verify(statisticDummy, atLeast(2)).increasePagesExplored();
         verify(scraperDummy, atLeast(2)).scrapeAndGetItem(any());
     }
 //

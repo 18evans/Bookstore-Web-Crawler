@@ -21,6 +21,7 @@ public class WebCrawler {
     private Scraper scraper;
     private final Set<URL> exploredUrls;
     private final Set<URL> toBeExploredUrls;
+    private Set<Item> foundItems;
 
     public WebCrawler(URL url, String keyword, Item type, Scraper scraper) {
         this.url = url;
@@ -30,6 +31,7 @@ public class WebCrawler {
         statistic = new Statistic(type, keyword);
         exploredUrls = new HashSet<>();
         toBeExploredUrls = Collections.singleton(url);
+        foundItems = new HashSet<>();
         this.scraper = scraper;
     }
 
@@ -65,8 +67,11 @@ public class WebCrawler {
                     this.statistic.increasePagesExplored();
                     final Document document = Jsoup.connect(url.toString()).get();
                     final Elements urlsOnPage = document.select("a[href]");
+                    Item foundItem = (Item) scraper.scrapeAndGetItem(document);
+                    if (foundItem != null){
+                        foundItems.add(foundItem);
+                    }
                     for (final Element element : urlsOnPage) {
-
                         final String urlText = element.attr("abs:href");
                         final URL discoveredUrl = new URL(urlText);
                         newUrls.add(discoveredUrl);
@@ -77,7 +82,7 @@ public class WebCrawler {
             }
             return crawl(newUrls);
         } else {
-            return null;
+            return foundItems;
         }
     }
 

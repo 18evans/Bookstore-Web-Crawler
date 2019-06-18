@@ -225,8 +225,9 @@ public class WebCrawlerTest {
     @Parameters(method = "crawlOneSiteToManySites")
     public void ifTheUrlSetIsEmptyButNotFoundAnythingShouldEmptyCollection(URL url) throws IOException {
         // arrange
-        Scraper scraperStub = mock(Scraper.class);
-        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType, scraperStub);
+        //Scraper scraperStub = mock(Scraper.class);
+        Scraper scraper = new Scraper();
+        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType, scraper);
 
         // act
         Set<Item> actualResult = webCrawler.startCrawler();

@@ -16,12 +16,13 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -58,7 +59,7 @@ public class WebCrawlerTest {
         };
     }
 
-    private Object[] testSameKeywordMultipleItemsShouldBeReturned() throws MalformedURLException {
+    private Object[] testSampleWebForCrawling() throws MalformedURLException {
         return new Object[]{
           new Object[]{ new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=books")},
           new Object[]{ new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=movies")},
@@ -289,17 +290,32 @@ public class WebCrawlerTest {
     }
 
 
-//    /***
-//     * During the crawling process, if the current collection of URLs are not empty
-//     * and no result found yet, the crawling should continue to the next URL in the
-//     * collection of URLs
-//     * @param urls - the current collection of URLs
-//     */
-//    @Test
-//    @Parameters(method = "")
-//    public void ifTheUrlSetIsNotEmptyButNotFoundAnythingShouldContinueWithTheNextUrl(Set<URL> urls) {
-//
-//    }
+    /***
+     * During the crawling process, if the current collection of URLs are not empty
+     * and no result found yet, the crawling should continue to the next URL in the
+     * collection of URLs
+     * @param urls - the current collection of URLs
+     */
+    @Test
+    @Parameters(method = "testSampleWebForCrawling")
+    public void ifTheUrlSetIsNotEmptyButNotFoundAnythingShouldContinueWithTheNextUrl(URL initUrl) throws IOException {
+        // arrange
+        WebCrawler webCrawler = new WebCrawler(initUrl, validKeyword, validGeneralItemType);
+        Statistic statisticMock = mock(Statistic.class);
+
+        webCrawler.setStatistic(statisticMock);
+
+        webCrawler.setScraper(scraperDummy);
+        when(scraperDummy.scrapeAndGetItem(any())).thenReturn(null);
+
+        // act
+        Set<Item> actualResult = webCrawler.startCrawler();
+
+        // assert
+        assertThat("The result collection contained unwanted item!!", actualResult, not(hasItem(validGeneralItemType)));
+        verify(statisticMock, atLeast(2)).increasePagesExplored();
+        verify(scraperDummy, atLeast(2)).scrapeAndGetItem(any());
+    }
 //
 //    /***
 //     * During the crawling process, if found an item that match the searching criteria

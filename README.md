@@ -21,6 +21,8 @@ For some users, if there is a current open project and "Create new Project from 
 1. IntelliJ IDE (any version but the latest one is always recommended)
 2. User should have experience in programming with Java
 3. User should have experience with different unit test frameworks (JUnit, Mockito, Hamcrest)
+4. Internet connection is required for the WebCrawler to work.
+5. Internet + Cisco VPN connect to the fontys network is required in order to access the example hosted site used for crawling/scraping in this project (http://i367506.hera.fhict.nl/webcrawl_example/catalog.php)
 
 ### Installing
 *to be filled in*

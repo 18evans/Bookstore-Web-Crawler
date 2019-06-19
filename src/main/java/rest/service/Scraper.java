@@ -54,7 +54,7 @@ public class Scraper {
 
                 String[] splitAuthors = authors.split(", ");
                 for (String author : splitAuthors) {
-                    ((Books) item).addAuthor(authors);
+                    ((Books) item).addAuthor(author);
                 }
 
                 ((Books) item).setPublisher(publisher);

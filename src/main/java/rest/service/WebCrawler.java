@@ -102,10 +102,10 @@ public class WebCrawler {
 
         for (Item i : foundItems) {
             if (StringUtils.isBlank(targetKeyword) ||
-                    i.getTitle().contains(targetKeyword) ||
-                    i.getGenre().contains(targetKeyword) ||
-                    i.getYear().toString().contains(targetKeyword) ||
-                    i.getFormat().contains(targetKeyword)) {
+                    i.getTitle().toLowerCase().contains(targetKeyword.toLowerCase()) ||
+                    i.getGenre().toLowerCase().contains(targetKeyword.toLowerCase()) ||
+                    i.getFormat().toLowerCase().contains(targetKeyword.toLowerCase()) ||
+                    i.getYear().toString().contains(targetKeyword)) {
                 result.add(i);
             }
         }

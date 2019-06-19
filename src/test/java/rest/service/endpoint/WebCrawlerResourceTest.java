@@ -2,13 +2,11 @@ package rest.service.endpoint;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
-import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import rest.service.Statistic;
-import rest.service.WebcrawlerResponse;
+import rest.service.WebCrawlerResponse;
 import rest.service.model.Books;
 import rest.service.model.Item;
 import rest.service.model.Movies;
@@ -23,7 +21,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_URL_INVALID;
 import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_URL_NULL_EMPTY_WHITESPACE;
 
@@ -49,6 +46,10 @@ public class WebCrawlerResourceTest {
     private final String type = Books.class.getSimpleName();
     private final String keyword = "The Bible";
 
+    /**
+     * Check if SUT on {@link WebCrawlerResource#getContent(String, String, String)}
+     * returns an instance of {@link Response} class object.
+     */
     @Test
     public void sutReturnsResponseReturnType() {
         //arrange - uses the valid global constants
@@ -62,6 +63,10 @@ public class WebCrawlerResourceTest {
                 response, instanceOf(Response.class));
     }
 
+    /**
+     * Check that the returned object wrapped within the {@link Response#getEntity()}
+     * is an instance of {@link WebCrawlerResponse}.
+     */
     @Test
     public void sutReturnsResponseWrapperWithinResponse() {
         //arrange - use example valid URL
@@ -70,8 +75,8 @@ public class WebCrawlerResourceTest {
         Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", "");
 
         //assert
-        assertThat("Object entity within Response was NOT an instance of WebcrawlerResponse class.",
-                response.getEntity(), instanceOf(WebcrawlerResponse.class));
+        assertThat("Object entity within Response was NOT an instance of WebCrawlerResponse class.",
+                response.getEntity(), instanceOf(WebCrawlerResponse.class));
     }
 
     //tests of only 1 parameter

@@ -2,7 +2,7 @@ package rest.service.endpoint;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
-import rest.service.WebcrawlerResponse;
+import rest.service.WebCrawlerResponse;
 
 import javax.inject.Singleton;
 import javax.ws.rs.DefaultValue;
@@ -40,7 +40,7 @@ public class WebCrawlerResource {
             return Response.serverError().entity(MSG_ERROR_URL_INVALID).build();
         }
 
-        return Response.ok(new WebcrawlerResponse()).build();
+        return Response.ok(new WebCrawlerResponse()).build();
     }
 
 }

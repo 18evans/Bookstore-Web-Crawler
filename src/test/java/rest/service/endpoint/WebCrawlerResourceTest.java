@@ -4,9 +4,9 @@ import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import rest.service.WebCrawler;
 import rest.service.WebCrawlerResponse;
 import rest.service.model.Books;
 import rest.service.model.Item;
@@ -214,7 +214,7 @@ public class WebCrawlerResourceTest {
      */
     @Test
     public void responseReturnsOKIfOnlyURLIsSpecified() {
-        //arrange - use example valid url + null passed vars
+        //arrange - using example valid url + null passed vars
 
         //act
         Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", "");
@@ -236,7 +236,7 @@ public class WebCrawlerResourceTest {
      */
     @Test
     public void responseWithOnlyAURLSpecifiedReturnsWholeSiteCrawlWithMultipleSetsWithMoreThan0Elements() {
-        //arrange - using dashboard url to find all items
+        //arrange - using dashboard url to crawl through multiple items
 
         //act
         final Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", "");
@@ -276,7 +276,7 @@ public class WebCrawlerResourceTest {
     @Test
     @Parameters(method = "getValidTypes")
     public void responseReturnsOnlyOneArrayOfObjectTypeSameAsTheOneSpecifiedInTheQueryParam(Class<? extends Item> type) {
-        //arrange - using dashboard url to find all items
+        //arrange - using dashboard url to crawl through multiple items
 
         //act
         final Response response = resource.getContent(exampleValidDashboardUrl.toString(), type.getSimpleName(), "");
@@ -286,7 +286,6 @@ public class WebCrawlerResourceTest {
         final Set<Music> music = webCrawlerResponse.getMusic();
 
         //assert
-
         if (type.equals(Books.class)) {
             assertThat(books.size(), greaterThan(0));
             assertTrue(movies.isEmpty());
@@ -302,17 +301,27 @@ public class WebCrawlerResourceTest {
         }
     }
 
-    //  url + keyword
 
     /**
-     * If response has a URL specified and a keyword which is null, empty string or white space
-     * response returned is a web-site crawl. Does not contain key matching "result"
-     * Example:     getContent("wikipedia.org", "Book", null)  result returns same JSON key format as
-     * getContent("wikipedia.org")
+     * Checks if using a keyword known to not match any element from the website.
+     * (this simulates mocking since we can't actually mock website)
+     * None of the collections will be filled.
      */
     @Test
-    @Ignore
-    public void responseWithNullEmptyOrWhitespaceKeywordReturnsSameFormatAsResponseWithOnlyURLSpecified() {
+    public void responseReturnsEmptyResultArrayIfPassedIsAKeywordNotFoundOnWebsite() {
+        //arrange - using random generated string of 255 char length to simulate a non-matching keyword on our webpage
+        String keywordOfNonexistentItem = RandomStringUtils.randomAlphanumeric(255);
+        //act
+        final Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", keywordOfNonexistentItem);
+        final WebCrawlerResponse webCrawlerResponse = (WebCrawlerResponse) response.getEntity();
+        final Set<Books> books = webCrawlerResponse.getBooks();
+        final Set<Movies> movies = webCrawlerResponse.getMovies();
+        final Set<Music> music = webCrawlerResponse.getMusic();
+
+        //assert
+        assertTrue(books.isEmpty());
+        assertTrue(movies.isEmpty());
+        assertTrue(music.isEmpty());
     }
 
     /**

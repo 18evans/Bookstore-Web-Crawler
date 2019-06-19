@@ -401,6 +401,12 @@ public class WebCrawlerTest {
         verify(statisticDummy, atMost(expectedMaxSearchDepth)).increaseSearchDepth(); // since the given urls' depth level are predictable.
     }
 
+    /***
+     * A test which verifies the search depth level of the web crawler. By default, the search depth level after the first crawling
+     * process must be increased into 1.
+     * @param initUrl - the initial url
+     * @throws IOException
+     */
     @Test
     @Parameters(method = "testSampleWebForCrawling")
     public void theSearchDepthLevelMustAlwaysBeGreaterThanZeroAfterStarting(URL initUrl) throws IOException {

@@ -159,6 +159,6 @@ public class WebCrawler {
     }
 
     public Integer getSearchDepth() {
-        return 0;
+        return this.statistic.getSearchDepth();
     }
 }

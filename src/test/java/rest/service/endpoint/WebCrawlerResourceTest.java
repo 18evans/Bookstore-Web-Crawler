@@ -1,13 +1,18 @@
 package rest.service.endpoint;
 
-import com.google.gson.Gson;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
+import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import rest.service.Statistic;
+import rest.service.WebcrawlerResponse;
 import rest.service.model.Books;
+import rest.service.model.Item;
+import rest.service.model.Movies;
+import rest.service.model.Music;
 
 import javax.ws.rs.core.Response;
 import java.net.MalformedURLException;
@@ -27,14 +32,18 @@ public class WebCrawlerResourceTest {
 
     //returns json
     private final WebCrawlerResource resource = new WebCrawlerResource(); //SUT
-    private final Gson gson = new Gson();
 
     //example valid argument variables
     private static URL exampleValidDashboardUrl;
+    private static final String validKeyword = "sample keyword";
+    private static final Class<? extends Item> validBookType = Books.class;
+    private static final Class<? extends Item> validMoviesType = Movies.class;
+    private static final Class<? extends Item> validMusicType = Music.class;
 
     @BeforeClass
     public static void setUp() throws MalformedURLException {
         exampleValidDashboardUrl = new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php");
+
     }
 
     private final String type = Books.class.getSimpleName();
@@ -53,6 +62,17 @@ public class WebCrawlerResourceTest {
                 response, instanceOf(Response.class));
     }
 
+    @Test
+    public void sutReturnsResponseWrapperWithinResponse() {
+        //arrange - use example valid URL
+
+        //act
+        Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", "");
+
+        //assert
+        assertThat("Object entity within Response was NOT an instance of WebcrawlerResponse class.",
+                response.getEntity(), instanceOf(WebcrawlerResponse.class));
+    }
 
     //tests of only 1 parameter
 
@@ -185,21 +205,21 @@ public class WebCrawlerResourceTest {
      * "time": 111111
      * }.
      */
-    @Test
-    public void ifRequestContainsURLResponseReturnsObjectWithPropertyValueForTimeElapsed() {
-        //arrange - use example valid url + null passed vars
-
-        //act
-        Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", "");
-
-//        Object object = response.getMediaType();//(JsonObject.class);
-        Object object = response.getEntity();
-        String objectAsJsonString = gson.toJson(object);
-
-        //assert
-        assertTrue("Response object did NOT have a key & value combination for \"time_elapsed\".",
-                objectAsJsonString.contains("time_elapsed"));
-    }
+//    @Test
+//    public void ifRequestContainsURLResponseReturnsObjectWithPropertyValueForTimeElapsed() {
+//        //arrange - use example valid url + null passed vars
+//
+//        //act
+//        Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", "");
+//
+////        Object object = response.getMediaType();//(JsonObject.class);
+//        Object object = response.getEntity();
+//        String objectAsJsonString = gson.toJson(object);
+//
+//        //assert
+//        assertTrue("Response object did NOT have a key & value combination for \"time_elapsed\".",
+//                objectAsJsonString.contains("time_elapsed"));
+//    }
 
     /**
      * Test case checks that response returns whole-site-craw array.
@@ -298,6 +318,15 @@ public class WebCrawlerResourceTest {
 
     //3 params - url + type + keyword
 
+
+    private static Class<? extends Item>[] getValidTypes() {
+        return new Class[]{
+                Books.class,
+                Movies.class,
+                Music.class
+        };
+    }
+
     /**
      * If response has a URL and a type specified, keyword it will contain a value for "result".
      * Example:
@@ -307,9 +336,38 @@ public class WebCrawlerResourceTest {
      * "result":{}
      * }
      */
-    @Test
-    @Ignore
-    public void responseWithValidTypeAndValidKeywordContainsKeyForResult() {
-    }
+//    @Test
+//    @Ignore
+//    @Parameters(method = "getValidTypes")
+//    public void responseWithValidTypeAndValidKeywordContainsKeyForResult(Class<? extends Item> validType) {
+//        //arrange
+//        resource.getCrawler()
+//
+//        //act
+//        Response response = resource.getContent(exampleValidDashboardUrl.toString(), validType.getSimpleName(), validKeyword);
+//
+//        JSONObject jsonObject = new JSONObject(response.getEntity());
+//        String objectAsJsonString =// gson.toJson(object);
+//
+//                //assert
+//                assertTrue("Response object did NOT have a key & value combination for \"result\".",
+//                        objectAsJsonString.contains("result"));
+//    }
 
+//    @Test
+//    public void responseIncludesJsonPropertiesOfStatisticClass() {
+//        //arrange
+////        resource.getCrawler()
+//        JSONObject jsonStatistic = new Statistic(null, null).toJSONobject();
+//
+//        //act
+//        Response response = resource.getContent(exampleValidDashboardUrl.toString(), validBookType.getSimpleName(), validKeyword);
+//        JSONObject jsonObject = new JSONObject(response.getEntity());
+//
+//        for (String key : jsonStatistic.keySet()) {
+//
+//        }
+//        //assert
+//        assertTrue(jsonObject.keySet().containsAll(jsonStatistic.keySet()));
+//    }
 }

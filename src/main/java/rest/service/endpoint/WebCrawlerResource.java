@@ -69,7 +69,7 @@ public class WebCrawlerResource {
             return Response.serverError().entity(MSG_ERROR_CRAWLING).build();
         }
 
-        WebCrawlerResponse webCrawlerResponse = new WebCrawlerResponse(webCrawler.getStatistic());
+        WebCrawlerResponse webCrawlerResponse = new WebCrawlerResponse(webCrawler.getStatistic(), result);
         return Response.ok(webCrawlerResponse).build();
     }
 

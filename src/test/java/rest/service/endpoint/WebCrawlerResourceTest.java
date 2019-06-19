@@ -2,6 +2,7 @@ package rest.service.endpoint;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -97,7 +98,6 @@ public class WebCrawlerResourceTest {
                 MSG_ERROR_TYPE_INVALID,
                 response.getEntity());
     }
-
 
 
     //tests of only 1 parameter
@@ -318,6 +318,30 @@ public class WebCrawlerResourceTest {
     public void responseReturnsArrayResultIfAKeyWordIsSpecified() {
     }
 
-    //3 params - url + type + keyword
+
+    private static Class<? extends Item>[] getValidTypes() {
+        return new Class[]{
+                Books.class,
+                Movies.class,
+                Music.class
+        };
+    }
+
+    @Test
+    @Parameters(method = "getValidTypes")
+    public void webCrawlResponseHasStatisticWithTheOriginalPassedTypeAndKeyword(Class<? extends Item> classType) {
+        //arrange
+        String randomKeyword = RandomStringUtils.randomAlphabetic(10); //generate random keyword at 10 character long
+        String type = classType.getSimpleName(); //get type as string name
+
+        //act
+        final Response endpointResponse = resource.getContent(exampleValidDashboardUrl.toString(), type, randomKeyword);
+        final WebCrawlerResponse webCrawlerResponse = (WebCrawlerResponse) endpointResponse.getEntity();
+//        JSONObject jsonObject = new JSONObject(response.getEntity());
+
+        //assert
+        assertEquals(webCrawlerResponse.getStatistic().getType().getClass().getSimpleName(), type);
+        assertEquals(webCrawlerResponse.getStatistic().getKeyword(), randomKeyword);
+    }
 
 }

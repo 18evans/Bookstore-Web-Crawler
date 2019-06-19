@@ -1,5 +1,5 @@
 package rest.service;
 
 
-public interface WebcrawlerResponse {
+public class WebcrawlerResponse {
 }

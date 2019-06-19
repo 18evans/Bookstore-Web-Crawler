@@ -18,9 +18,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.any;
-import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
@@ -37,6 +36,7 @@ public class WebCrawlerResourceTest {
 
     //example valid argument variables
     private static URL exampleValidDashboardUrl;
+    private static URL exampleValidMovieUrl;
     private static final String validKeyword = "sample keyword";
     private static final Class<? extends Item> validBookType = Books.class;
     private static final Class<? extends Item> validMoviesType = Movies.class;
@@ -46,6 +46,7 @@ public class WebCrawlerResourceTest {
     @BeforeClass
     public static void setUp() throws MalformedURLException {
         exampleValidDashboardUrl = new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php");
+        exampleValidMovieUrl = new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=201");
     }
 
     /**
@@ -82,7 +83,7 @@ public class WebCrawlerResourceTest {
     }
 
     /**
-     * Check that response is a Server Error with the correct expected message if a type to look for is passed
+     * Check that response is a Server Error with the correct expected message of a type to look for is passed
      * as argument that is unsupported yet.
      */
     @Test
@@ -206,9 +207,6 @@ public class WebCrawlerResourceTest {
                 response.getEntity());
     }
 
-    //todo test case empty type
-    //todo test case empty keyword
-
     /**
      * Test case checks that if a URL is specified, response succeeds
      * Example:     getContent("wikipedia.org") returns OK response.
@@ -229,59 +227,32 @@ public class WebCrawlerResourceTest {
     /**
      * Test case checks that response returns whole-site-craw array.
      * Included will be Statistics object and Result objects.
-     *
+     * Test case checks that response returns several arrays, one for each
+     * model type. Currently there are 3 supported model types, meaining 3 arrays
+     * are expected.
+     * <p>
      * IMPORTANT: Expected results are to have 1 or more of each supported type.
      */
     @Test
-    public void responseWithOnlyAURLSpecifiedReturnsWholeSiteCrawl() {
+    public void responseWithOnlyAURLSpecifiedReturnsWholeSiteCrawlWithMultipleSetsWithMoreThan0Elements() {
         //arrange - using dashboard url to find all items
 
         //act
         final Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", "");
         final WebCrawlerResponse webCrawlerResponse = (WebCrawlerResponse) response.getEntity();
-        final Set<Item> result = webCrawlerResponse.getResults();
+        final Set<Books> books = webCrawlerResponse.getBooks();
+        final Set<Movies> movies = webCrawlerResponse.getMovies();
+        final Set<Music> music = webCrawlerResponse.getMusic();
 
         //assert
-        assertThat(result, hasItem(any(validBookType)));
-        assertThat(result, hasItem(any(validMoviesType)));
-        assertThat(result, hasItem(any(validMusicType)));
-    }
-
-    /**
-     * Test case checks that response returns several arrays, one for each
-     * model type. Currently there are 3 supported model types, meaining 3 arrays
-     * are expected.
-     * Example:     getContent("wikipedia.org") has 3 arrays, one for each model type.
-     */
-    @Test
-    @Ignore
-    public void responseReturnsMultipleArraysOfEachModelTypeIfURLIsSpecified() {
+        assertThat(books.size(), greaterThan(0));
+        assertThat(movies.size(), greaterThan(0));
+        assertThat(music.size(), greaterThan(0));
     }
 
     //tests with 2 parameters:
     //  url + type
 
-    /**
-     * Test case checks that response returns error if specified "type" query
-     * param doesn't exist.
-     * Example:     getContent("wikipedia.org", "dfgdsfsf") returns
-     * reponse with error response code.
-     */
-    @Test
-    @Ignore
-    public void responseReturnsErrorIfTypeDoesNotExistInModels() {
-    }
-
-    /**
-     * If response has a URL specified and a type which is null, empty string or white space
-     * response returned is a web-site crawl. Does not contain key matching "result"
-     * Example:     getContent("wikipedia.org", null)  result returns same JSON key format as
-     * getContent("wikipedia.org")
-     */
-    @Test
-    @Ignore
-    public void responseWithNullEmptyOrWhitespaceTypeReturnsSameFormatAsResponseWithOnlyURLSpecified() {
-    }
 
     /**
      * Test case will check that the "type" query param specified

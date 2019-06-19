@@ -130,38 +130,6 @@ public class WebCrawlerTest {
     }
 
     /***
-     * The test that verify the method should throw an IllegalArgumentException when
-     * the given keyword is Empty or Null.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void emptyKeywordShouldThrowIllegalArgumentException() {
-        // arrange
-        String emptyKeyword = emptyString;
-        WebCrawler webCrawler;
-
-        // act
-        webCrawler = new WebCrawler(validUrl, validMusicType, emptyKeyword);
-        webCrawler = new WebCrawler(validUrl, validBookType, emptyKeyword);
-        webCrawler = new WebCrawler(validUrl, validMovieType, emptyKeyword);
-    }
-
-    /***
-     * The test that verify the method should throw an IllegalArgumentException when
-     * the given keyword is Empty or Null.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void nullKeywordShouldThrowIllegalArgumentException() {
-        // arrange
-        String nullKeyword = nullString;
-        WebCrawler webCrawler;
-
-        // act
-        webCrawler = new WebCrawler(validUrl, validBookType, nullKeyword);
-        webCrawler = new WebCrawler(validUrl, validMovieType, nullKeyword);
-        webCrawler = new WebCrawler(validUrl, validMusicType, nullKeyword);
-    }
-
-    /***
      * The test the test that verify the method should not throw an IllegalArgumentException when
      * the given keyword is in a valid format
      */

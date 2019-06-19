@@ -6,7 +6,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import rest.service.model.Item;
-import rest.service.model.Movies;
 
 import java.io.IOException;
 import java.net.URL;
@@ -76,7 +75,9 @@ public class WebCrawler {
                     for (final Element element : urlsOnPage) {
                         final String urlText = element.attr("abs:href");
                         final URL discoveredUrl = new URL(urlText);
-                        newUrls.add(discoveredUrl);
+                        if (discoveredUrl.getHost().startsWith("i367506.hera.fhict.nl")) {
+                            newUrls.add(discoveredUrl);
+                        }
                     }
                 }
             } catch (Exception ex) {

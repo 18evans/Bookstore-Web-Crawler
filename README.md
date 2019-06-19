@@ -1,6 +1,6 @@
-# Project Title
+#Web Crawler
 
-This is the TCI - Group Project - Web Crawler
+This is the a group project of Testing and Continuos Integration (TCI) course from Fontys.
 
 The aim of the project is to design, implement and test a Web Crawler [(Read more about Web Crawler here)](https://en.wikipedia.org/wiki/Web_crawler) 
 using the Test Driven Developement (TDD) process.
@@ -24,3 +24,15 @@ For some users, if there is a current open project and "Create new Project from 
 
 ### Installing
 *to be filled in*
+
+## Built With
+
+* [Jsoup](https://jsoup.org/) - Java HTML Parser
+
+* [Jersey](https://jersey.github.io/) - RESTful Web Services in Java 
+
+* [Maven](https://maven.apache.org/) - Dependency Management
+
+* [Gradle](https://gradle.org/) - Build Automation tool
+
+

@@ -3,10 +3,11 @@ package rest.service.model;
 public class Music extends Item {
     private String artist;
 
-    public Music() { }
+    public Music() {
+    }
 
-    public Music(String genre, String format, Integer year, String artist) {
-        super(genre, format, year);
+    public Music(String title, String genre, String format, Integer year, String artist) {
+        super(title, genre, format, year);
         this.artist = artist;
     }
 
@@ -31,6 +32,15 @@ public class Music extends Item {
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    @Override
+    public boolean compareTo(Item obj) {
+        if (super.compareTo(obj)
+                && artist.equals(((Music) obj).artist)) {
+            return true;
+        }
+        return false;
     }
 }
 

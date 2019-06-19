@@ -1,0 +1,211 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Scraper</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">rest.service</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Scraper (rest.service)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Scraper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (65/ 65)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Scraper$MockitoMock$1514296724</td>
+  </tr>
+  <tr>
+    <td class="name">Scraper$MockitoMock$1514296724$auxiliary$kMArf2Fh</td>
+  </tr>
+  <tr>
+    <td class="name">Scraper$MockitoMock$1514296724$auxiliary$NTugPuxg</td>
+  </tr>
+  <tr>
+    <td class="name">Scraper$MockitoMock$1514296724$auxiliary$Wo8BzYAN</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (65/ 65)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package rest.service;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import org.jsoup.nodes.Document;
+<i>4</i>&nbsp;import org.jsoup.nodes.Element;
+<i>5</i>&nbsp;import org.jsoup.select.Elements;
+<i>6</i>&nbsp;import rest.service.model.Books;
+<i>7</i>&nbsp;import rest.service.model.Item;
+<i>8</i>&nbsp;import rest.service.model.Movies;
+<i>9</i>&nbsp;import rest.service.model.Music;
+<i>10</i>&nbsp;
+<b class="fc"><i>11</i>&nbsp;public class Scraper {</b>
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    public Item scrapeAndGetItem(Document document) {
+<b class="fc"><i>14</i>&nbsp;        Elements elements = document.select(&quot;div.media-details&quot;);</b>
+<i>15</i>&nbsp;
+<b class="fc"><i>16</i>&nbsp;        if (elements == null || elements.isEmpty()) {</b>
+<b class="fc"><i>17</i>&nbsp;            return null; //not an item page</b>
+<i>18</i>&nbsp;        }
+<i>19</i>&nbsp;
+<b class="fc"><i>20</i>&nbsp;        final String title = elements.select(&quot;h1&quot;).text();</b>
+<b class="fc"><i>21</i>&nbsp;        final Elements rows = elements.select(&quot;table tbody tr&quot;);</b>
+<i>22</i>&nbsp;
+<b class="fc"><i>23</i>&nbsp;        Item item = null;</b>
+<b class="fc"><i>24</i>&nbsp;        String category = &quot;&quot;, genre = &quot;&quot;, format = &quot;&quot;;</b>
+<b class="fc"><i>25</i>&nbsp;        int year = -1;</b>
+<i>26</i>&nbsp;
+<b class="fc"><i>27</i>&nbsp;        for (Element row : rows) {</b>
+<b class="fc"><i>28</i>&nbsp;            if (row.select(&quot;th&quot;).text().toLowerCase().contains(&quot;genre&quot;)) {</b>
+<b class="fc"><i>29</i>&nbsp;                genre = row.select(&quot;td&quot;).text();</b>
+<b class="fc"><i>30</i>&nbsp;            } else if (row.select(&quot;th&quot;).text().toLowerCase().contains(&quot;format&quot;)) {</b>
+<b class="fc"><i>31</i>&nbsp;                format = row.select(&quot;td&quot;).text();</b>
+<b class="fc"><i>32</i>&nbsp;            } else if (row.select(&quot;th&quot;).text().toLowerCase().contains(&quot;year&quot;)) {</b>
+<b class="fc"><i>33</i>&nbsp;                year = Integer.parseInt(row.select(&quot;td&quot;).text());</b>
+<b class="fc"><i>34</i>&nbsp;            } else if (row.select(&quot;th&quot;).text().toLowerCase().contains(&quot;category&quot;)) {</b>
+<b class="fc"><i>35</i>&nbsp;                category = row.select(&quot;td&quot;).text();</b>
+<i>36</i>&nbsp;            }
+<b class="fc"><i>37</i>&nbsp;        }</b>
+<i>38</i>&nbsp;
+<b class="fc"><i>39</i>&nbsp;        switch (category.toLowerCase()) {</b>
+<i>40</i>&nbsp;            case &quot;books&quot;:
+<b class="fc"><i>41</i>&nbsp;                item = new Books();</b>
+<i>42</i>&nbsp;
+<b class="fc"><i>43</i>&nbsp;                String authors = &quot;&quot;, publisher = &quot;&quot;, isbn = &quot;&quot;;</b>
+<i>44</i>&nbsp;
+<b class="fc"><i>45</i>&nbsp;                for (Element row : rows) {</b>
+<b class="fc"><i>46</i>&nbsp;                    if (row.select(&quot;th&quot;).text().toLowerCase().contains(&quot;authors&quot;)) {</b>
+<b class="fc"><i>47</i>&nbsp;                        authors = row.select(&quot;td&quot;).text();</b>
+<b class="fc"><i>48</i>&nbsp;                    } else if (row.select(&quot;th&quot;).text().toLowerCase().contains(&quot;publisher&quot;)) {</b>
+<b class="fc"><i>49</i>&nbsp;                        publisher = row.select(&quot;td&quot;).text();</b>
+<b class="fc"><i>50</i>&nbsp;                    } else if (row.select(&quot;th&quot;).text().toLowerCase().contains(&quot;isbn&quot;)) {</b>
+<b class="fc"><i>51</i>&nbsp;                        isbn = row.select(&quot;td&quot;).text();</b>
+<i>52</i>&nbsp;                    }
+<b class="fc"><i>53</i>&nbsp;                }</b>
+<i>54</i>&nbsp;
+<b class="fc"><i>55</i>&nbsp;                String[] splitAuthors = authors.split(&quot;, &quot;);</b>
+<b class="fc"><i>56</i>&nbsp;                for (String author : splitAuthors) {</b>
+<b class="fc"><i>57</i>&nbsp;                    ((Books) item).addAuthor(authors);</b>
+<i>58</i>&nbsp;                }
+<i>59</i>&nbsp;
+<b class="fc"><i>60</i>&nbsp;                ((Books) item).setPublisher(publisher);</b>
+<b class="fc"><i>61</i>&nbsp;                ((Books) item).setISBN(isbn);</b>
+<b class="fc"><i>62</i>&nbsp;                break;</b>
+<i>63</i>&nbsp;            case &quot;movies&quot;:
+<b class="fc"><i>64</i>&nbsp;                item = new Movies();</b>
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;                String director = &quot;&quot;, writers = &quot;&quot;, stars = &quot;&quot;;</b>
+<i>67</i>&nbsp;
+<b class="fc"><i>68</i>&nbsp;                for (Element row : rows) {</b>
+<b class="fc"><i>69</i>&nbsp;                    if (row.select(&quot;th&quot;).text().toLowerCase().contains(&quot;director&quot;)) {</b>
+<b class="fc"><i>70</i>&nbsp;                        director = row.select(&quot;td&quot;).text();</b>
+<b class="fc"><i>71</i>&nbsp;                    } else if (row.select(&quot;th&quot;).text().toLowerCase().contains(&quot;writers&quot;)) {</b>
+<b class="fc"><i>72</i>&nbsp;                        writers = row.select(&quot;td&quot;).text();</b>
+<b class="fc"><i>73</i>&nbsp;                    } else if (row.select(&quot;th&quot;).text().toLowerCase().contains(&quot;stars&quot;)) {</b>
+<b class="fc"><i>74</i>&nbsp;                        stars = row.select(&quot;td&quot;).text();</b>
+<i>75</i>&nbsp;                    }
+<b class="fc"><i>76</i>&nbsp;                }</b>
+<i>77</i>&nbsp;
+<b class="fc"><i>78</i>&nbsp;                ((Movies) item).setDirector(director);</b>
+<i>79</i>&nbsp;
+<b class="fc"><i>80</i>&nbsp;                String[] splitWriters = writers.split(&quot;, &quot;);</b>
+<b class="fc"><i>81</i>&nbsp;                for (String writer : splitWriters) {</b>
+<b class="fc"><i>82</i>&nbsp;                    ((Movies) item).addWriter(writer);</b>
+<i>83</i>&nbsp;                }
+<i>84</i>&nbsp;
+<b class="fc"><i>85</i>&nbsp;                String[] splitStars = stars.split(&quot;, &quot;);</b>
+<b class="fc"><i>86</i>&nbsp;                for (String star : splitStars) {</b>
+<b class="fc"><i>87</i>&nbsp;                    ((Movies) item).addStar(star);</b>
+<i>88</i>&nbsp;                }
+<b class="fc"><i>89</i>&nbsp;                break;</b>
+<i>90</i>&nbsp;            case &quot;music&quot;:
+<b class="fc"><i>91</i>&nbsp;                item = new Music();</b>
+<i>92</i>&nbsp;
+<b class="fc"><i>93</i>&nbsp;                for (Element row : rows) {</b>
+<b class="fc"><i>94</i>&nbsp;                    if (row.select(&quot;th&quot;).text().toLowerCase().contains(&quot;artist&quot;)) {</b>
+<b class="fc"><i>95</i>&nbsp;                        String artist = row.select(&quot;td&quot;).text();</b>
+<b class="fc"><i>96</i>&nbsp;                        ((Music) item).setArtist(artist);</b>
+<i>97</i>&nbsp;                    }
+<b class="fc"><i>98</i>&nbsp;                }</b>
+<i>99</i>&nbsp;                break;
+<i>100</i>&nbsp;        }
+<i>101</i>&nbsp;
+<b class="fc"><i>102</i>&nbsp;        item.setTitle(title);</b>
+<b class="fc"><i>103</i>&nbsp;        item.setFormat(format);</b>
+<b class="fc"><i>104</i>&nbsp;        item.setGenre(genre);</b>
+<b class="fc"><i>105</i>&nbsp;        item.setYear(year);</b>
+<i>106</i>&nbsp;
+<b class="fc"><i>107</i>&nbsp;        return item;</b>
+<i>108</i>&nbsp;    }
+<i>109</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-06-19 03:06</div>
+</div>
+</body>
+</html>

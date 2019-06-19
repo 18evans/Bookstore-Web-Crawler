@@ -10,7 +10,8 @@ import rest.service.model.Item;
 import rest.service.model.Movies;
 import rest.service.model.Music;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 
 @RunWith(JUnitParamsRunner.class)
@@ -225,13 +226,4 @@ public class StatisticTest {
         assertNotNull("The new search type was changed to null!!", actualNewType);
     }
 
-    /***
-     * A test which is used to verify generating Json behavior.
-     * The test expected all the keys and values are in correct order
-     * and the method does not return null
-     */
-    @Test
-    public void generateJsonShouldReturnJsonObjectWithCorrectValues(){
-
-    }
 }

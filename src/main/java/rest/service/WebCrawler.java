@@ -6,7 +6,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import rest.service.model.Item;
-import rest.service.model.Movies;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,22 +16,18 @@ import java.util.Set;
 public class WebCrawler {
 
     private Statistic statistic;
-    private URL url;
-    private Scraper scraper;
+    private final URL url;
+    private Scraper scraper = new Scraper();
     private final Set<URL> exploredUrls;
-    private final Set<URL> toBeExploredUrls;
-    private Set<Item> foundItems;
+    private final Set<URL> initialToBeExploredUrls;
+    private final Set<Item> foundItems;
 
-    public WebCrawler(URL url, String keyword, Item type) {
+    public WebCrawler(URL url, Item type, String keyword) {
         this.url = url;
-        if (keyword == null || keyword.equals("")) {
-            throw new IllegalArgumentException();
-        }
+        initialToBeExploredUrls = Collections.singleton(url);
         statistic = new Statistic(type, keyword);
         exploredUrls = new HashSet<>();
-        toBeExploredUrls = Collections.singleton(url);
         foundItems = new HashSet<>();
-        this.scraper = new Scraper();
     }
 
     /***
@@ -49,8 +44,8 @@ public class WebCrawler {
      *
      * @return A Set Collection of the Item
      */
-    public Set<Item> startCrawler() throws IOException {
-        return crawl(toBeExploredUrls);
+    public Set<Item> startCrawler() {
+        return crawl(initialToBeExploredUrls);
     }
 
     /**
@@ -67,22 +62,25 @@ public class WebCrawler {
             this.exploredUrls.addAll(urls);
             final Set<URL> newUrls = new HashSet<>();
             try {
-                for (final URL url : toBeExploredUrls) {
+                for (final URL url : urls) {
                     this.statistic.increasePagesExplored();
                     final Document document = Jsoup.connect(url.toString()).get();
                     final Elements urlsOnPage = document.select("a[href]");
-                    Item newFoundItem = (Item) scraper.scrapeAndGetItem(document);
-                    if (newFoundItem != null && foundItems.stream().noneMatch(o -> o.compareTo(newFoundItem))) {
-                        //do not add if no new found element or an element with same properties exists
+                    Item newFoundItem = scraper.scrapeAndGetItem(document);
+                    if (newFoundItem != null &&
+                            (getItem() == null || newFoundItem.getClass().equals(getItem().getClass())) && //if Type filtering is set check if Type is same as the set one
+                            foundItems.stream().noneMatch(o -> o.compareTo(newFoundItem))) { //do not add if no new found element or an element with same properties exists
                         foundItems.add(newFoundItem);
                     }
                     for (final Element element : urlsOnPage) {
                         final String urlText = element.attr("abs:href");
                         final URL discoveredUrl = new URL(urlText);
-                        newUrls.add(discoveredUrl);
+                        if (discoveredUrl.getHost().startsWith(getInitUrl().getHost())) { // limit future URL crawling only within the initial host
+                            newUrls.add(discoveredUrl);
+                        }
                     }
                 }
-            } catch (Exception ex) {
+            } catch (IOException ex) {
 
             }
             this.statistic.increaseSearchDepth();
@@ -119,8 +117,8 @@ public class WebCrawler {
      * Return the initial url
      * @return
      */
-    public String getInitUrl() {
-        return this.url.toString();
+    public URL getInitUrl() {
+        return this.url;
     }
 
     /***
@@ -143,11 +141,9 @@ public class WebCrawler {
         return exploredUrls;
     }
 
-
-    public Set<URL> getToBeExploredUrls() {
-        return toBeExploredUrls;
+    public Set<URL> getInitialToBeExploredUrls() {
+        return initialToBeExploredUrls;
     }
-
 
     /***
      * Set the Scraper object - for mocking purpose

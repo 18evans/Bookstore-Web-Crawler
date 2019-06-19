@@ -2,52 +2,208 @@ package rest.service.endpoint;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import rest.service.WebCrawler;
+import rest.service.WebCrawlerResponse;
+import rest.service.model.Books;
+import rest.service.model.Item;
+import rest.service.model.Movies;
+import rest.service.model.Music;
+
+import javax.ws.rs.core.Response;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Set;
+
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_TYPE_INVALID;
+import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_URL_INVALID;
+import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_URL_NULL_EMPTY_WHITESPACE;
 
 @RunWith(JUnitParamsRunner.class)
 public class WebCrawlerResourceTest {
 
-    //1 returns json
-    WebCrawlerResource resource = new WebCrawlerResource(); //SUT
+    //returns json
+    private final WebCrawlerResource resource = new WebCrawlerResource(); //SUT
 
+    //example valid argument variables
+    private static URL exampleValidDashboardUrl;
+    private static final String validKeyword = "sample keyword";
+    private static final Class<? extends Item> validBookType = Books.class;
+    private static final Class<? extends Item> validMoviesType = Movies.class;
+    private static final Class<? extends Item> validMusicType = Music.class;
+    private static final String exampleKeyword = "The Bible";
+
+    @BeforeClass
+    public static void setUp() throws MalformedURLException {
+        exampleValidDashboardUrl = new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php");
+    }
+
+    /**
+     * Check if SUT on {@link WebCrawlerResource#getContent(String, String, String)}
+     * returns an instance of {@link Response} class object.
+     */
     @Test
     public void sutReturnsResponseReturnType() {
-    }
+        //arrange - uses the valid global constants
 
-    //tests with only 1 parameter
+        //act
+        Response response = resource.getContent("", "", "");
 
-    /**
-     * If query parameter for "url" is not specified,
-     * method returns a Server Error response.
-     */
-    @Test
-    public void responseReturnsErrorIfURLIsNotSpecified() {
-    }
-
-    /**
-     * If query param value for "url" is passed as null, empty String or white space.
-     * Example:     getContent(null) returns Server Error.
-     */
-    @Test
-    public void responseReturnsErrorIfURLIsNullEmptyOrWhitespace() {
+        //assert
+        assertNotNull("Response was NULL", response);
+        assertThat("Response was NOT an instance of Response class.",
+                response, instanceOf(Response.class));
     }
 
     /**
-     * /**
-     * Test case checks that response returns Error if URL is omitted,
-     * when type is present.
+     * Check that the returned object wrapped within the {@link Response#getEntity()}
+     * is an instance of {@link WebCrawlerResponse}.
      */
     @Test
-    public void responseReturnsErrorIfURLIsNotSpecifiedButTypeIs() {
+    public void sutReturnsWebCrawlerResponseWithinResponse() {
+        //arrange - use example valid URL
+
+        //act
+        Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", "");
+
+        //assert
+        assertThat("Object entity within Response was NOT an instance of WebCrawlerResponse class.",
+                response.getEntity(), instanceOf(WebCrawlerResponse.class));
     }
 
     /**
-     * Test case checks that response returns Error if URL is omitted,
-     * when keyword is present.
+     * Check that response is a Server Error with the correct expected message of a type to look for is passed
+     * as argument that is unsupported yet.
      */
     @Test
-    public void responseReturnsErrorIfUrlIsNotSpecifiedButKeywordIs() {
+    public void sutResponseReturnsInvalidTypeServerErrorIfPassedTypeIsNotSupported() {
+        //arrange - use example valid URL
+        String unsupportedType = "Cars";
+
+        //act
+        Response response = resource.getContent(exampleValidDashboardUrl.toString(), unsupportedType, "");
+
+        //assert
+        assertEquals("Response on invalid type was NOT server error as was expected.",
+                Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                response.getStatus());
+        assertEquals("Server Error did not in fact carry the expected entity error String message.",
+                MSG_ERROR_TYPE_INVALID,
+                response.getEntity());
+    }
+
+
+    //tests of only 1 parameter
+
+    private static String[] getNullEmptyOrWhiteSpaceStrings() {
+        return new String[]{
+                null,
+                "",
+                "     "
+        };
+    }
+
+    /**
+     * If query param value for "url" is a passed NULL pointer, Empty String or String of only White Space,
+     * expected return object is a Response carrying ServerError entity with
+     * a Server error entity message for NULL pointer, Empty String or String of only White Space URLs.
+     * Example:      getContent(null),
+     * getContent("")
+     * and getContent("     ")
+     * return Server Error.
+     * <p>
+     * Note: Cannot Mock final classes ({@link URL} and {@link String}) thus using parameterized test
+     * for each of the three scenarios
+     *
+     * @param urlAsNullEmptyOrWhiteSpace - url equal to either NULL, "" or "    ".
+     */
+    @Test
+    @Parameters(method = "getNullEmptyOrWhiteSpaceStrings")
+    public void responseReturnsUrlNullEmptyWhiteSpaceServerErrorIfUrlIsNullEmptyOrWhiteSpace(String urlAsNullEmptyOrWhiteSpace) {
+        //arrange - url from Parameterized method, type & keyword from Global constants
+
+        //act
+        Response responseNull = resource.getContent(urlAsNullEmptyOrWhiteSpace, "", "");
+
+        //assert
+        assertEquals("Response on NULL url was NOT server error as was expected.",
+                Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                responseNull.getStatus());
+        assertEquals("Server Error did not in fact carry the expected entity error String message.",
+                MSG_ERROR_URL_NULL_EMPTY_WHITESPACE,
+                responseNull.getEntity());
+    }
+
+    private static URL[] getValidUrls() throws MalformedURLException {
+        return new URL[]{
+                new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=101"),
+                new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=201"),
+                new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=301")
+        };
+    }
+
+    /**
+     * Method asserts that a Valid URL, Type and keyword passed as argument will cause endpoint
+     * to NOT return a Server error.
+     * Method uses Parameterized Tests to get valid URL argument.
+     *
+     * @param url - the valid URL.
+     */
+    @Test
+    @Parameters(method = "getValidUrls")
+    public void responseDoesNotReturnServerErrorOnValidArguments(URL url) {
+        //arrange - uses the valid global constants
+
+        //act
+        Response response = resource.getContent(url.toString(), validBookType.getSimpleName(), exampleKeyword);
+
+        //assert
+        assertNotEquals("Response did in fact return a SERVER ERROR when it was not expected.",
+                Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                response.getStatus());
+    }
+
+    private static String[] getInvalidUrls() {
+        return new String[]{
+                "asdf",
+                "fdgdfhg.gfddsfgdg",
+                "gfdhfnb.dsfgdg",
+                "www.dfgdfgdfgdfgdfgdfgdfg.hngfdjhgjgfhjgdhj"
+        };
+    }
+
+    /**
+     * Method asserts that an Invalid URL passed as argument will cause endpoint
+     * to return Server error.
+     * Method uses Parameterized Tests to get an invalid URL argument.
+     *
+     * @param url - the invalid URL.
+     */
+    @Test
+    @Parameters(method = "getInvalidUrls")
+    public void responseReturnsServerErrorOnInvalidURL(String url) {
+        //arrange - uses the valid global constants
+
+        //act
+        Response response = resource.getContent(url, validBookType.getSimpleName(), exampleKeyword);
+
+        //assert
+        assertEquals("Response did in fact NOT return a SERVER ERROR when it was expected.",
+                Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                response.getStatus());
+        assertEquals("Server Error did not in fact carry the expected entity error String message.",
+                MSG_ERROR_URL_INVALID,
+                response.getEntity());
     }
 
     /**
@@ -55,62 +211,52 @@ public class WebCrawlerResourceTest {
      * Example:     getContent("wikipedia.org") returns OK response.
      */
     @Test
-    public void responseReturnsOKIfURLIsSpecified() {
-    }
+    public void responseReturnsOKIfOnlyURLIsSpecified() {
+        //arrange - using example valid url + null passed vars
 
-    /**
-     * Test case checks that if a URL is specified, response returns
-     * a value for "time_elapsed".
-     * Example:     getContent("wikipedia.org") contains
-     * {
-     * "time": 111111
-     * }.
-     */
-    @Test
-    public void ifResponseReturnsOKItContainsValueForTimeElapsed() {
+        //act
+        Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", "");
+
+        //assert
+        assertEquals("Response did NOT return OK when it was expected.",
+                Response.Status.OK.getStatusCode(),
+                response.getStatus());
     }
 
     /**
      * Test case checks that response returns whole-site-craw array.
-     * Included will be value for "pags_explored", "search_depth".
-     * Example:     getContent("wikipedia.org") returns OK response.
-     */
-    @Test
-    public void responseWithOnlyAURLSpecifiedReturnsWholeSiteCrawl() {
-    }
-
-    /**
+     * Included will be Statistics object and Result objects.
      * Test case checks that response returns several arrays, one for each
      * model type. Currently there are 3 supported model types, meaining 3 arrays
      * are expected.
-     * Example:     getContent("wikipedia.org") has 3 arrays, one for each model type.
+     * <p>
+     * IMPORTANT: Expected results are to have 1 or more of each supported type.
      */
     @Test
-    public void responseReturnsMultipleArraysOfEachModelTypeIfURLIsSpecified() {
+    public void responseWithOnlyAURLSpecifiedReturnsWholeSiteCrawlWithMultipleSetsWithMoreThan0Elements() {
+        //arrange - using dashboard url to crawl through multiple items
+
+        //act
+        final Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", "");
+        final WebCrawlerResponse webCrawlerResponse = (WebCrawlerResponse) response.getEntity();
+        final Set<Books> books = webCrawlerResponse.getBooks();
+        final Set<Movies> movies = webCrawlerResponse.getMovies();
+        final Set<Music> music = webCrawlerResponse.getMusic();
+
+        //assert
+        assertThat(books.size(), greaterThan(0));
+        assertThat(movies.size(), greaterThan(0));
+        assertThat(music.size(), greaterThan(0));
     }
 
-    //tests with 2 parameters:
-    //  url + type
-
-    /**
-     * Test case checks that response returns error if specified "type" query
-     * param doesn't exist.
-     * Example:     getContent("wikipedia.org", "dfgdsfsf") returns
-     * reponse with error response code.
-     */
-    @Test
-    public void responseReturnsErrorIfTypeDoesNotExistInModels() {
+    private static Class<? extends Item>[] getValidTypes() {
+        return new Class[]{
+                Books.class,
+                Movies.class,
+                Music.class
+        };
     }
 
-    /**
-     * If response has a URL specified and a type which is null, empty string or white space
-     * response returned is a web-site crawl. Does not contain key matching "result"
-     * Example:     getContent("wikipedia.org", null)  result returns same JSON key format as
-     * getContent("wikipedia.org")
-     */
-    @Test
-    public void responseWithNullEmptyOrWhitespaceTypeReturnsSameFormatAsResponseWithOnlyURLSpecified() {
-    }
 
     /**
      * Test case will check that the "type" query param specified
@@ -123,54 +269,133 @@ public class WebCrawlerResourceTest {
      * Example:     getContent("wikipedia.org", "Book") returns response
      * with only one array which contains Book elements.
      *
-     * @param urlAsString url query param - Required to be present for response to not return error.
-     * @param type        type query param - Compared to the response's array's object type.
+     * @param type type query param - Compared to the response's array's object type.
      */
     @Test
-    @Parameters(method = "")
-    public void responseReturnsOnlyOneArrayOfObjectTypeSameAsTheOneSpecifiedInTheQueryParam(String urlAsString,
-                                                                                            String type) {
+    @Parameters(method = "getValidTypes")
+    public void responseReturnsOnlyOneArrayOfObjectTypeSameAsTheOneSpecifiedInTheQueryParam(Class<? extends Item> type) {
+        //arrange - using dashboard url to crawl through multiple items
+
+        //act
+        final Response response = resource.getContent(exampleValidDashboardUrl.toString(), type.getSimpleName(), "");
+        final WebCrawlerResponse webCrawlerResponse = (WebCrawlerResponse) response.getEntity();
+        final Set<Books> books = webCrawlerResponse.getBooks();
+        final Set<Movies> movies = webCrawlerResponse.getMovies();
+        final Set<Music> music = webCrawlerResponse.getMusic();
+
+        //assert
+        if (type.equals(Books.class)) {
+            assertThat(books.size(), greaterThan(0));
+            assertTrue(movies.isEmpty());
+            assertTrue(music.isEmpty());
+        } else if (type.equals(Movies.class)) {
+            assertTrue(books.isEmpty());
+            assertTrue(music.isEmpty());
+            assertThat(movies.size(), greaterThan(0));
+        } else if (type.equals(Music.class)) {
+            assertTrue(movies.isEmpty());
+            assertTrue(books.isEmpty());
+            assertThat(music.size(), greaterThan(0));
+        }
     }
 
-    //  url + keyword
 
     /**
-     * If response has a URL specified and a keyword which is null, empty string or white space
-     * response returned is a web-site crawl. Does not contain key matching "result"
-     * Example:     getContent("wikipedia.org", "Book", null)  result returns same JSON key format as
-     * getContent("wikipedia.org")
+     * Checks if using a keyword known to not match any element from the website.
+     * (this simulates mocking since we can't actually mock website)
+     * None of the collections will be filled.
      */
     @Test
-    public void responseWithNullEmptyOrWhitespaceKeywordReturnsSameFormatAsResponseWithOnlyURLSpecified() {
+    public void responseReturnsEmptyResultArrayIfPassedIsAKeywordNotFoundOnWebsite() {
+        //arrange - using random generated string of 255 char length to simulate a non-matching keyword on our webpage
+        String keywordOfNonexistentItem = RandomStringUtils.randomAlphanumeric(255);
+
+        //act
+        final Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", keywordOfNonexistentItem);
+        final WebCrawlerResponse webCrawlerResponse = (WebCrawlerResponse) response.getEntity();
+        final Set<Books> books = webCrawlerResponse.getBooks();
+        final Set<Movies> movies = webCrawlerResponse.getMovies();
+        final Set<Music> music = webCrawlerResponse.getMusic();
+
+        //assert
+        assertTrue(books.isEmpty());
+        assertTrue(movies.isEmpty());
+        assertTrue(music.isEmpty());
     }
 
     /**
-     * If response has a URL specified and a keyword it will contain
-     * a value for "result"
-     * Example:
-     * {
-     * "id": 4,
-     * "time":1499696751,
-     * "result":{}
-     * }
+     * Gets existing pages from the website which can be reached by passing {@link #exampleValidDashboardUrl}
+     * to the webcrawler.
+     * <p>
+     * This is done to simulate mocking since it's not possible to mock the website
+     * using our {@link rest.service.Scraper} object using Jsoup within the scope of this assignment.
      */
-    @Test
-    public void responseReturnsArrayResultIfAKeyWordIsSpecified() {
+    private static Object[] getTypeWithValidKeyword() {
+        return new Object[]{
+                new Object[]{
+                        Books.class, "Code"
+                },
+                new Object[]{
+                        Movies.class, "Gump"
+                },
+                new Object[]{
+                        Music.class, "Elvis"
+                }
+        };
     }
 
-    //3 params - url + type + keyword
-
     /**
-     * If response has a URL and a type specified, keyword it will contain a value for "result".
-     * Example:
-     * {
-     * "id": 4,
-     * "time":1499696751,
-     * "result":{}
-     * }
+     * Checks if using the type and an existing keyword of an existing object retrieves a result.
+     *
+     * Example: "The Clean Coder" is a type Book and using a keyword "Code" we can
+     * associate it with the Books name. If passed is a URL through which this Book's page
+     * can be reached by the {@link WebCrawler#startCrawler()} then the Book should be returned
+     * within the {@link WebCrawlerResponse} in the appropriate Set collection ({@link WebCrawlerResponse#getBooks()} for this example)
+     *
+     * Sadly, not possible to mock the webpage since it's a separate entity rather than within this program.
      */
     @Test
-    public void responseWithValidTypeAndValidKeywordContainsKeyForResult() {
+    @Parameters(method = "getTypeWithValidKeyword")
+    public void responseReturnsObjectIfItsTypeAndAnExistingKeywordFromItsPageIsSpecified(Class<? extends Item> type, String validKeyword) {
+        //arrange
+
+        //act
+        final Response response = resource.getContent(exampleValidDashboardUrl.toString(), type.getSimpleName(), validKeyword);
+        final WebCrawlerResponse webCrawlerResponse = (WebCrawlerResponse) response.getEntity();
+        final Set<Books> books = webCrawlerResponse.getBooks();
+        final Set<Movies> movies = webCrawlerResponse.getMovies();
+        final Set<Music> music = webCrawlerResponse.getMusic();
+
+        //assert
+        if (type.equals(Books.class)) {
+            assertThat(books.size(), greaterThan(0));
+            assertTrue(movies.isEmpty());
+            assertTrue(music.isEmpty());
+        } else if (type.equals(Movies.class)) {
+            assertTrue(books.isEmpty());
+            assertTrue(music.isEmpty());
+            assertThat(movies.size(), greaterThan(0));
+        } else if (type.equals(Music.class)) {
+            assertTrue(movies.isEmpty());
+            assertTrue(books.isEmpty());
+            assertThat(music.size(), greaterThan(0));
+        }
+    }
+
+    @Test
+    @Parameters(method = "getValidTypes")
+    public void webCrawlResponseHasStatisticWithTheOriginalPassedTypeAndKeyword(Class<? extends Item> classType) {
+        //arrange
+        String randomKeyword = RandomStringUtils.randomAlphabetic(10); //generate random keyword at 10 character long
+        String type = classType.getSimpleName(); //get type as string name
+
+        //act
+        final Response endpointResponse = resource.getContent(exampleValidDashboardUrl.toString(), type, randomKeyword);
+        final WebCrawlerResponse webCrawlerResponse = (WebCrawlerResponse) endpointResponse.getEntity();
+
+        //assert
+        assertEquals(webCrawlerResponse.getStatistic().getType().getClass().getSimpleName(), type);
+        assertEquals(webCrawlerResponse.getStatistic().getKeyword(), randomKeyword);
     }
 
 }

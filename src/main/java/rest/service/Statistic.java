@@ -77,14 +77,8 @@ public class Statistic {
     }
 
     /***
-     * Generate the statistics including start time, total number of pages explored,
-     * format type, keyword and search depth in JSON format.
-     * @return - The JSON object which contains data in JSON format.
+     * Reset the statistic to the initial values. The method should be used when the keyword/target type is changed
      */
-    public JsonObject generateJSONData(){
-        return null;
-    }
-
     public void resetData() {
         this.searchDepth = 0;
         this.pagesExplored = 0;

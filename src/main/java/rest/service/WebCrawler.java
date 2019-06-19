@@ -35,6 +35,10 @@ public class WebCrawler {
         this.scraper = new Scraper();
     }
 
+    /***
+     * Set the Statistic object - for mocking purpose
+     * @param statistic
+     */
     public void setStatistic(Statistic statistic) {
         this.statistic = statistic;
     }
@@ -127,7 +131,7 @@ public class WebCrawler {
         return statistic.getKeyword();
     }
 
-    public Object getItem() {
+    public Item getItem() {
         return statistic.getType();
     }
 
@@ -144,20 +148,37 @@ public class WebCrawler {
         return toBeExploredUrls;
     }
 
+
+    /***
+     * Set the Scraper object - for mocking purpose
+     * @param scraper
+     */
     public void setScraper(Scraper scraper) {
         this.scraper = scraper;
     }
 
+    /***
+     * Change the target keyword and reset the statistic to start a new crawling process.
+     * @param newKeyword
+     */
     public void changeKeyword(String newKeyword) {
         this.statistic.changeKeyword(newKeyword);
         this.statistic.resetData();
     }
 
+    /***
+     * Change the target type and reset the statistic to start a new crawling process
+     * @param newType
+     */
     public void changeType(Item newType) {
         this.statistic.changeTargetType(newType);
         this.statistic.resetData();
     }
 
+    /***
+     * Retunr the current search depth after the crawling process already finished
+     * @return
+     */
     public Integer getSearchDepth() {
         return this.statistic.getSearchDepth();
     }

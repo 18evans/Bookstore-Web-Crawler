@@ -15,11 +15,11 @@ import java.util.Set;
 public class WebCrawler {
 
     private Statistic statistic;
-    private URL url;
-    private Scraper scraper;
+    private final URL url;
+    private final Scraper scraper = new Scraper();
     private final Set<URL> exploredUrls;
     private final Set<URL> initialToBeExploredUrls;
-    private Set<Item> foundItems;
+    private final Set<Item> foundItems;
 
     public WebCrawler(URL url, Item type, String keyword) {
         this.url = url;
@@ -27,7 +27,6 @@ public class WebCrawler {
         statistic = new Statistic(type, keyword);
         exploredUrls = new HashSet<>();
         foundItems = new HashSet<>();
-        this.scraper = new Scraper();
     }
 
     /***

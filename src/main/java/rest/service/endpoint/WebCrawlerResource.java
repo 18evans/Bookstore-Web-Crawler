@@ -1,7 +1,6 @@
 package rest.service.endpoint;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.validator.routines.UrlValidator;
 import rest.service.WebCrawler;
 import rest.service.WebCrawlerResponse;
 import rest.service.model.Books;
@@ -17,7 +16,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
@@ -30,7 +28,6 @@ public class WebCrawlerResource {
     public static final String MSG_ERROR_URL_INVALID = "URL is malformed or invalid.";
     public static final String MSG_ERROR_URL_NULL_EMPTY_WHITESPACE = "URL cannot be NULL, EMPTY or WHITE SPACE.";
     public static final String MSG_ERROR_TYPE_INVALID = "Given Item Type is unsupported. Currently supported types are Books, Movies, Music.";
-    public static final String MSG_ERROR_CRAWLING = "Error occurred while crawling.";
 
     /**
      * @param urlAsString - url of website you wish to crawl through
@@ -47,9 +44,6 @@ public class WebCrawlerResource {
         if (StringUtils.isBlank(urlAsString)) {
             return Response.serverError().entity(MSG_ERROR_URL_NULL_EMPTY_WHITESPACE).build();
         }
-        if (!UrlValidator.getInstance().isValid(urlAsString)) {
-            return Response.serverError().entity(MSG_ERROR_URL_INVALID).build();
-        }
 
         final Item classObjectType = getClassTypeFromStringType(type);
         if (!StringUtils.isBlank(type) && classObjectType == null) {
@@ -64,9 +58,6 @@ public class WebCrawlerResource {
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return Response.serverError().entity(MSG_ERROR_URL_INVALID).build();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return Response.serverError().entity(MSG_ERROR_CRAWLING).build();
         }
 
         WebCrawlerResponse webCrawlerResponse = new WebCrawlerResponse(webCrawler.getStatistic(), result);

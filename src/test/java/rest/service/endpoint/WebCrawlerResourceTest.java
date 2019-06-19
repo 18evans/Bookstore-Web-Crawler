@@ -37,7 +37,6 @@ public class WebCrawlerResourceTest {
 
     //example valid argument variables
     private static URL exampleValidDashboardUrl;
-    private static URL exampleValidMovieUrl;
     private static final String validKeyword = "sample keyword";
     private static final Class<? extends Item> validBookType = Books.class;
     private static final Class<? extends Item> validMoviesType = Movies.class;
@@ -47,7 +46,6 @@ public class WebCrawlerResourceTest {
     @BeforeClass
     public static void setUp() throws MalformedURLException {
         exampleValidDashboardUrl = new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php");
-        exampleValidMovieUrl = new URL("http://i367506.hera.fhict.nl/webcrawl_example/details.php?id=201");
     }
 
     /**
@@ -311,6 +309,7 @@ public class WebCrawlerResourceTest {
     public void responseReturnsEmptyResultArrayIfPassedIsAKeywordNotFoundOnWebsite() {
         //arrange - using random generated string of 255 char length to simulate a non-matching keyword on our webpage
         String keywordOfNonexistentItem = RandomStringUtils.randomAlphanumeric(255);
+
         //act
         final Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", keywordOfNonexistentItem);
         final WebCrawlerResponse webCrawlerResponse = (WebCrawlerResponse) response.getEntity();
@@ -358,7 +357,7 @@ public class WebCrawlerResourceTest {
     @Test
     @Parameters(method = "getTypeWithValidKeyword")
     public void responseReturnsObjectIfItsTypeAndAnExistingKeywordFromItsPageIsSpecified(Class<? extends Item> type, String validKeyword) {
-        //arrange -
+        //arrange
 
         //act
         final Response response = resource.getContent(exampleValidDashboardUrl.toString(), type.getSimpleName(), validKeyword);
@@ -393,7 +392,6 @@ public class WebCrawlerResourceTest {
         //act
         final Response endpointResponse = resource.getContent(exampleValidDashboardUrl.toString(), type, randomKeyword);
         final WebCrawlerResponse webCrawlerResponse = (WebCrawlerResponse) endpointResponse.getEntity();
-//        JSONObject jsonObject = new JSONObject(response.getEntity());
 
         //assert
         assertEquals(webCrawlerResponse.getStatistic().getType().getClass().getSimpleName(), type);

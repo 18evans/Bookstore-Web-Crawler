@@ -23,11 +23,8 @@ public class WebCrawler {
     private final Set<URL> toBeExploredUrls;
     private Set<Item> foundItems;
 
-    public WebCrawler(URL url, String keyword, Item type) {
+    public WebCrawler(URL url, Item type, String keyword) {
         this.url = url;
-        if (keyword == null || keyword.equals("")) {
-            throw new IllegalArgumentException();
-        }
         statistic = new Statistic(type, keyword);
         exploredUrls = new HashSet<>();
         toBeExploredUrls = Collections.singleton(url);

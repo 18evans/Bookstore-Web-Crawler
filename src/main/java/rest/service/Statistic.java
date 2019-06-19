@@ -1,6 +1,5 @@
 package rest.service;
 
-import com.google.gson.JsonObject;
 import rest.service.model.Item;
 
 public class Statistic {

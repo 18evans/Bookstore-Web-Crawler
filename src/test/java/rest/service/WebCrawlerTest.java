@@ -15,13 +15,20 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.atMost;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(JUnitParamsRunner.class)
 public class WebCrawlerTest {
@@ -96,8 +103,8 @@ public class WebCrawlerTest {
         URL nullURL = new URL(nullString);
 
         // act
-        WebCrawler webCrawler = new WebCrawler(emptyUrl, validKeyword, validGeneralItemType);
-        WebCrawler webCrawler2 = new WebCrawler(nullURL, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(emptyUrl, validGeneralItemType, validKeyword);
+        WebCrawler webCrawler2 = new WebCrawler(nullURL, validGeneralItemType, validKeyword);
 
         // assert
     }
@@ -113,7 +120,7 @@ public class WebCrawlerTest {
         String expectedUrl = validUrl.toString();
 
         // act
-        webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+        webCrawler = new WebCrawler(validUrl, validGeneralItemType, validKeyword);
         String actualUrl = webCrawler.getInitUrl();
 
         // assert
@@ -133,9 +140,9 @@ public class WebCrawlerTest {
         WebCrawler webCrawler;
 
         // act
-        webCrawler = new WebCrawler(validUrl, emptyKeyword, validMusicType);
-        webCrawler = new WebCrawler(validUrl, emptyKeyword, validBookType);
-        webCrawler = new WebCrawler(validUrl, emptyKeyword, validMovieType);
+        webCrawler = new WebCrawler(validUrl, validMusicType, emptyKeyword);
+        webCrawler = new WebCrawler(validUrl, validBookType, emptyKeyword);
+        webCrawler = new WebCrawler(validUrl, validMovieType, emptyKeyword);
     }
 
     /***
@@ -149,9 +156,9 @@ public class WebCrawlerTest {
         WebCrawler webCrawler;
 
         // act
-        webCrawler = new WebCrawler(validUrl, nullKeyword, validBookType);
-        webCrawler = new WebCrawler(validUrl, nullKeyword, validMovieType);
-        webCrawler = new WebCrawler(validUrl, nullKeyword, validMusicType);
+        webCrawler = new WebCrawler(validUrl, validBookType, nullKeyword);
+        webCrawler = new WebCrawler(validUrl, validMovieType, nullKeyword);
+        webCrawler = new WebCrawler(validUrl, validMusicType, nullKeyword);
     }
 
     /***
@@ -164,7 +171,7 @@ public class WebCrawlerTest {
         WebCrawler webCrawler;
 
         // act
-        webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+        webCrawler = new WebCrawler(validUrl, validGeneralItemType, validKeyword);
 
         // assert
         assertNotNull("The WebCrawler object was null!!", webCrawler);
@@ -179,7 +186,7 @@ public class WebCrawlerTest {
         WebCrawler webCrawler;
 
         // act
-        webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+        webCrawler = new WebCrawler(validUrl, validGeneralItemType, validKeyword);
         String actualUrl = webCrawler.getInitUrl();
         String actualKeyword = webCrawler.getKeyword();
         Statistic actualStatistic = webCrawler.getStatistic();
@@ -199,7 +206,7 @@ public class WebCrawlerTest {
     @Test
     public void afterInstantiationTheToBeExploredUrlShouldHaveOnlyOneInitUrl() {
         // arrange
-        WebCrawler webCrawler = new WebCrawler(validUrl, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(validUrl, validGeneralItemType, validKeyword);
         Integer expectedNrOfUrl = 1;
         String expectedUrlString = validUrl.toString();
 
@@ -220,7 +227,7 @@ public class WebCrawlerTest {
     @Parameters(method = "crawlOneSiteToManySites")
     public void afterStartTheUrlListShouldHaveMoreThanZeroUrl(URL url) throws IOException {
         // arrange
-        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(url, validGeneralItemType, validKeyword);
 
         // act
         webCrawler.startCrawler();
@@ -240,7 +247,7 @@ public class WebCrawlerTest {
     @Parameters(method = "crawlOneSiteToManySites")
     public void afterFinishFindingAllLinksOfAnUrlTheStatisticShouldIncreaseTheNumberOfPageExplored(URL url) throws IOException {
         // arrange
-        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(url, validGeneralItemType, validKeyword);
         Statistic statistic = mock(Statistic.class);
         webCrawler.setStatistic(statistic);
 
@@ -263,7 +270,7 @@ public class WebCrawlerTest {
     @Parameters(method = "crawlOneSiteToManySites")
     public void ifTheUrlSetIsEmptyButNotFoundAnythingShouldEmptyCollection(URL url) throws IOException {
         // arrange
-        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(url, validGeneralItemType, validKeyword);
         webCrawler.setStatistic(statisticDummy);
         when(validGeneralItemType.getFormat()).thenReturn("sddad");
         when(validGeneralItemType.getGenre()).thenReturn("9588231asda");
@@ -288,7 +295,7 @@ public class WebCrawlerTest {
     @Parameters(method = "crawlOneSiteToManySites")
     public void itemFoundInScraperShouldBePutInCrawlResultSet(URL url) throws IOException {
         // arrange
-        WebCrawler webCrawler = new WebCrawler(url, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(url, validGeneralItemType, validKeyword);
 
         webCrawler.setStatistic(statisticDummy);
         when(statisticDummy.getKeyword()).thenReturn(validKeyword);
@@ -321,7 +328,7 @@ public class WebCrawlerTest {
     @Parameters(method = "testSampleWebForCrawling")
     public void ifTheUrlSetIsNotEmptyButNotFoundAnythingShouldContinueWithTheNextUrl(URL initUrl) throws IOException {
         // arrange
-        WebCrawler webCrawler = new WebCrawler(initUrl, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(initUrl, validGeneralItemType, validKeyword);
 
         webCrawler.setStatistic(statisticDummy);
 
@@ -345,7 +352,7 @@ public class WebCrawlerTest {
         // arrange
         String oldKeyword = "old";
         String newKeyword = "new";
-        WebCrawler webCrawler = new WebCrawler(validUrl, oldKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(validUrl, validGeneralItemType, oldKeyword);
         webCrawler.setStatistic(statisticDummy);
         webCrawler.setScraper(scraperDummy);
 
@@ -365,7 +372,7 @@ public class WebCrawlerTest {
         // arrange
         Books oldType = (Books) validBookType;
         Movies newType = (Movies) validMovieType;
-        WebCrawler webCrawler = new WebCrawler(validUrl, validKeyword, oldType);
+        WebCrawler webCrawler = new WebCrawler(validUrl, oldType, validKeyword);
         webCrawler.setStatistic(statisticDummy);
         webCrawler.setScraper(scraperDummy);
 
@@ -387,7 +394,7 @@ public class WebCrawlerTest {
     @Parameters(method = "testSampleWebForCrawlingSearchDepth")
     public void theSearchDepthLevelShouldBeIncreasedWhenANewRecursiveCrawlStart(URL initURl, Integer expectedMaxSearchDepth) throws IOException {
         // arrange
-        WebCrawler webCrawler = new WebCrawler(initURl, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(initURl, validGeneralItemType, validKeyword);
         webCrawler.setStatistic(statisticDummy);
 
         webCrawler.setScraper(scraperDummy);
@@ -411,7 +418,7 @@ public class WebCrawlerTest {
     @Parameters(method = "testSampleWebForCrawling")
     public void theSearchDepthLevelMustAlwaysBeGreaterThanZeroAfterStarting(URL initUrl) throws IOException {
         // arrange
-        WebCrawler webCrawler = new WebCrawler(initUrl, validKeyword, validGeneralItemType);
+        WebCrawler webCrawler = new WebCrawler(initUrl, validGeneralItemType, validKeyword);
 
         // act
         webCrawler.startCrawler();

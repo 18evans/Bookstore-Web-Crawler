@@ -63,7 +63,7 @@ public class WebCrawler {
             this.exploredUrls.addAll(urls);
             final Set<URL> newUrls = new HashSet<>();
             try {
-                for (final URL url : toBeExploredUrls) {
+                for (final URL url : urls) {
                     this.statistic.increasePagesExplored();
                     final Document document = Jsoup.connect(url.toString()).get();
                     final Elements urlsOnPage = document.select("a[href]");

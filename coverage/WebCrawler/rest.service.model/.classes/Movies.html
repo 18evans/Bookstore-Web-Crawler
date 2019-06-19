@@ -1,0 +1,229 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Movies</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">rest.service.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Movies (rest.service.model)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Movies</td>
+<td class="coverageStat">
+  <span class="percent">
+    42.9%
+  </span>
+  <span class="absValue">
+    (6/ 14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.2%
+  </span>
+  <span class="absValue">
+    (16/ 29)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$0S4irjDM</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$2bpjovOm</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$4sYtxy1a</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$8oysaGx4</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$8SlkLHUO</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$AcPOjv3F</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$fPZuNHGQ</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$GiKaeWnM</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$jYmRXrjA</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$jzy7vlSB</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$Lb3b9hUA</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$OpKoY2x2</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$p3Vp4MbE</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$TJyxXElx</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$vweYlSf6</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$wHxBsqYb</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$wmxrjL13</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$WwJsleut</td>
+  </tr>
+  <tr>
+    <td class="name">Movies$MockitoMock$1218734482$auxiliary$XuZBUJJU</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    42.9%
+  </span>
+  <span class="absValue">
+    (6/ 14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.2%
+  </span>
+  <span class="absValue">
+    (16/ 29)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package rest.service.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.util.ArrayList;
+<i>4</i>&nbsp;import java.util.Arrays;
+<i>5</i>&nbsp;import java.util.List;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;public class Movies extends Item {
+<i>8</i>&nbsp;    private String director;
+<b class="fc"><i>9</i>&nbsp;    private List&lt;String&gt; writers = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>10</i>&nbsp;    private List&lt;String&gt; stars = new ArrayList&lt;&gt;();</b>
+<i>11</i>&nbsp;
+<b class="fc"><i>12</i>&nbsp;    public Movies() {</b>
+<b class="fc"><i>13</i>&nbsp;    }</b>
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    public Movies(String title, String genre, String format, Integer year, String director) {
+<b class="nc"><i>16</i>&nbsp;        super(title, genre, format, year);</b>
+<b class="nc"><i>17</i>&nbsp;        this.director = director;</b>
+<b class="nc"><i>18</i>&nbsp;    }</b>
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    public String getDirector() {
+<b class="nc"><i>22</i>&nbsp;        return director;</b>
+<i>23</i>&nbsp;    }
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    public void setDirector(String director) {
+<b class="fc"><i>26</i>&nbsp;        this.director = director;</b>
+<b class="fc"><i>27</i>&nbsp;    }</b>
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    public List&lt;String&gt; getWriters() {
+<b class="nc"><i>30</i>&nbsp;        return writers;</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    public void setWriters(ArrayList&lt;String&gt; writers) {
+<b class="nc"><i>34</i>&nbsp;        this.writers = writers;</b>
+<b class="nc"><i>35</i>&nbsp;    }</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    public List&lt;String&gt; getStars() {
+<b class="nc"><i>38</i>&nbsp;        return stars;</b>
+<i>39</i>&nbsp;    }
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    public void setStars(ArrayList&lt;String&gt; stars) {
+<b class="nc"><i>42</i>&nbsp;        this.stars = stars;</b>
+<b class="nc"><i>43</i>&nbsp;    }</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    public void addWriter(String writer) {
+<b class="fc"><i>46</i>&nbsp;        this.writers.add(writer);</b>
+<b class="fc"><i>47</i>&nbsp;    }</b>
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    public void addStar(String star) {
+<b class="fc"><i>50</i>&nbsp;        this.stars.add(star);</b>
+<b class="fc"><i>51</i>&nbsp;    }</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    @Override
+<i>54</i>&nbsp;    public int hashCode() {
+<b class="fc"><i>55</i>&nbsp;        return super.hashCode();</b>
+<i>56</i>&nbsp;    }
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    @Override
+<i>59</i>&nbsp;    public boolean equals(Object obj) {
+<b class="nc"><i>60</i>&nbsp;        return super.equals(obj);</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    @Override
+<i>64</i>&nbsp;    public String toString() {
+<b class="nc"><i>65</i>&nbsp;        return super.toString();</b>
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    @Override
+<i>69</i>&nbsp;    public boolean compareTo(Item obj) {
+<b class="fc"><i>70</i>&nbsp;        if (super.compareTo(obj)</b>
+<b class="fc"><i>71</i>&nbsp;                &amp;&amp; director.equals(((Movies) obj).director)</b>
+<b class="fc"><i>72</i>&nbsp;                &amp;&amp; Arrays.equals(writers.toArray(), ((Movies) obj).writers.toArray())</b>
+<b class="fc"><i>73</i>&nbsp;                &amp;&amp; Arrays.equals(stars.toArray(), ((Movies) obj).stars.toArray())) {</b>
+<b class="fc"><i>74</i>&nbsp;            return true;</b>
+<i>75</i>&nbsp;        }
+<b class="nc"><i>76</i>&nbsp;        return false;</b>
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;}
+<i>79</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-06-19 03:06</div>
+</div>
+</body>
+</html>

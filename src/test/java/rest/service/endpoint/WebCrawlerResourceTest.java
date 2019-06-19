@@ -325,18 +325,62 @@ public class WebCrawlerResourceTest {
     }
 
     /**
-     * If response has a URL specified and a keyword it will contain
-     * a value for "result"
-     * Example:
-     * {
-     * "id": 4,
-     * "time":1499696751,
-     * "result":{}
-     * }
+     * Gets existing pages from the website which can be reached by passing {@link #exampleValidDashboardUrl}
+     * to the webcrawler.
+     * <p>
+     * This is done to simulate mocking since it's not possible to mock the website
+     * using our {@link rest.service.Scraper} object using Jsoup within the scope of this assignment.
+     */
+    private static Object[] getTypeWithValidKeyword() {
+        return new Object[]{
+                new Object[]{
+                        Books.class, "Code"
+                },
+                new Object[]{
+                        Movies.class, "Gump"
+                },
+                new Object[]{
+                        Music.class, "Elvis"
+                }
+        };
+    }
+
+    /**
+     * Checks if using the type and an existing keyword of an existing object retrieves a result.
+     *
+     * Example: "The Clean Coder" is a type Book and using a keyword "Code" we can
+     * associate it with the Books name. If passed is a URL through which this Book's page
+     * can be reached by the {@link WebCrawler#startCrawler()} then the Book should be returned
+     * within the {@link WebCrawlerResponse} in the appropriate Set collection ({@link WebCrawlerResponse#getBooks()} for this example)
+     *
+     * Sadly, not possible to mock the webpage since it's a separate entity rather than within this program.
      */
     @Test
-    @Ignore
-    public void responseReturnsArrayResultIfAKeyWordIsSpecified() {
+    @Parameters(method = "getTypeWithValidKeyword")
+    public void responseReturnsObjectIfItsTypeAndAnExistingKeywordFromItsPageIsSpecified(Class<? extends Item> type, String validKeyword) {
+        //arrange -
+
+        //act
+        final Response response = resource.getContent(exampleValidDashboardUrl.toString(), type.getSimpleName(), validKeyword);
+        final WebCrawlerResponse webCrawlerResponse = (WebCrawlerResponse) response.getEntity();
+        final Set<Books> books = webCrawlerResponse.getBooks();
+        final Set<Movies> movies = webCrawlerResponse.getMovies();
+        final Set<Music> music = webCrawlerResponse.getMusic();
+
+        //assert
+        if (type.equals(Books.class)) {
+            assertThat(books.size(), greaterThan(0));
+            assertTrue(movies.isEmpty());
+            assertTrue(music.isEmpty());
+        } else if (type.equals(Movies.class)) {
+            assertTrue(books.isEmpty());
+            assertTrue(music.isEmpty());
+            assertThat(movies.size(), greaterThan(0));
+        } else if (type.equals(Music.class)) {
+            assertTrue(movies.isEmpty());
+            assertTrue(books.isEmpty());
+            assertThat(music.size(), greaterThan(0));
+        }
     }
 
     @Test

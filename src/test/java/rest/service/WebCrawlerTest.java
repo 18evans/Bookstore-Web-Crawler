@@ -400,4 +400,18 @@ public class WebCrawlerTest {
         verify(statisticDummy, atLeast(1)).increaseSearchDepth();
         verify(statisticDummy, atMost(expectedMaxSearchDepth)).increaseSearchDepth(); // since the given urls' depth level are predictable.
     }
+
+    @Test
+    @Parameters(method = "testSampleWebForCrawling")
+    public void theSearchDepthLevelMustAlwaysBeGreaterThanZeroAfterStarting(URL initUrl) throws IOException {
+        // arrange
+        WebCrawler webCrawler = new WebCrawler(initUrl, validKeyword, validGeneralItemType);
+
+        // act
+        webCrawler.startCrawler();
+        Integer searchDepth = webCrawler.getSearchDepth();
+
+        // assert
+        assertThat("The expected search depth was equal to Zero!!", searchDepth, greaterThan(0));
+    }
 }

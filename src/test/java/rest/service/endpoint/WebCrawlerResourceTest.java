@@ -24,6 +24,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_TYPE_INVALID;
 import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_URL_INVALID;
 import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_URL_NULL_EMPTY_WHITESPACE;
@@ -270,7 +271,7 @@ public class WebCrawlerResourceTest {
      * Example:     getContent("wikipedia.org", "Book") returns response
      * with only one array which contains Book elements.
      *
-     * @param type        type query param - Compared to the response's array's object type.
+     * @param type type query param - Compared to the response's array's object type.
      */
     @Test
     @Parameters(method = "getValidTypes")
@@ -288,15 +289,15 @@ public class WebCrawlerResourceTest {
 
         if (type.equals(Books.class)) {
             assertThat(books.size(), greaterThan(0));
-            assertEquals(movies.size(), 0);
-            assertEquals(music.size(), 0);
+            assertTrue(movies.isEmpty());
+            assertTrue(music.isEmpty());
         } else if (type.equals(Movies.class)) {
-            assertEquals(books.size(), 0);
+            assertTrue(books.isEmpty());
+            assertTrue(music.isEmpty());
             assertThat(movies.size(), greaterThan(0));
-            assertEquals(music.size(), 0);
         } else if (type.equals(Music.class)) {
-            assertEquals(movies.size(), 0);
-            assertEquals(books.size(), 0);
+            assertTrue(movies.isEmpty());
+            assertTrue(books.isEmpty());
             assertThat(music.size(), greaterThan(0));
         }
     }

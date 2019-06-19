@@ -7,7 +7,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import rest.service.model.Item;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
@@ -19,14 +18,14 @@ public class WebCrawler {
     private URL url;
     private Scraper scraper;
     private final Set<URL> exploredUrls;
-    private final Set<URL> toBeExploredUrls;
+    private final Set<URL> initialToBeExploredUrls;
     private Set<Item> foundItems;
 
     public WebCrawler(URL url, Item type, String keyword) {
         this.url = url;
+        initialToBeExploredUrls = Collections.singleton(url);
         statistic = new Statistic(type, keyword);
         exploredUrls = new HashSet<>();
-        toBeExploredUrls = Collections.singleton(url);
         foundItems = new HashSet<>();
         this.scraper = new Scraper();
     }
@@ -45,8 +44,8 @@ public class WebCrawler {
      *
      * @return A Set Collection of the Item
      */
-    public Set<Item> startCrawler() throws IOException {
-        return crawl(toBeExploredUrls);
+    public Set<Item> startCrawler() {
+        return crawl(initialToBeExploredUrls);
     }
 
     /**
@@ -77,7 +76,7 @@ public class WebCrawler {
                     for (final Element element : urlsOnPage) {
                         final String urlText = element.attr("abs:href");
                         final URL discoveredUrl = new URL(urlText);
-                        if (discoveredUrl.getHost().startsWith(toBeExploredUrls.iterator().next().getHost())) { // limit future URL crawling only within the initial host
+                        if (discoveredUrl.getHost().startsWith(getInitUrl().getHost())) { // limit future URL crawling only within the initial host
                             newUrls.add(discoveredUrl);
                         }
                     }
@@ -119,8 +118,8 @@ public class WebCrawler {
      * Return the initial url
      * @return
      */
-    public String getInitUrl() {
-        return this.url.toString();
+    public URL getInitUrl() {
+        return this.url;
     }
 
     /***
@@ -143,11 +142,9 @@ public class WebCrawler {
         return exploredUrls;
     }
 
-
-    public Set<URL> getToBeExploredUrls() {
-        return toBeExploredUrls;
+    public Set<URL> getInitialToBeExploredUrls() {
+        return initialToBeExploredUrls;
     }
-
 
     /***
      * Set the Scraper object - for mocking purpose

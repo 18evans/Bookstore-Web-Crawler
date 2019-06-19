@@ -121,7 +121,7 @@ public class WebCrawlerTest {
 
         // act
         webCrawler = new WebCrawler(validUrl, validGeneralItemType, validKeyword);
-        String actualUrl = webCrawler.getInitUrl();
+        String actualUrl = webCrawler.getInitUrl().toString();
 
         // assert
         assertNotNull("The webcrawler is null", webCrawler);
@@ -155,10 +155,10 @@ public class WebCrawlerTest {
 
         // act
         webCrawler = new WebCrawler(validUrl, validGeneralItemType, validKeyword);
-        String actualUrl = webCrawler.getInitUrl();
+        String actualUrl = webCrawler.getInitUrl().toString();
         String actualKeyword = webCrawler.getKeyword();
         Statistic actualStatistic = webCrawler.getStatistic();
-        Object actualItem = webCrawler.getItem();
+        Object actualItem = webCrawler.getType();
 
         // assert
         assertEquals("The url did not match!!", actualUrl, validUrl.toString());
@@ -179,8 +179,8 @@ public class WebCrawlerTest {
         String expectedUrlString = validUrl.toString();
 
         // act
-        Integer actualNrOfUrl = webCrawler.getToBeExploredUrls().size();
-        String actualUrlString = webCrawler.getToBeExploredUrls().toArray()[0].toString();
+        Integer actualNrOfUrl = webCrawler.getInitialToBeExploredUrls().size();
+        String actualUrlString = webCrawler.getInitialToBeExploredUrls().toArray()[0].toString();
 
         // assert
         assertEquals("The number of initial url was not 1", actualNrOfUrl, expectedNrOfUrl);

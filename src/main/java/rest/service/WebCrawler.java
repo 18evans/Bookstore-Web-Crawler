@@ -157,4 +157,8 @@ public class WebCrawler {
         this.statistic.changeTargetType(newType);
         this.statistic.resetData();
     }
+
+    public Integer getSearchDepth() {
+        return 0;
+    }
 }

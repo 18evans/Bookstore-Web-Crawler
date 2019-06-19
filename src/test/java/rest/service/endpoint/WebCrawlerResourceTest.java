@@ -16,7 +16,10 @@ import rest.service.model.Music;
 import javax.ws.rs.core.Response;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Set;
 
+import static org.hamcrest.CoreMatchers.any;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -225,12 +228,23 @@ public class WebCrawlerResourceTest {
 
     /**
      * Test case checks that response returns whole-site-craw array.
-     * Included will be value for "pags_explored", "search_depth".
-     * Example:     getContent("wikipedia.org") returns OK response.
+     * Included will be Statistics object and Result objects.
+     *
+     * IMPORTANT: Expected results are to have 1 or more of each supported type.
      */
     @Test
-    @Ignore
     public void responseWithOnlyAURLSpecifiedReturnsWholeSiteCrawl() {
+        //arrange - using dashboard url to find all items
+
+        //act
+        final Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", "");
+        final WebCrawlerResponse webCrawlerResponse = (WebCrawlerResponse) response.getEntity();
+        final Set<Item> result = webCrawlerResponse.getResults();
+
+        //assert
+        assertThat(result, hasItem(any(validBookType)));
+        assertThat(result, hasItem(any(validMoviesType)));
+        assertThat(result, hasItem(any(validMusicType)));
     }
 
     /**

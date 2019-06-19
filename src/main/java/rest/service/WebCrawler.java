@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import rest.service.model.Item;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
@@ -16,7 +17,7 @@ public class WebCrawler {
 
     private Statistic statistic;
     private final URL url;
-    private final Scraper scraper = new Scraper();
+    private Scraper scraper = new Scraper();
     private final Set<URL> exploredUrls;
     private final Set<URL> initialToBeExploredUrls;
     private final Set<Item> foundItems;
@@ -79,7 +80,7 @@ public class WebCrawler {
                         }
                     }
                 }
-            } catch (Exception ex) {
+            } catch (IOException ex) {
 
             }
             this.statistic.increaseSearchDepth();

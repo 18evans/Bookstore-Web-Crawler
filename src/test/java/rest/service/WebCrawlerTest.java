@@ -10,7 +10,6 @@ import rest.service.model.Item;
 import rest.service.model.Movies;
 import rest.service.model.Music;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
@@ -85,9 +84,9 @@ public class WebCrawlerTest {
      */
     private Object[] testSampleWebForCrawlingSearchDepth() throws MalformedURLException {
         return new Object[]{
-                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=books"), 2},
-                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=movies"), 2},
-                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=music"), 2},
+                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=books"), 4},
+                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=movies"), 4},
+                new Object[]{new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php?cat=music"), 4},
         };
     }
 
@@ -158,7 +157,7 @@ public class WebCrawlerTest {
         String actualUrl = webCrawler.getInitUrl().toString();
         String actualKeyword = webCrawler.getKeyword();
         Statistic actualStatistic = webCrawler.getStatistic();
-        Object actualItem = webCrawler.getType();
+        Object actualItem = webCrawler.getItem();
 
         // assert
         assertEquals("The url did not match!!", actualUrl, validUrl.toString());
@@ -193,7 +192,7 @@ public class WebCrawlerTest {
      */
     @Test
     @Parameters(method = "crawlOneSiteToManySites")
-    public void afterStartTheUrlListShouldHaveMoreThanZeroUrl(URL url) throws IOException {
+    public void afterStartTheUrlListShouldHaveMoreThanZeroUrl(URL url) {
         // arrange
         WebCrawler webCrawler = new WebCrawler(url, validGeneralItemType, validKeyword);
 
@@ -209,11 +208,10 @@ public class WebCrawlerTest {
      * After finish searching for all the links of the given url, the total number of page explored should be increase by one.
      *
      * @param url - the given URL
-     * @throws IOException - expected exception from Jsoup
      */
     @Test
     @Parameters(method = "crawlOneSiteToManySites")
-    public void afterFinishFindingAllLinksOfAnUrlTheStatisticShouldIncreaseTheNumberOfPageExplored(URL url) throws IOException {
+    public void afterFinishFindingAllLinksOfAnUrlTheStatisticShouldIncreaseTheNumberOfPageExplored(URL url) {
         // arrange
         WebCrawler webCrawler = new WebCrawler(url, validGeneralItemType, validKeyword);
         Statistic statistic = mock(Statistic.class);
@@ -236,7 +234,7 @@ public class WebCrawlerTest {
      */
     @Test
     @Parameters(method = "crawlOneSiteToManySites")
-    public void ifTheUrlSetIsEmptyButNotFoundAnythingShouldEmptyCollection(URL url) throws IOException {
+    public void ifTheUrlSetIsEmptyButNotFoundAnythingShouldEmptyCollection(URL url) {
         // arrange
         WebCrawler webCrawler = new WebCrawler(url, validGeneralItemType, validKeyword);
         webCrawler.setStatistic(statisticDummy);
@@ -261,7 +259,7 @@ public class WebCrawlerTest {
      */
     @Test
     @Parameters(method = "crawlOneSiteToManySites")
-    public void itemFoundInScraperShouldBePutInCrawlResultSet(URL url) throws IOException {
+    public void itemFoundInScraperShouldBePutInCrawlResultSet(URL url) {
         // arrange
         WebCrawler webCrawler = new WebCrawler(url, validGeneralItemType, validKeyword);
 
@@ -294,7 +292,7 @@ public class WebCrawlerTest {
      */
     @Test
     @Parameters(method = "testSampleWebForCrawling")
-    public void ifTheUrlSetIsNotEmptyButNotFoundAnythingShouldContinueWithTheNextUrl(URL initUrl) throws IOException {
+    public void ifTheUrlSetIsNotEmptyButNotFoundAnythingShouldContinueWithTheNextUrl(URL initUrl) {
         // arrange
         WebCrawler webCrawler = new WebCrawler(initUrl, validGeneralItemType, validKeyword);
 
@@ -353,14 +351,13 @@ public class WebCrawlerTest {
     }
 
     /**
-     * A test which check if the web crawler increase the search depth everytime it starts a new crawling procedure
+     * A test which check if the web crawler increase the search depth every time it starts a new crawling procedure
      *
      * @param initURl - the initial url
-     * @throws IOException
      */
     @Test
     @Parameters(method = "testSampleWebForCrawlingSearchDepth")
-    public void theSearchDepthLevelShouldBeIncreasedWhenANewRecursiveCrawlStart(URL initURl, Integer expectedMaxSearchDepth) throws IOException {
+    public void theSearchDepthLevelShouldBeIncreasedWhenANewRecursiveCrawlStart(URL initURl, Integer expectedMaxSearchDepth) {
         // arrange
         WebCrawler webCrawler = new WebCrawler(initURl, validGeneralItemType, validKeyword);
         webCrawler.setStatistic(statisticDummy);
@@ -369,7 +366,7 @@ public class WebCrawlerTest {
         when(scraperDummy.scrapeAndGetItem(any())).thenReturn(null);
 
         // act
-        webCrawler.startCrawler();
+        Set<Item> set = webCrawler.startCrawler();
 
         // assert
         verify(statisticDummy, atLeast(1)).increaseSearchDepth();
@@ -380,11 +377,10 @@ public class WebCrawlerTest {
      * A test which verifies the search depth level of the web crawler. By default, the search depth level after the first crawling
      * process must be increased into 1.
      * @param initUrl - the initial url
-     * @throws IOException
      */
     @Test
     @Parameters(method = "testSampleWebForCrawling")
-    public void theSearchDepthLevelMustAlwaysBeGreaterThanZeroAfterStarting(URL initUrl) throws IOException {
+    public void theSearchDepthLevelMustAlwaysBeGreaterThanZeroAfterStarting(URL initUrl) {
         // arrange
         WebCrawler webCrawler = new WebCrawler(initUrl, validGeneralItemType, validKeyword);
 

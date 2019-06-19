@@ -56,7 +56,6 @@ public class WebCrawlerResource {
             webCrawler = new WebCrawler(new URL(urlAsString), classObjectType, keyword);
             result = webCrawler.startCrawler();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
             return Response.serverError().entity(MSG_ERROR_URL_INVALID).build();
         }
 

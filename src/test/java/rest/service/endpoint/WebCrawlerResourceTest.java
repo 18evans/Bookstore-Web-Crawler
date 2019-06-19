@@ -250,8 +250,13 @@ public class WebCrawlerResourceTest {
         assertThat(music.size(), greaterThan(0));
     }
 
-    //tests with 2 parameters:
-    //  url + type
+    private static Class<? extends Item>[] getValidTypes() {
+        return new Class[]{
+                Books.class,
+                Movies.class,
+                Music.class
+        };
+    }
 
 
     /**
@@ -265,14 +270,35 @@ public class WebCrawlerResourceTest {
      * Example:     getContent("wikipedia.org", "Book") returns response
      * with only one array which contains Book elements.
      *
-     * @param urlAsString url query param - Required to be present for response to not return error.
      * @param type        type query param - Compared to the response's array's object type.
      */
     @Test
-    @Ignore
-//    @Parameters(method = "")
-    public void responseReturnsOnlyOneArrayOfObjectTypeSameAsTheOneSpecifiedInTheQueryParam(String urlAsString,
-                                                                                            String type) {
+    @Parameters(method = "getValidTypes")
+    public void responseReturnsOnlyOneArrayOfObjectTypeSameAsTheOneSpecifiedInTheQueryParam(Class<? extends Item> type) {
+        //arrange - using dashboard url to find all items
+
+        //act
+        final Response response = resource.getContent(exampleValidDashboardUrl.toString(), type.getSimpleName(), "");
+        final WebCrawlerResponse webCrawlerResponse = (WebCrawlerResponse) response.getEntity();
+        final Set<Books> books = webCrawlerResponse.getBooks();
+        final Set<Movies> movies = webCrawlerResponse.getMovies();
+        final Set<Music> music = webCrawlerResponse.getMusic();
+
+        //assert
+
+        if (type.equals(Books.class)) {
+            assertThat(books.size(), greaterThan(0));
+            assertEquals(movies.size(), 0);
+            assertEquals(music.size(), 0);
+        } else if (type.equals(Movies.class)) {
+            assertEquals(books.size(), 0);
+            assertThat(movies.size(), greaterThan(0));
+            assertEquals(music.size(), 0);
+        } else if (type.equals(Music.class)) {
+            assertEquals(movies.size(), 0);
+            assertEquals(books.size(), 0);
+            assertThat(music.size(), greaterThan(0));
+        }
     }
 
     //  url + keyword
@@ -301,15 +327,6 @@ public class WebCrawlerResourceTest {
     @Test
     @Ignore
     public void responseReturnsArrayResultIfAKeyWordIsSpecified() {
-    }
-
-
-    private static Class<? extends Item>[] getValidTypes() {
-        return new Class[]{
-                Books.class,
-                Movies.class,
-                Music.class
-        };
     }
 
     @Test

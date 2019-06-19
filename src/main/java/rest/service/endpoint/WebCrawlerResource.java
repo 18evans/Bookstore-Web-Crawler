@@ -2,6 +2,7 @@ package rest.service.endpoint;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
+import rest.service.WebCrawler;
 import rest.service.WebCrawlerResponse;
 import rest.service.model.Books;
 import rest.service.model.Item;
@@ -16,6 +17,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Set;
 
 @Path("crawler")
 @Singleton
@@ -25,6 +30,7 @@ public class WebCrawlerResource {
     public static final String MSG_ERROR_URL_INVALID = "URL is malformed or invalid.";
     public static final String MSG_ERROR_URL_NULL_EMPTY_WHITESPACE = "URL cannot be NULL, EMPTY or WHITE SPACE.";
     public static final String MSG_ERROR_TYPE_INVALID = "Given Item Type is unsupported. Currently supported types are Books, Movies, Music.";
+    public static final String MSG_ERROR_CRAWLING = "Error occurred while crawling.";
 
     /**
      * @param urlAsString - url of website you wish to crawl through
@@ -45,22 +51,36 @@ public class WebCrawlerResource {
             return Response.serverError().entity(MSG_ERROR_URL_INVALID).build();
         }
 
-        final Class<? extends Item> classType = getClassTypeFromStringType(type);
-        if (!StringUtils.isBlank(type) && classType == null) {
+        final Item classObjectType = getClassTypeFromStringType(type);
+        if (!StringUtils.isBlank(type) && classObjectType == null) {
             return Response.serverError().entity(MSG_ERROR_TYPE_INVALID).build();
         }
 
-        return Response.ok(new WebCrawlerResponse()).build();
+        WebCrawler webCrawler;
+        Set<Item> result;
+        try {
+            webCrawler = new WebCrawler(new URL(urlAsString), classObjectType, keyword);
+            result = webCrawler.startCrawler();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return Response.serverError().entity(MSG_ERROR_URL_INVALID).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Response.serverError().entity(MSG_ERROR_CRAWLING).build();
+        }
+
+        WebCrawlerResponse webCrawlerResponse = new WebCrawlerResponse(webCrawler.getStatistic());
+        return Response.ok(webCrawlerResponse).build();
     }
 
 
-    private Class<? extends Item> getClassTypeFromStringType(String type) {
+    private Item getClassTypeFromStringType(String type) {
         if (type.toLowerCase().equals(Books.class.getSimpleName().toLowerCase())) {
-            return Books.class;
+            return new Books();
         } else if (type.toLowerCase().equals(Music.class.getSimpleName().toLowerCase())) {
-            return Music.class;
+            return new Music();
         } else if (type.toLowerCase().equals(Movies.class.getSimpleName().toLowerCase())) {
-            return Movies.class;
+            return new Movies();
         }
         return null;
     }

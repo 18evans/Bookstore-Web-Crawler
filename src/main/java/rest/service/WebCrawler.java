@@ -68,9 +68,8 @@ public class WebCrawler {
                     final Elements urlsOnPage = document.select("a[href]");
                     Item newFoundItem = scraper.scrapeAndGetItem(document);
                     if (newFoundItem != null &&
-                            newFoundItem.getClass().equals(getItem().getClass()) &&
-                            foundItems.stream().noneMatch(o -> o.compareTo(newFoundItem))) {
-                        //do not add if no new found element or an element with same properties exists
+                            (getItem() == null || newFoundItem.getClass().equals(getItem().getClass())) && //if Type filtering is set check if Type is same as the set one
+                            foundItems.stream().noneMatch(o -> o.compareTo(newFoundItem))) { //do not add if no new found element or an element with same properties exists
                         foundItems.add(newFoundItem);
                     }
                     for (final Element element : urlsOnPage) {

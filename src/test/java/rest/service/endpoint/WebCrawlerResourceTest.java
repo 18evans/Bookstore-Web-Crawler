@@ -21,6 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_TYPE_INVALID;
 import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_URL_INVALID;
 import static rest.service.endpoint.WebCrawlerResource.MSG_ERROR_URL_NULL_EMPTY_WHITESPACE;
 
@@ -36,15 +37,12 @@ public class WebCrawlerResourceTest {
     private static final Class<? extends Item> validBookType = Books.class;
     private static final Class<? extends Item> validMoviesType = Movies.class;
     private static final Class<? extends Item> validMusicType = Music.class;
+    private static final String exampleKeyword = "The Bible";
 
     @BeforeClass
     public static void setUp() throws MalformedURLException {
         exampleValidDashboardUrl = new URL("http://i367506.hera.fhict.nl/webcrawl_example/catalog.php");
-
     }
-
-    private final String type = Books.class.getSimpleName();
-    private final String keyword = "The Bible";
 
     /**
      * Check if SUT on {@link WebCrawlerResource#getContent(String, String, String)}
@@ -68,7 +66,7 @@ public class WebCrawlerResourceTest {
      * is an instance of {@link WebCrawlerResponse}.
      */
     @Test
-    public void sutReturnsResponseWrapperWithinResponse() {
+    public void sutReturnsWebCrawlerResponseWithinResponse() {
         //arrange - use example valid URL
 
         //act
@@ -79,6 +77,10 @@ public class WebCrawlerResourceTest {
                 response.getEntity(), instanceOf(WebCrawlerResponse.class));
     }
 
+    /**
+     * Check that response is a Server Error with the correct expected message if a type to look for is passed
+     * as argument that is unsupported yet.
+     */
     @Test
     public void sutResponseReturnsInvalidTypeServerErrorIfPassedTypeIsNotSupported() {
         //arrange - use example valid URL
@@ -95,6 +97,7 @@ public class WebCrawlerResourceTest {
                 MSG_ERROR_TYPE_INVALID,
                 response.getEntity());
     }
+
 
 
     //tests of only 1 parameter
@@ -123,11 +126,11 @@ public class WebCrawlerResourceTest {
      */
     @Test
     @Parameters(method = "getNullEmptyOrWhiteSpaceStrings")
-    public void responseReturnsServerErrorIfUrlIsNullEmptyOrWhiteSpace(String urlAsNullEmptyOrWhiteSpace) {
+    public void responseReturnsUrlNullEmptyWhiteSpaceServerErrorIfUrlIsNullEmptyOrWhiteSpace(String urlAsNullEmptyOrWhiteSpace) {
         //arrange - url from Parameterized method, type & keyword from Global constants
 
         //act
-        Response responseNull = resource.getContent(urlAsNullEmptyOrWhiteSpace, type, keyword);
+        Response responseNull = resource.getContent(urlAsNullEmptyOrWhiteSpace, "", "");
 
         //assert
         assertEquals("Response on NULL url was NOT server error as was expected.",
@@ -147,7 +150,7 @@ public class WebCrawlerResourceTest {
     }
 
     /**
-     * Method asserts that a Valid URL passed as argument will cause endpoint
+     * Method asserts that a Valid URL, Type and keyword passed as argument will cause endpoint
      * to NOT return a Server error.
      * Method uses Parameterized Tests to get valid URL argument.
      *
@@ -155,11 +158,11 @@ public class WebCrawlerResourceTest {
      */
     @Test
     @Parameters(method = "getValidUrls")
-    public void responseDoesNotReturnServerErrorOnValidatedURL(URL url) {
+    public void responseDoesNotReturnServerErrorOnValidArguments(URL url) {
         //arrange - uses the valid global constants
 
         //act
-        Response response = resource.getContent(url.toString(), type, keyword);
+        Response response = resource.getContent(url.toString(), validBookType.getSimpleName(), exampleKeyword);
 
         //assert
         assertNotEquals("Response did in fact return a SERVER ERROR when it was not expected.",
@@ -189,7 +192,7 @@ public class WebCrawlerResourceTest {
         //arrange - uses the valid global constants
 
         //act
-        Response response = resource.getContent(url, type, keyword);
+        Response response = resource.getContent(url, validBookType.getSimpleName(), exampleKeyword);
 
         //assert
         assertEquals("Response did in fact NOT return a SERVER ERROR when it was expected.",
@@ -219,30 +222,6 @@ public class WebCrawlerResourceTest {
                 Response.Status.OK.getStatusCode(),
                 response.getStatus());
     }
-
-    /**
-     * Test case checks that if a URL is specified, response returns
-     * a value for "time_elapsed".
-     * Example:     getContent("wikipedia.org") contains
-     * {
-     * "time": 111111
-     * }.
-     */
-//    @Test
-//    public void ifRequestContainsURLResponseReturnsObjectWithPropertyValueForTimeElapsed() {
-//        //arrange - use example valid url + null passed vars
-//
-//        //act
-//        Response response = resource.getContent(exampleValidDashboardUrl.toString(), "", "");
-//
-////        Object object = response.getMediaType();//(JsonObject.class);
-//        Object object = response.getEntity();
-//        String objectAsJsonString = gson.toJson(object);
-//
-//        //assert
-//        assertTrue("Response object did NOT have a key & value combination for \"time_elapsed\".",
-//                objectAsJsonString.contains("time_elapsed"));
-//    }
 
     /**
      * Test case checks that response returns whole-site-craw array.
@@ -341,56 +320,4 @@ public class WebCrawlerResourceTest {
 
     //3 params - url + type + keyword
 
-
-    private static Class<? extends Item>[] getValidTypes() {
-        return new Class[]{
-                Books.class,
-                Movies.class,
-                Music.class
-        };
-    }
-
-    /**
-     * If response has a URL and a type specified, keyword it will contain a value for "result".
-     * Example:
-     * {
-     * "id": 4,
-     * "time":1499696751,
-     * "result":{}
-     * }
-     */
-//    @Test
-//    @Ignore
-//    @Parameters(method = "getValidTypes")
-//    public void responseWithValidTypeAndValidKeywordContainsKeyForResult(Class<? extends Item> validType) {
-//        //arrange
-//        resource.getCrawler()
-//
-//        //act
-//        Response response = resource.getContent(exampleValidDashboardUrl.toString(), validType.getSimpleName(), validKeyword);
-//
-//        JSONObject jsonObject = new JSONObject(response.getEntity());
-//        String objectAsJsonString =// gson.toJson(object);
-//
-//                //assert
-//                assertTrue("Response object did NOT have a key & value combination for \"result\".",
-//                        objectAsJsonString.contains("result"));
-//    }
-
-//    @Test
-//    public void responseIncludesJsonPropertiesOfStatisticClass() {
-//        //arrange
-////        resource.getCrawler()
-//        JSONObject jsonStatistic = new Statistic(null, null).toJSONobject();
-//
-//        //act
-//        Response response = resource.getContent(exampleValidDashboardUrl.toString(), validBookType.getSimpleName(), validKeyword);
-//        JSONObject jsonObject = new JSONObject(response.getEntity());
-//
-//        for (String key : jsonStatistic.keySet()) {
-//
-//        }
-//        //assert
-//        assertTrue(jsonObject.keySet().containsAll(jsonStatistic.keySet()));
-//    }
 }

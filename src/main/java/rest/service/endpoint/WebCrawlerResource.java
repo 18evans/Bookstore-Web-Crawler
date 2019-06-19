@@ -3,6 +3,10 @@ package rest.service.endpoint;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 import rest.service.WebCrawlerResponse;
+import rest.service.model.Books;
+import rest.service.model.Item;
+import rest.service.model.Movies;
+import rest.service.model.Music;
 
 import javax.inject.Singleton;
 import javax.ws.rs.DefaultValue;
@@ -20,6 +24,7 @@ public class WebCrawlerResource {
 
     public static final String MSG_ERROR_URL_INVALID = "URL is malformed or invalid.";
     public static final String MSG_ERROR_URL_NULL_EMPTY_WHITESPACE = "URL cannot be NULL, EMPTY or WHITE SPACE.";
+    public static final String MSG_ERROR_TYPE_INVALID = "Given Item Type is unsupported. Currently supported types are Books, Movies, Music.";
 
     /**
      * @param urlAsString - url of website you wish to crawl through
@@ -40,7 +45,24 @@ public class WebCrawlerResource {
             return Response.serverError().entity(MSG_ERROR_URL_INVALID).build();
         }
 
+        final Class<? extends Item> classType = getClassTypeFromStringType(type);
+        if (!StringUtils.isBlank(type) && classType == null) {
+            return Response.serverError().entity(MSG_ERROR_TYPE_INVALID).build();
+        }
+
         return Response.ok(new WebCrawlerResponse()).build();
+    }
+
+
+    private Class<? extends Item> getClassTypeFromStringType(String type) {
+        if (type.toLowerCase().equals(Books.class.getSimpleName().toLowerCase())) {
+            return Books.class;
+        } else if (type.toLowerCase().equals(Music.class.getSimpleName().toLowerCase())) {
+            return Music.class;
+        } else if (type.toLowerCase().equals(Movies.class.getSimpleName().toLowerCase())) {
+            return Movies.class;
+        }
+        return null;
     }
 
 }

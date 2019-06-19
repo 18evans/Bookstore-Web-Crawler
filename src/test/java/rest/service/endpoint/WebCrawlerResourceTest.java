@@ -79,6 +79,24 @@ public class WebCrawlerResourceTest {
                 response.getEntity(), instanceOf(WebCrawlerResponse.class));
     }
 
+    @Test
+    public void sutResponseReturnsInvalidTypeServerErrorIfPassedTypeIsNotSupported() {
+        //arrange - use example valid URL
+        String unsupportedType = "Cars";
+
+        //act
+        Response response = resource.getContent(exampleValidDashboardUrl.toString(), unsupportedType, "");
+
+        //assert
+        assertEquals("Response on invalid type was NOT server error as was expected.",
+                Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                response.getStatus());
+        assertEquals("Server Error did not in fact carry the expected entity error String message.",
+                MSG_ERROR_TYPE_INVALID,
+                response.getEntity());
+    }
+
+
     //tests of only 1 parameter
 
     private static String[] getNullEmptyOrWhiteSpaceStrings() {

@@ -71,3 +71,6 @@ fabric.properties
 .idea/
 .gradle/
 build/
+
+# Test Coverage
+coverage/
